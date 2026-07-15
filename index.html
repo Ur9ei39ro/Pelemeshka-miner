@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🥟 ПЕЛЕМЕШКА ТРЕЙДЕР – 200 КАРТ</title>
+    <title>🥟 ПЕЛЕМЕШКА ТРЕЙДЕР – 201 КАРТА</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: #0a0f0f; color: #0f0; font-family: 'Courier New', monospace; padding: 8px; padding-bottom: 80px; }
@@ -54,19 +54,13 @@
         .coin-item .name { color: #0ff; font-weight: bold; }
         .status { text-align: center; padding: 8px; font-size: 11px; color: #808080; }
         .status.ok { color: #0f0; }
-        .file-input-wrapper { display: flex; flex-direction: column; gap: 8px; }
-        .file-input-wrapper input[type="file"] { padding: 10px; background: #001020; border: 1px solid #0f0; border-radius: 8px; color: #0f0; font-size: 12px; width: 100%; }
-        .chart-container { width: 100%; height: 150px; margin: 10px 0; background: #001020; border: 1px solid #003040; border-radius: 8px; overflow: hidden; }
-        .chart-container canvas { width: 100% !important; height: 100% !important; }
-        .filter-group { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0; }
-        .filter-group .btn { padding: 6px 12px; font-size: 11px; width: auto; flex: 1; min-width: 60px; }
-        .filter-group .btn.active-filter { border-color: #0f0; background: #004000; }
         .support-btn { display: inline-block; padding: 14px 28px; margin: 10px 0; background: linear-gradient(45deg, #ffdd00, #f5a623); color: #000; font-size: 18px; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; text-decoration: none; box-shadow: 0 0 20px rgba(255,220,0,0.3); transition: all 0.3s; text-align: center; }
         .support-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(255,220,0,0.5); }
         .support-btn:active { transform: scale(0.95); }
         .license { text-align: center; font-size: 10px; color: #404040; padding: 10px; border-top: 1px solid #003030; margin-top: 10px; }
         .license a { color: #808080; text-decoration: none; }
         .license a:hover { color: #0f0; }
+        .limited-remaining { font-size: 9px; color: #ff0; }
         @media (max-width: 480px) { .gpu-grid { grid-template-columns: 1fr 1fr; } }
         @media (max-width: 360px) { .gpu-grid { grid-template-columns: 1fr; } }
     </style>
@@ -74,7 +68,9 @@
 <body>
 
 <script>
-    // ЗАЩИТА
+    // ========================================================================
+    // ЗАЩИТА ОТ ВЗЛОМА
+    // ========================================================================
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F12' || (e.ctrlKey && e.key === 'u') || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J'))) {
             e.preventDefault(); alert('🔒 Доступ запрещён!'); return false;
@@ -88,7 +84,7 @@
 
 <div class="header">
     <h1>🥟 ПЕЛЕМЕШКА ТРЕЙДЕР</h1>
-    <div class="sub">200 карт · Чёткие уровни</div>
+    <div class="sub">201 карта · Сбалансированная экономика</div>
 </div>
 
 <div class="card" style="border-color:#0f0;">
@@ -108,6 +104,7 @@
 <div class="card" style="border-color:#ff0;">
     <div class="row"><span class="label">💰 БАЛАНС</span><span class="value gold" id="budgetDisplay">100 ₽</span></div>
     <div class="row"><span class="label">💵 ВСЕГО ЗАРАБОТАНО</span><span class="value gold" id="earnedDisplay">100 ₽</span></div>
+    <div class="row"><span class="label">⏱️ ВРЕМЯ В ИГРЕ</span><span class="value blue" id="playTimeDisplay">00:00:00</span></div>
 </div>
 
 <button class="clicker-btn" onclick="doClick()">🖱️ КЛИКНИ<br><span style="font-size:14px;" id="clickCounter">0 / 1000</span></button>
@@ -131,13 +128,14 @@
         <div class="row"><span class="label">⛏️ Доход</span><span class="value gold" id="statEps">0 ₽/с</span></div>
         <div class="row"><span class="label">🔨 Работ</span><span class="value blue" id="statWorks">0</span></div>
         <div class="row"><span class="label">📊 Сделок</span><span class="value blue" id="statTrades">0</span></div>
+        <div class="row"><span class="label">🏆 Достижений</span><span class="value gold" id="statAchievements">0</span></div>
     </div>
 </div>
 
 <div id="tab-work" class="tab-content">
     <div class="card">
         <h3>🔨 РАБОТА</h3>
-        <div class="row"><span class="label">Доход</span><span class="value gold" id="workIncome">10-20 ₽</span></div>
+        <div class="row"><span class="label">Доход</span><span class="value gold" id="workIncome">5-15 ₽</span></div>
         <div class="row"><span class="label">Статус</span><span class="value" id="workStatus">⚡ ГОТОВ</span></div>
         <div class="progress-bar"><div class="fill" id="workProgressFill" style="width:0%;"></div></div>
         <div class="row"><span class="label">Прогресс</span><span class="value" id="workProgressText">0/10 сек</span></div>
@@ -160,7 +158,7 @@
 
 <div id="tab-gpu" class="tab-content">
     <div class="card">
-        <h3>🛒 МАРКЕТ GPU (200 карт)</h3>
+        <h3>🛒 МАРКЕТ GPU (201 карта)</h3>
         <input type="text" id="gpuSearch" class="search-input" placeholder="🔍 Поиск карты...">
         <div class="filter-group">
             <button class="btn btn-blue active-filter" onclick="setFilter('default')" id="filter_default">🔄 Все</button>
@@ -228,262 +226,263 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 // ========================================================================
-// 1. НАСТРОЙКИ
+// 1. НАСТРОЙКИ ЭКОНОМИКИ
 // ========================================================================
 const ENCRYPTION_KEY = "Pelemeshka_Super_Secret_Key_2026";
 let priceChart = null;
 let chartHistory = [];
 let currentFilter = 'default';
+let gameStartTime = Date.now();
+let achievementsUnlocked = [];
 
 const COINS = [
-    { name: "POMOJNYI", price: 50, color: "#8B4513", min: 30, max: 100, symbol: "P" },
-    { name: "BRONZOVYI", price: 500, color: "#CD7F32", min: 400, max: 600, symbol: "B" },
-    { name: "SEREBRYANYI", price: 2000, color: "#C0C0C0", min: 1500, max: 2500, symbol: "S" },
-    { name: "ZOLOTOY", price: 8000, color: "#FFD700", min: 6000, max: 10000, symbol: "Z" },
-    { name: "LAYMOVYI", price: 25000, color: "#32CD32", min: 20000, max: 30000, symbol: "L" },
-    { name: "ELEKTRICHESKIY", price: 70000, color: "#00FFFF", min: 60000, max: 80000, symbol: "E" },
-    { name: "ISTORICHESKIY", price: 150000, color: "#8B4513", min: 120000, max: 180000, symbol: "I" },
-    { name: "PUSHISTYI", price: 300000, color: "#FFB6C1", min: 250000, max: 350000, symbol: "U" },
-    { name: "MULTYASHNYI", price: 500000, color: "#FF69B4", min: 400000, max: 600000, symbol: "M" },
-    { name: "PELEMESHKA", price: 1000000, color: "#00FFFF", min: 800000, max: 1200000, symbol: "C" },
-    { name: "ALMAZNYI", price: 2000000, color: "#B9F2FF", min: 1500000, max: 2500000, symbol: "A" },
-    { name: "TITANOVYI", price: 5000000, color: "#878681", min: 4000000, max: 6000000, symbol: "T" },
-    { name: "PELEMESHKA_REDKIY", price: 10000000, color: "#FFD700", min: 8000000, max: 12000000, symbol: "R" },
-    { name: "IZUMRUD", price: 20000000, color: "#50C878", min: 15000000, max: 25000000, symbol: "I" },
-    { name: "NEFRITOVYI", price: 50000000, color: "#00A86B", min: 40000000, max: 60000000, symbol: "N" },
-    { name: "STEKLYANNYI", price: 100000000, color: "#E0FFFF", min: 80000000, max: 120000000, symbol: "K" },
-    { name: "RADUZHNYI", price: 200000000, color: "#FF1493", min: 150000000, max: 250000000, symbol: "D" },
-    { name: "UNICHTOZHITEL", price: 500000000, color: "#FF0000", min: 400000000, max: 600000000, symbol: "U" }
+    { name: "POMOJNYI", price: 50, color: "#8B4513", min: 30, max: 100, symbol: "POM" },
+    { name: "BRONZOVYI", price: 500, color: "#CD7F32", min: 400, max: 600, symbol: "BRZ" },
+    { name: "SEREBRYANYI", price: 2000, color: "#C0C0C0", min: 1500, max: 2500, symbol: "SER" },
+    { name: "ZOLOTOY", price: 8000, color: "#FFD700", min: 6000, max: 10000, symbol: "ZOL" },
+    { name: "LAYMOVYI", price: 25000, color: "#32CD32", min: 20000, max: 30000, symbol: "LAY" },
+    { name: "ELEKTRICHESKIY", price: 70000, color: "#00FFFF", min: 60000, max: 80000, symbol: "ELE" },
+    { name: "ISTORICHESKIY", price: 150000, color: "#8B4513", min: 120000, max: 180000, symbol: "IST" },
+    { name: "PUSHISTYI", price: 300000, color: "#FFB6C1", min: 250000, max: 350000, symbol: "PUS" },
+    { name: "MULTYASHNYI", price: 500000, color: "#FF69B4", min: 400000, max: 600000, symbol: "MUL" },
+    { name: "PELEMESHKA", price: 1000000, color: "#00FFFF", min: 800000, max: 1200000, symbol: "PEL" },
+    { name: "ALMAZNYI", price: 2000000, color: "#B9F2FF", min: 1500000, max: 2500000, symbol: "ALM" },
+    { name: "TITANOVYI", price: 5000000, color: "#878681", min: 4000000, max: 6000000, symbol: "TIT" },
+    { name: "PELEMESHKA_REDKIY", price: 10000000, color: "#FFD700", min: 8000000, max: 12000000, symbol: "PRD" },
+    { name: "IZUMRUD", price: 20000000, color: "#50C878", min: 15000000, max: 25000000, symbol: "IZU" },
+    { name: "NEFRITOVYI", price: 50000000, color: "#00A86B", min: 40000000, max: 60000000, symbol: "NEF" },
+    { name: "STEKLYANNYI", price: 100000000, color: "#E0FFFF", min: 80000000, max: 120000000, symbol: "STE" },
+    { name: "RADUZHNYI", price: 200000000, color: "#FF1493", min: 150000000, max: 250000000, symbol: "RAD" },
+    { name: "UNICHTOZHITEL", price: 500000000, color: "#FF0000", min: 400000000, max: 600000000, symbol: "UNI" }
 ];
 
 // ========================================================================
-// 2. 200 РУЧНЫХ КАРТ – ЧЁТКИЕ УРОВНИ
+// 2. ВСЕ КАРТЫ (201 штука)
 // ========================================================================
+const LIMITED_GPU_ID = 999;
+let limitedGpuStock = 500;
+
 const ALL_GPUS = [
-    // ===== УРОВЕНЬ 1 – 30 КАРТ (100-500 ₽, 1-5 MH/s) =====
-    { id: 1, name: "GT 1030 2GB", hashrate: 1, price: 100, tier: 1, multiplier: 1.00, limited: false, color: "#4CAF50" },
-    { id: 2, name: "GT 1030 4GB", hashrate: 1, price: 110, tier: 1, multiplier: 1.01, limited: false, color: "#4CAF50" },
-    { id: 3, name: "GTX 650 1GB", hashrate: 1, price: 120, tier: 1, multiplier: 1.02, limited: false, color: "#4CAF50" },
-    { id: 4, name: "GTX 650 2GB", hashrate: 2, price: 130, tier: 1, multiplier: 1.03, limited: false, color: "#4CAF50" },
-    { id: 5, name: "GTX 750 1GB", hashrate: 2, price: 140, tier: 1, multiplier: 1.04, limited: false, color: "#4CAF50" },
-    { id: 6, name: "GTX 750 2GB", hashrate: 2, price: 150, tier: 1, multiplier: 1.05, limited: false, color: "#4CAF50" },
-    { id: 7, name: "GTX 750 Ti 2GB", hashrate: 2, price: 160, tier: 1, multiplier: 1.06, limited: false, color: "#4CAF50" },
-    { id: 8, name: "GTX 750 Ti 4GB", hashrate: 3, price: 170, tier: 1, multiplier: 1.07, limited: false, color: "#4CAF50" },
-    { id: 9, name: "GT 710 1GB", hashrate: 1, price: 100, tier: 1, multiplier: 1.00, limited: false, color: "#4CAF50" },
-    { id: 10, name: "GT 710 2GB", hashrate: 1, price: 110, tier: 1, multiplier: 1.01, limited: false, color: "#4CAF50" },
-    { id: 11, name: "GT 720 2GB", hashrate: 1, price: 120, tier: 1, multiplier: 1.02, limited: false, color: "#4CAF50" },
-    { id: 12, name: "GT 730 2GB", hashrate: 2, price: 130, tier: 1, multiplier: 1.03, limited: false, color: "#4CAF50" },
-    { id: 13, name: "GT 730 4GB", hashrate: 2, price: 140, tier: 1, multiplier: 1.04, limited: false, color: "#4CAF50" },
-    { id: 14, name: "Radeon HD 6450", hashrate: 1, price: 100, tier: 1, multiplier: 1.00, limited: false, color: "#4CAF50" },
-    { id: 15, name: "Radeon HD 6570", hashrate: 1, price: 110, tier: 1, multiplier: 1.01, limited: false, color: "#4CAF50" },
-    { id: 16, name: "Radeon HD 6670", hashrate: 2, price: 120, tier: 1, multiplier: 1.02, limited: false, color: "#4CAF50" },
-    { id: 17, name: "Radeon HD 7750", hashrate: 2, price: 130, tier: 1, multiplier: 1.03, limited: false, color: "#4CAF50" },
-    { id: 18, name: "Radeon HD 7770", hashrate: 2, price: 140, tier: 1, multiplier: 1.04, limited: false, color: "#4CAF50" },
-    { id: 19, name: "Radeon R7 240", hashrate: 2, price: 150, tier: 1, multiplier: 1.05, limited: false, color: "#4CAF50" },
-    { id: 20, name: "Radeon R7 250", hashrate: 2, price: 160, tier: 1, multiplier: 1.06, limited: false, color: "#4CAF50" },
-    { id: 21, name: "Radeon R7 260", hashrate: 3, price: 170, tier: 1, multiplier: 1.07, limited: false, color: "#4CAF50" },
-    { id: 22, name: "Radeon R7 360", hashrate: 3, price: 180, tier: 1, multiplier: 1.08, limited: false, color: "#4CAF50" },
-    { id: 23, name: "GTX 550 Ti 1GB", hashrate: 2, price: 150, tier: 1, multiplier: 1.05, limited: false, color: "#4CAF50" },
-    { id: 24, name: "GTX 550 Ti 2GB", hashrate: 2, price: 160, tier: 1, multiplier: 1.06, limited: false, color: "#4CAF50" },
-    { id: 25, name: "GTX 560 1GB", hashrate: 3, price: 170, tier: 1, multiplier: 1.07, limited: false, color: "#4CAF50" },
-    { id: 26, name: "GTX 560 2GB", hashrate: 3, price: 180, tier: 1, multiplier: 1.08, limited: false, color: "#4CAF50" },
-    { id: 27, name: "GTX 560 Ti 1GB", hashrate: 3, price: 190, tier: 1, multiplier: 1.09, limited: false, color: "#4CAF50" },
-    { id: 28, name: "GTX 560 Ti 2GB", hashrate: 4, price: 200, tier: 1, multiplier: 1.10, limited: false, color: "#4CAF50" },
-    { id: 29, name: "GTX 660 2GB", hashrate: 4, price: 210, tier: 1, multiplier: 1.11, limited: false, color: "#4CAF50" },
-    { id: 30, name: "GTX 660 Ti 2GB", hashrate: 5, price: 220, tier: 1, multiplier: 1.12, limited: false, color: "#4CAF50" },
-
-    // ===== УРОВЕНЬ 2 – 30 КАРТ (500-2000 ₽, 5-15 MH/s) =====
-    { id: 31, name: "GTX 670 2GB", hashrate: 5, price: 500, tier: 2, multiplier: 1.35, limited: false, color: "#2196F3" },
-    { id: 32, name: "GTX 670 4GB", hashrate: 5, price: 520, tier: 2, multiplier: 1.36, limited: false, color: "#2196F3" },
-    { id: 33, name: "GTX 680 2GB", hashrate: 6, price: 540, tier: 2, multiplier: 1.37, limited: false, color: "#2196F3" },
-    { id: 34, name: "GTX 680 4GB", hashrate: 6, price: 560, tier: 2, multiplier: 1.38, limited: false, color: "#2196F3" },
-    { id: 35, name: "GTX 760 2GB", hashrate: 6, price: 580, tier: 2, multiplier: 1.39, limited: false, color: "#2196F3" },
-    { id: 36, name: "GTX 760 4GB", hashrate: 7, price: 600, tier: 2, multiplier: 1.40, limited: false, color: "#2196F3" },
-    { id: 37, name: "GTX 770 2GB", hashrate: 7, price: 620, tier: 2, multiplier: 1.41, limited: false, color: "#2196F3" },
-    { id: 38, name: "GTX 770 4GB", hashrate: 7, price: 640, tier: 2, multiplier: 1.42, limited: false, color: "#2196F3" },
-    { id: 39, name: "GTX 780 3GB", hashrate: 8, price: 660, tier: 2, multiplier: 1.43, limited: false, color: "#2196F3" },
-    { id: 40, name: "GTX 780 6GB", hashrate: 8, price: 680, tier: 2, multiplier: 1.44, limited: false, color: "#2196F3" },
-    { id: 41, name: "GTX 780 Ti 3GB", hashrate: 8, price: 700, tier: 2, multiplier: 1.45, limited: false, color: "#2196F3" },
-    { id: 42, name: "GTX 780 Ti 6GB", hashrate: 9, price: 720, tier: 2, multiplier: 1.46, limited: false, color: "#2196F3" },
-    { id: 43, name: "GTX 950 2GB", hashrate: 7, price: 550, tier: 2, multiplier: 1.37, limited: false, color: "#2196F3" },
-    { id: 44, name: "GTX 950 4GB", hashrate: 7, price: 570, tier: 2, multiplier: 1.38, limited: false, color: "#2196F3" },
-    { id: 45, name: "GTX 960 2GB", hashrate: 8, price: 590, tier: 2, multiplier: 1.39, limited: false, color: "#2196F3" },
-    { id: 46, name: "GTX 960 4GB", hashrate: 8, price: 610, tier: 2, multiplier: 1.40, limited: false, color: "#2196F3" },
-    { id: 47, name: "GTX 970 4GB", hashrate: 10, price: 700, tier: 2, multiplier: 1.45, limited: false, color: "#2196F3" },
-    { id: 48, name: "GTX 970 8GB", hashrate: 10, price: 720, tier: 2, multiplier: 1.46, limited: false, color: "#2196F3" },
-    { id: 49, name: "GTX 980 4GB", hashrate: 11, price: 740, tier: 2, multiplier: 1.47, limited: false, color: "#2196F3" },
-    { id: 50, name: "GTX 980 8GB", hashrate: 11, price: 760, tier: 2, multiplier: 1.48, limited: false, color: "#2196F3" },
-    { id: 51, name: "GTX 980 Ti 6GB", hashrate: 12, price: 780, tier: 2, multiplier: 1.49, limited: false, color: "#2196F3" },
-    { id: 52, name: "GTX 980 Ti 12GB", hashrate: 12, price: 800, tier: 2, multiplier: 1.50, limited: false, color: "#2196F3" },
-    { id: 53, name: "GTX 1050 2GB", hashrate: 5, price: 500, tier: 2, multiplier: 1.35, limited: false, color: "#2196F3" },
-    { id: 54, name: "GTX 1050 4GB", hashrate: 5, price: 520, tier: 2, multiplier: 1.36, limited: false, color: "#2196F3" },
-    { id: 55, name: "GTX 1050 Ti 4GB", hashrate: 6, price: 540, tier: 2, multiplier: 1.37, limited: false, color: "#2196F3" },
-    { id: 56, name: "GTX 1050 Ti 8GB", hashrate: 6, price: 560, tier: 2, multiplier: 1.38, limited: false, color: "#2196F3" },
-    { id: 57, name: "GTX 1060 3GB", hashrate: 8, price: 600, tier: 2, multiplier: 1.40, limited: false, color: "#2196F3" },
-    { id: 58, name: "GTX 1060 6GB", hashrate: 9, price: 650, tier: 2, multiplier: 1.43, limited: false, color: "#2196F3" },
-    { id: 59, name: "GTX 1060 12GB", hashrate: 9, price: 680, tier: 2, multiplier: 1.44, limited: false, color: "#2196F3" },
-    { id: 60, name: "GTX 1070 8GB", hashrate: 10, price: 750, tier: 2, multiplier: 1.47, limited: false, color: "#2196F3" },
-
-    // ===== УРОВЕНЬ 3 – 30 КАРТ (2000-8000 ₽, 15-40 MH/s) =====
-    { id: 61, name: "GTX 1070 16GB", hashrate: 10, price: 800, tier: 3, multiplier: 1.70, limited: false, color: "#FF9800" },
-    { id: 62, name: "GTX 1070 Ti 8GB", hashrate: 11, price: 900, tier: 3, multiplier: 1.72, limited: false, color: "#FF9800" },
-    { id: 63, name: "GTX 1080 8GB", hashrate: 12, price: 1000, tier: 3, multiplier: 1.74, limited: false, color: "#FF9800" },
-    { id: 64, name: "GTX 1080 16GB", hashrate: 12, price: 1100, tier: 3, multiplier: 1.76, limited: false, color: "#FF9800" },
-    { id: 65, name: "GTX 1080 Ti 11GB", hashrate: 14, price: 1200, tier: 3, multiplier: 1.78, limited: false, color: "#FF9800" },
-    { id: 66, name: "GTX 1080 Ti 22GB", hashrate: 14, price: 1300, tier: 3, multiplier: 1.80, limited: false, color: "#FF9800" },
-    { id: 67, name: "Titan X 12GB", hashrate: 13, price: 1200, tier: 3, multiplier: 1.78, limited: false, color: "#FF9800" },
-    { id: 68, name: "Titan X 24GB", hashrate: 13, price: 1300, tier: 3, multiplier: 1.80, limited: false, color: "#FF9800" },
-    { id: 69, name: "Radeon R9 270", hashrate: 6, price: 700, tier: 3, multiplier: 1.68, limited: false, color: "#FF9800" },
-    { id: 70, name: "Radeon R9 270X", hashrate: 7, price: 750, tier: 3, multiplier: 1.70, limited: false, color: "#FF9800" },
-    { id: 71, name: "Radeon R9 280", hashrate: 8, price: 800, tier: 3, multiplier: 1.72, limited: false, color: "#FF9800" },
-    { id: 72, name: "Radeon R9 280X", hashrate: 8, price: 850, tier: 3, multiplier: 1.74, limited: false, color: "#FF9800" },
-    { id: 73, name: "Radeon R9 290", hashrate: 10, price: 900, tier: 3, multiplier: 1.76, limited: false, color: "#FF9800" },
-    { id: 74, name: "Radeon R9 290X", hashrate: 10, price: 950, tier: 3, multiplier: 1.78, limited: false, color: "#FF9800" },
-    { id: 75, name: "Radeon R9 380", hashrate: 8, price: 800, tier: 3, multiplier: 1.72, limited: false, color: "#FF9800" },
-    { id: 76, name: "Radeon R9 380X", hashrate: 8, price: 850, tier: 3, multiplier: 1.74, limited: false, color: "#FF9800" },
-    { id: 77, name: "Radeon R9 390", hashrate: 10, price: 900, tier: 3, multiplier: 1.76, limited: false, color: "#FF9800" },
-    { id: 78, name: "Radeon R9 390X", hashrate: 10, price: 950, tier: 3, multiplier: 1.78, limited: false, color: "#FF9800" },
-    { id: 79, name: "RX 460 2GB", hashrate: 6, price: 700, tier: 3, multiplier: 1.68, limited: false, color: "#FF9800" },
-    { id: 80, name: "RX 460 4GB", hashrate: 6, price: 750, tier: 3, multiplier: 1.70, limited: false, color: "#FF9800" },
-    { id: 81, name: "RX 470 4GB", hashrate: 8, price: 800, tier: 3, multiplier: 1.72, limited: false, color: "#FF9800" },
-    { id: 82, name: "RX 470 8GB", hashrate: 8, price: 850, tier: 3, multiplier: 1.74, limited: false, color: "#FF9800" },
-    { id: 83, name: "RX 480 4GB", hashrate: 9, price: 900, tier: 3, multiplier: 1.76, limited: false, color: "#FF9800" },
-    { id: 84, name: "RX 480 8GB", hashrate: 9, price: 950, tier: 3, multiplier: 1.78, limited: false, color: "#FF9800" },
-    { id: 85, name: "RX 550 2GB", hashrate: 4, price: 500, tier: 3, multiplier: 1.60, limited: false, color: "#FF9800" },
-    { id: 86, name: "RX 550 4GB", hashrate: 4, price: 550, tier: 3, multiplier: 1.62, limited: false, color: "#FF9800" },
-    { id: 87, name: "RX 560 2GB", hashrate: 5, price: 600, tier: 3, multiplier: 1.64, limited: false, color: "#FF9800" },
-    { id: 88, name: "RX 560 4GB", hashrate: 5, price: 650, tier: 3, multiplier: 1.66, limited: false, color: "#FF9800" },
-    { id: 89, name: "RX 570 4GB", hashrate: 10, price: 1000, tier: 3, multiplier: 1.80, limited: false, color: "#FF9800" },
-    { id: 90, name: "RX 570 8GB", hashrate: 10, price: 1050, tier: 3, multiplier: 1.82, limited: false, color: "#FF9800" },
-
-    // ===== УРОВЕНЬ 4 – 30 КАРТ (8000-30000 ₽, 40-100 MH/s) =====
-    { id: 91, name: "RX 580 4GB", hashrate: 11, price: 1100, tier: 4, multiplier: 2.05, limited: false, color: "#F44336" },
-    { id: 92, name: "RX 580 8GB", hashrate: 11, price: 1150, tier: 4, multiplier: 2.06, limited: false, color: "#F44336" },
-    { id: 93, name: "RX 590 8GB", hashrate: 12, price: 1200, tier: 4, multiplier: 2.07, limited: false, color: "#F44336" },
-    { id: 94, name: "RX 590 16GB", hashrate: 12, price: 1250, tier: 4, multiplier: 2.08, limited: false, color: "#F44336" },
-    { id: 95, name: "RX 5500 XT 4GB", hashrate: 10, price: 1000, tier: 4, multiplier: 2.05, limited: false, color: "#F44336" },
-    { id: 96, name: "RX 5500 XT 8GB", hashrate: 10, price: 1050, tier: 4, multiplier: 2.06, limited: false, color: "#F44336" },
-    { id: 97, name: "RX 5600 XT 6GB", hashrate: 12, price: 1100, tier: 4, multiplier: 2.07, limited: false, color: "#F44336" },
-    { id: 98, name: "RX 5600 XT 12GB", hashrate: 12, price: 1150, tier: 4, multiplier: 2.08, limited: false, color: "#F44336" },
-    { id: 99, name: "RX 5700 8GB", hashrate: 14, price: 1200, tier: 4, multiplier: 2.09, limited: false, color: "#F44336" },
-    { id: 100, name: "RX 5700 XT 8GB", hashrate: 16, price: 1250, tier: 4, multiplier: 2.10, limited: false, color: "#F44336" },
-    { id: 101, name: "RX 5700 XT 16GB", hashrate: 16, price: 1300, tier: 4, multiplier: 2.11, limited: false, color: "#F44336" },
-    { id: 102, name: "RTX 2060 6GB", hashrate: 20, price: 1500, tier: 4, multiplier: 2.15, limited: false, color: "#F44336" },
-    { id: 103, name: "RTX 2060 12GB", hashrate: 20, price: 1600, tier: 4, multiplier: 2.16, limited: false, color: "#F44336" },
-    { id: 104, name: "RTX 2060 Super 8GB", hashrate: 22, price: 1700, tier: 4, multiplier: 2.17, limited: false, color: "#F44336" },
-    { id: 105, name: "RTX 2070 8GB", hashrate: 24, price: 1800, tier: 4, multiplier: 2.18, limited: false, color: "#F44336" },
-    { id: 106, name: "RTX 2070 Super 8GB", hashrate: 26, price: 1900, tier: 4, multiplier: 2.19, limited: false, color: "#F44336" },
-    { id: 107, name: "RTX 2080 8GB", hashrate: 28, price: 2000, tier: 4, multiplier: 2.20, limited: false, color: "#F44336" },
-    { id: 108, name: "RTX 2080 Super 8GB", hashrate: 30, price: 2100, tier: 4, multiplier: 2.21, limited: false, color: "#F44336" },
-    { id: 109, name: "RTX 2080 Ti 11GB", hashrate: 32, price: 2200, tier: 4, multiplier: 2.22, limited: false, color: "#F44336" },
-    { id: 110, name: "RTX 2080 Ti 22GB", hashrate: 32, price: 2300, tier: 4, multiplier: 2.23, limited: false, color: "#F44336" },
-    { id: 111, name: "Titan V 12GB", hashrate: 28, price: 2000, tier: 4, multiplier: 2.20, limited: false, color: "#F44336" },
-    { id: 112, name: "Titan V 24GB", hashrate: 28, price: 2100, tier: 4, multiplier: 2.21, limited: false, color: "#F44336" },
-    { id: 113, name: "RTX 3050 8GB", hashrate: 16, price: 1200, tier: 4, multiplier: 2.10, limited: false, color: "#F44336" },
-    { id: 114, name: "RTX 3050 12GB", hashrate: 16, price: 1300, tier: 4, multiplier: 2.11, limited: false, color: "#F44336" },
-    { id: 115, name: "RTX 3060 8GB", hashrate: 22, price: 1500, tier: 4, multiplier: 2.15, limited: false, color: "#F44336" },
-    { id: 116, name: "RTX 3060 12GB", hashrate: 22, price: 1600, tier: 4, multiplier: 2.16, limited: false, color: "#F44336" },
-    { id: 117, name: "RTX 3060 Ti 8GB", hashrate: 24, price: 1700, tier: 4, multiplier: 2.17, limited: false, color: "#F44336" },
-    { id: 118, name: "RTX 3070 8GB", hashrate: 26, price: 1800, tier: 4, multiplier: 2.18, limited: false, color: "#F44336" },
-    { id: 119, name: "RTX 3070 Ti 8GB", hashrate: 28, price: 1900, tier: 4, multiplier: 2.19, limited: false, color: "#F44336" },
-    { id: 120, name: "RTX 3080 10GB", hashrate: 30, price: 2000, tier: 4, multiplier: 2.20, limited: false, color: "#F44336" },
-
-    // ===== УРОВЕНЬ 5 – 30 КАРТ (30000-100000 ₽, 100-250 MH/s) =====
-    { id: 121, name: "RTX 3080 Ti 12GB", hashrate: 32, price: 2200, tier: 5, multiplier: 2.40, limited: false, color: "#9C27B0" },
-    { id: 122, name: "RTX 3080 Ti 24GB", hashrate: 32, price: 2300, tier: 5, multiplier: 2.41, limited: false, color: "#9C27B0" },
-    { id: 123, name: "RTX 3090 24GB", hashrate: 35, price: 2400, tier: 5, multiplier: 2.42, limited: false, color: "#9C27B0" },
-    { id: 124, name: "RTX 3090 Ti 24GB", hashrate: 38, price: 2500, tier: 5, multiplier: 2.43, limited: false, color: "#9C27B0" },
-    { id: 125, name: "RTX 3090 Ti 48GB", hashrate: 38, price: 2600, tier: 5, multiplier: 2.44, limited: false, color: "#9C27B0" },
-    { id: 126, name: "RX 6600 8GB", hashrate: 20, price: 1500, tier: 5, multiplier: 2.35, limited: false, color: "#9C27B0" },
-    { id: 127, name: "RX 6600 XT 8GB", hashrate: 22, price: 1600, tier: 5, multiplier: 2.36, limited: false, color: "#9C27B0" },
-    { id: 128, name: "RX 6700 XT 12GB", hashrate: 24, price: 1700, tier: 5, multiplier: 2.37, limited: false, color: "#9C27B0" },
-    { id: 129, name: "RX 6800 16GB", hashrate: 26, price: 1800, tier: 5, multiplier: 2.38, limited: false, color: "#9C27B0" },
-    { id: 130, name: "RX 6800 XT 16GB", hashrate: 28, price: 1900, tier: 5, multiplier: 2.39, limited: false, color: "#9C27B0" },
-    { id: 131, name: "RX 6900 XT 16GB", hashrate: 30, price: 2000, tier: 5, multiplier: 2.40, limited: false, color: "#9C27B0" },
-    { id: 132, name: "RX 6900 XT 32GB", hashrate: 30, price: 2100, tier: 5, multiplier: 2.41, limited: false, color: "#9C27B0" },
-    { id: 133, name: "RX 7600 8GB", hashrate: 22, price: 1600, tier: 5, multiplier: 2.36, limited: false, color: "#9C27B0" },
-    { id: 134, name: "RX 7600 XT 12GB", hashrate: 24, price: 1700, tier: 5, multiplier: 2.37, limited: false, color: "#9C27B0" },
-    { id: 135, name: "RX 7700 XT 12GB", hashrate: 26, price: 1800, tier: 5, multiplier: 2.38, limited: false, color: "#9C27B0" },
-    { id: 136, name: "RX 7800 XT 16GB", hashrate: 28, price: 1900, tier: 5, multiplier: 2.39, limited: false, color: "#9C27B0" },
-    { id: 137, name: "RX 7900 XT 20GB", hashrate: 30, price: 2000, tier: 5, multiplier: 2.40, limited: false, color: "#9C27B0" },
-    { id: 138, name: "RX 7900 XTX 24GB", hashrate: 32, price: 2100, tier: 5, multiplier: 2.41, limited: false, color: "#9C27B0" },
-    { id: 139, name: "RTX 4070 12GB", hashrate: 30, price: 2200, tier: 5, multiplier: 2.42, limited: false, color: "#9C27B0" },
-    { id: 140, name: "RTX 4070 Super 12GB", hashrate: 32, price: 2300, tier: 5, multiplier: 2.43, limited: false, color: "#9C27B0" },
-    { id: 141, name: "RTX 4070 Ti 12GB", hashrate: 34, price: 2400, tier: 5, multiplier: 2.44, limited: false, color: "#9C27B0" },
-    { id: 142, name: "RTX 4070 Ti Super 16GB", hashrate: 36, price: 2500, tier: 5, multiplier: 2.45, limited: false, color: "#9C27B0" },
-    { id: 143, name: "RTX 4080 16GB", hashrate: 38, price: 2600, tier: 5, multiplier: 2.46, limited: false, color: "#9C27B0" },
-    { id: 144, name: "RTX 4080 Super 16GB", hashrate: 40, price: 2700, tier: 5, multiplier: 2.47, limited: false, color: "#9C27B0" },
-    { id: 145, name: "RTX 4090 24GB", hashrate: 42, price: 2800, tier: 5, multiplier: 2.48, limited: false, color: "#9C27B0" },
-    { id: 146, name: "RTX 4090 Ti 24GB", hashrate: 45, price: 2900, tier: 5, multiplier: 2.49, limited: false, color: "#9C27B0" },
-    { id: 147, name: "RTX 4090 Ti 48GB", hashrate: 45, price: 3000, tier: 5, multiplier: 2.50, limited: false, color: "#9C27B0" },
-    { id: 148, name: "Titan RTX 24GB", hashrate: 38, price: 2600, tier: 5, multiplier: 2.46, limited: false, color: "#9C27B0" },
-    { id: 149, name: "Titan RTX 48GB", hashrate: 38, price: 2700, tier: 5, multiplier: 2.47, limited: false, color: "#9C27B0" },
-    { id: 150, name: "Radeon VII 16GB", hashrate: 28, price: 1900, tier: 5, multiplier: 2.39, limited: false, color: "#9C27B0" },
-
-    // ===== УРОВЕНЬ 6 – 30 КАРТ (100000-500000 ₽, 250-500 MH/s) =====
-    { id: 151, name: "RTX 4090 Ti Super 24GB", hashrate: 48, price: 3200, tier: 6, multiplier: 2.75, limited: false, color: "#E91E63" },
-    { id: 152, name: "RTX 4090 Ti Super 48GB", hashrate: 48, price: 3300, tier: 6, multiplier: 2.76, limited: false, color: "#E91E63" },
-    { id: 153, name: "RTX 5090 32GB", hashrate: 55, price: 3400, tier: 6, multiplier: 2.77, limited: false, color: "#E91E63" },
-    { id: 154, name: "RTX 5090 Ti 32GB", hashrate: 60, price: 3500, tier: 6, multiplier: 2.78, limited: false, color: "#E91E63" },
-    { id: 155, name: "RTX 5090 Ti 64GB", hashrate: 60, price: 3600, tier: 6, multiplier: 2.79, limited: false, color: "#E91E63" },
-    { id: 156, name: "RTX 6090 48GB", hashrate: 70, price: 3700, tier: 6, multiplier: 2.80, limited: false, color: "#E91E63" },
-    { id: 157, name: "RTX 6090 Ti 48GB", hashrate: 75, price: 3800, tier: 6, multiplier: 2.81, limited: false, color: "#E91E63" },
-    { id: 158, name: "RTX 6090 Ti 96GB", hashrate: 75, price: 3900, tier: 6, multiplier: 2.82, limited: false, color: "#E91E63" },
-    { id: 159, name: "RTX 7090 64GB", hashrate: 85, price: 4000, tier: 6, multiplier: 2.83, limited: false, color: "#E91E63" },
-    { id: 160, name: "RTX 7090 Ti 64GB", hashrate: 90, price: 4100, tier: 6, multiplier: 2.84, limited: false, color: "#E91E63" },
-    { id: 161, name: "RTX 7090 Ti 128GB", hashrate: 90, price: 4200, tier: 6, multiplier: 2.85, limited: false, color: "#E91E63" },
-    { id: 162, name: "RTX 8090 128GB", hashrate: 100, price: 4300, tier: 6, multiplier: 2.86, limited: false, color: "#E91E63" },
-    { id: 163, name: "RTX 8090 Ti 128GB", hashrate: 110, price: 4400, tier: 6, multiplier: 2.87, limited: false, color: "#E91E63" },
-    { id: 164, name: "RTX 8090 Ti 256GB", hashrate: 110, price: 4500, tier: 6, multiplier: 2.88, limited: false, color: "#E91E63" },
-    { id: 165, name: "RTX 9090 256GB", hashrate: 120, price: 4600, tier: 6, multiplier: 2.89, limited: false, color: "#E91E63" },
-    { id: 166, name: "RTX 9090 Ti 256GB", hashrate: 130, price: 4700, tier: 6, multiplier: 2.90, limited: false, color: "#E91E63" },
-    { id: 167, name: "RTX 9090 Ti 512GB", hashrate: 130, price: 4800, tier: 6, multiplier: 2.91, limited: false, color: "#E91E63" },
-    { id: 168, name: "RTX A6000 48GB", hashrate: 80, price: 4000, tier: 6, multiplier: 2.83, limited: false, color: "#E91E63" },
-    { id: 169, name: "RTX A6000 96GB", hashrate: 80, price: 4100, tier: 6, multiplier: 2.84, limited: false, color: "#E91E63" },
-    { id: 170, name: "RTX A800 80GB", hashrate: 90, price: 4200, tier: 6, multiplier: 2.85, limited: false, color: "#E91E63" },
-    { id: 171, name: "RTX A800 160GB", hashrate: 90, price: 4300, tier: 6, multiplier: 2.86, limited: false, color: "#E91E63" },
-    { id: 172, name: "RTX A100 80GB", hashrate: 100, price: 4400, tier: 6, multiplier: 2.87, limited: false, color: "#E91E63" },
-    { id: 173, name: "RTX A100 160GB", hashrate: 100, price: 4500, tier: 6, multiplier: 2.88, limited: false, color: "#E91E63" },
-    { id: 174, name: "RTX H100 80GB", hashrate: 120, price: 4600, tier: 6, multiplier: 2.89, limited: false, color: "#E91E63" },
-    { id: 175, name: "RTX H100 160GB", hashrate: 120, price: 4700, tier: 6, multiplier: 2.90, limited: false, color: "#E91E63" },
-    { id: 176, name: "RTX B200 192GB", hashrate: 150, price: 4800, tier: 6, multiplier: 2.91, limited: false, color: "#E91E63" },
-    { id: 177, name: "RTX B200 384GB", hashrate: 150, price: 4900, tier: 6, multiplier: 2.92, limited: false, color: "#E91E63" },
-    { id: 178, name: "RTX B100 192GB", hashrate: 160, price: 5000, tier: 6, multiplier: 2.93, limited: false, color: "#E91E63" },
-    { id: 179, name: "RTX B100 384GB", hashrate: 160, price: 5100, tier: 6, multiplier: 2.94, limited: false, color: "#E91E63" },
-    { id: 180, name: "RTX X100 256GB", hashrate: 180, price: 5200, tier: 6, multiplier: 2.95, limited: false, color: "#E91E63" },
-
-    // ===== УРОВЕНЬ 7 – 20 КАРТ (500000-5000000 ₽, 500-5000 MH/s) =====
-    { id: 181, name: "RTX X100 512GB", hashrate: 180, price: 5300, tier: 7, multiplier: 3.10, limited: false, color: "#00BCD4" },
-    { id: 182, name: "RTX X200 256GB", hashrate: 200, price: 5400, tier: 7, multiplier: 3.12, limited: false, color: "#00BCD4" },
-    { id: 183, name: "RTX X200 512GB", hashrate: 200, price: 5500, tier: 7, multiplier: 3.14, limited: false, color: "#00BCD4" },
-    { id: 184, name: "RTX Z100 512GB", hashrate: 220, price: 5600, tier: 7, multiplier: 3.16, limited: false, color: "#00BCD4" },
-    { id: 185, name: "RTX Z100 1TB", hashrate: 220, price: 5700, tier: 7, multiplier: 3.18, limited: false, color: "#00BCD4" },
-    { id: 186, name: "RTX Z200 512GB", hashrate: 250, price: 5800, tier: 7, multiplier: 3.20, limited: false, color: "#00BCD4" },
-    { id: 187, name: "RTX Z200 1TB", hashrate: 250, price: 5900, tier: 7, multiplier: 3.22, limited: false, color: "#00BCD4" },
-    { id: 188, name: "Pelemeshka Core 16GB", hashrate: 60, price: 3500, tier: 7, multiplier: 3.00, limited: false, color: "#00BCD4" },
-    { id: 189, name: "Pelemeshka Pro 32GB", hashrate: 80, price: 3600, tier: 7, multiplier: 3.02, limited: false, color: "#00BCD4" },
-    { id: 190, name: "Pelemeshka Max 64GB", hashrate: 100, price: 3700, tier: 7, multiplier: 3.04, limited: false, color: "#00BCD4" },
-    { id: 191, name: "Pelemeshka Ultra 128GB", hashrate: 150, price: 3800, tier: 7, multiplier: 3.06, limited: false, color: "#00BCD4" },
-    { id: 192, name: "Pelemeshka Titan 256GB", hashrate: 200, price: 3900, tier: 7, multiplier: 3.08, limited: false, color: "#00BCD4" },
-    { id: 193, name: "Pelemeshka Quantum 512GB", hashrate: 300, price: 4000, tier: 7, multiplier: 3.10, limited: false, color: "#00BCD4" },
-    { id: 194, name: "Pelemeshka Quantum Pro 1TB", hashrate: 400, price: 4100, tier: 7, multiplier: 3.12, limited: false, color: "#00BCD4" },
-    { id: 195, name: "ASIC X10 10TH/s", hashrate: 500, price: 500000, tier: 7, multiplier: 3.50, limited: false, color: "#00BCD4" },
-    { id: 196, name: "ASIC X20 20TH/s", hashrate: 1000, price: 1000000, tier: 7, multiplier: 3.70, limited: false, color: "#00BCD4" },
-    { id: 197, name: "ASIC X50 50TH/s", hashrate: 2000, price: 2000000, tier: 7, multiplier: 3.90, limited: false, color: "#00BCD4" },
-    { id: 198, name: "ASIC X100 100TH/s", hashrate: 3000, price: 3000000, tier: 7, multiplier: 4.10, limited: false, color: "#00BCD4" },
-    { id: 199, name: "ASIC X500 500TH/s", hashrate: 4000, price: 4000000, tier: 7, multiplier: 4.30, limited: false, color: "#00BCD4" },
-    { id: 200, name: "ASIC X1000 1PH/s", hashrate: 5000, price: 5000000, tier: 7, multiplier: 4.50, limited: false, color: "#00BCD4" }
+    // УРОВЕНЬ 1 (30 карт)
+    { id: 1, name: "GT 1030 2GB", hashrate: 1.0, price: 100, tier: 1, multiplier: 1.0, limited: false, color: "#4CAF50" },
+    { id: 2, name: "GT 1030 4GB", hashrate: 1.2, price: 120, tier: 1, multiplier: 1.02, limited: false, color: "#4CAF50" },
+    { id: 3, name: "GTX 650 1GB", hashrate: 1.3, price: 130, tier: 1, multiplier: 1.04, limited: false, color: "#4CAF50" },
+    { id: 4, name: "GTX 650 2GB", hashrate: 1.5, price: 140, tier: 1, multiplier: 1.06, limited: false, color: "#4CAF50" },
+    { id: 5, name: "GTX 750 1GB", hashrate: 1.6, price: 150, tier: 1, multiplier: 1.08, limited: false, color: "#4CAF50" },
+    { id: 6, name: "GTX 750 2GB", hashrate: 1.8, price: 160, tier: 1, multiplier: 1.10, limited: false, color: "#4CAF50" },
+    { id: 7, name: "GTX 750 Ti 2GB", hashrate: 2.0, price: 180, tier: 1, multiplier: 1.12, limited: false, color: "#4CAF50" },
+    { id: 8, name: "GTX 750 Ti 4GB", hashrate: 2.2, price: 200, tier: 1, multiplier: 1.14, limited: false, color: "#4CAF50" },
+    { id: 9, name: "GT 710 1GB", hashrate: 0.8, price: 90, tier: 1, multiplier: 0.95, limited: false, color: "#4CAF50" },
+    { id: 10, name: "GT 710 2GB", hashrate: 0.9, price: 100, tier: 1, multiplier: 0.97, limited: false, color: "#4CAF50" },
+    { id: 11, name: "GT 720 2GB", hashrate: 1.0, price: 110, tier: 1, multiplier: 1.0, limited: false, color: "#4CAF50" },
+    { id: 12, name: "GT 730 2GB", hashrate: 1.2, price: 120, tier: 1, multiplier: 1.02, limited: false, color: "#4CAF50" },
+    { id: 13, name: "GT 730 4GB", hashrate: 1.4, price: 130, tier: 1, multiplier: 1.04, limited: false, color: "#4CAF50" },
+    { id: 14, name: "Radeon HD 6450", hashrate: 0.8, price: 90, tier: 1, multiplier: 0.95, limited: false, color: "#4CAF50" },
+    { id: 15, name: "Radeon HD 6570", hashrate: 1.0, price: 100, tier: 1, multiplier: 1.0, limited: false, color: "#4CAF50" },
+    { id: 16, name: "Radeon HD 6670", hashrate: 1.2, price: 110, tier: 1, multiplier: 1.02, limited: false, color: "#4CAF50" },
+    { id: 17, name: "Radeon HD 7750", hashrate: 1.5, price: 130, tier: 1, multiplier: 1.04, limited: false, color: "#4CAF50" },
+    { id: 18, name: "Radeon HD 7770", hashrate: 1.7, price: 150, tier: 1, multiplier: 1.06, limited: false, color: "#4CAF50" },
+    { id: 19, name: "Radeon R7 240", hashrate: 1.2, price: 120, tier: 1, multiplier: 1.02, limited: false, color: "#4CAF50" },
+    { id: 20, name: "Radeon R7 250", hashrate: 1.4, price: 140, tier: 1, multiplier: 1.04, limited: false, color: "#4CAF50" },
+    { id: 21, name: "Radeon R7 260", hashrate: 1.8, price: 160, tier: 1, multiplier: 1.08, limited: false, color: "#4CAF50" },
+    { id: 22, name: "Radeon R7 360", hashrate: 2.0, price: 180, tier: 1, multiplier: 1.10, limited: false, color: "#4CAF50" },
+    { id: 23, name: "GTX 550 Ti 1GB", hashrate: 1.5, price: 150, tier: 1, multiplier: 1.06, limited: false, color: "#4CAF50" },
+    { id: 24, name: "GTX 550 Ti 2GB", hashrate: 1.7, price: 160, tier: 1, multiplier: 1.08, limited: false, color: "#4CAF50" },
+    { id: 25, name: "GTX 560 1GB", hashrate: 2.0, price: 170, tier: 1, multiplier: 1.10, limited: false, color: "#4CAF50" },
+    { id: 26, name: "GTX 560 2GB", hashrate: 2.2, price: 180, tier: 1, multiplier: 1.12, limited: false, color: "#4CAF50" },
+    { id: 27, name: "GTX 560 Ti 1GB", hashrate: 2.3, price: 190, tier: 1, multiplier: 1.14, limited: false, color: "#4CAF50" },
+    { id: 28, name: "GTX 560 Ti 2GB", hashrate: 2.5, price: 200, tier: 1, multiplier: 1.16, limited: false, color: "#4CAF50" },
+    { id: 29, name: "GTX 660 2GB", hashrate: 2.8, price: 210, tier: 1, multiplier: 1.18, limited: false, color: "#4CAF50" },
+    { id: 30, name: "GTX 660 Ti 2GB", hashrate: 3.0, price: 220, tier: 1, multiplier: 1.20, limited: false, color: "#4CAF50" },
+    // УРОВЕНЬ 2 (30 карт)
+    { id: 31, name: "GTX 670 2GB", hashrate: 3.5, price: 500, tier: 2, multiplier: 1.35, limited: false, color: "#2196F3" },
+    { id: 32, name: "GTX 670 4GB", hashrate: 3.7, price: 520, tier: 2, multiplier: 1.37, limited: false, color: "#2196F3" },
+    { id: 33, name: "GTX 680 2GB", hashrate: 4.0, price: 540, tier: 2, multiplier: 1.39, limited: false, color: "#2196F3" },
+    { id: 34, name: "GTX 680 4GB", hashrate: 4.2, price: 560, tier: 2, multiplier: 1.41, limited: false, color: "#2196F3" },
+    { id: 35, name: "GTX 760 2GB", hashrate: 4.5, price: 580, tier: 2, multiplier: 1.43, limited: false, color: "#2196F3" },
+    { id: 36, name: "GTX 760 4GB", hashrate: 4.8, price: 600, tier: 2, multiplier: 1.45, limited: false, color: "#2196F3" },
+    { id: 37, name: "GTX 770 2GB", hashrate: 5.0, price: 620, tier: 2, multiplier: 1.47, limited: false, color: "#2196F3" },
+    { id: 38, name: "GTX 770 4GB", hashrate: 5.2, price: 640, tier: 2, multiplier: 1.49, limited: false, color: "#2196F3" },
+    { id: 39, name: "GTX 780 3GB", hashrate: 5.5, price: 660, tier: 2, multiplier: 1.51, limited: false, color: "#2196F3" },
+    { id: 40, name: "GTX 780 6GB", hashrate: 5.8, price: 680, tier: 2, multiplier: 1.53, limited: false, color: "#2196F3" },
+    { id: 41, name: "GTX 780 Ti 3GB", hashrate: 6.0, price: 700, tier: 2, multiplier: 1.55, limited: false, color: "#2196F3" },
+    { id: 42, name: "GTX 780 Ti 6GB", hashrate: 6.3, price: 720, tier: 2, multiplier: 1.57, limited: false, color: "#2196F3" },
+    { id: 43, name: "GTX 950 2GB", hashrate: 4.5, price: 550, tier: 2, multiplier: 1.43, limited: false, color: "#2196F3" },
+    { id: 44, name: "GTX 950 4GB", hashrate: 4.8, price: 570, tier: 2, multiplier: 1.45, limited: false, color: "#2196F3" },
+    { id: 45, name: "GTX 960 2GB", hashrate: 5.0, price: 590, tier: 2, multiplier: 1.47, limited: false, color: "#2196F3" },
+    { id: 46, name: "GTX 960 4GB", hashrate: 5.3, price: 610, tier: 2, multiplier: 1.49, limited: false, color: "#2196F3" },
+    { id: 47, name: "GTX 970 4GB", hashrate: 6.0, price: 700, tier: 2, multiplier: 1.55, limited: false, color: "#2196F3" },
+    { id: 48, name: "GTX 970 8GB", hashrate: 6.3, price: 720, tier: 2, multiplier: 1.57, limited: false, color: "#2196F3" },
+    { id: 49, name: "GTX 980 4GB", hashrate: 6.8, price: 740, tier: 2, multiplier: 1.59, limited: false, color: "#2196F3" },
+    { id: 50, name: "GTX 980 8GB", hashrate: 7.0, price: 760, tier: 2, multiplier: 1.61, limited: false, color: "#2196F3" },
+    { id: 51, name: "GTX 980 Ti 6GB", hashrate: 7.5, price: 780, tier: 2, multiplier: 1.63, limited: false, color: "#2196F3" },
+    { id: 52, name: "GTX 980 Ti 12GB", hashrate: 7.8, price: 800, tier: 2, multiplier: 1.65, limited: false, color: "#2196F3" },
+    { id: 53, name: "GTX 1050 2GB", hashrate: 3.5, price: 500, tier: 2, multiplier: 1.35, limited: false, color: "#2196F3" },
+    { id: 54, name: "GTX 1050 4GB", hashrate: 3.8, price: 520, tier: 2, multiplier: 1.37, limited: false, color: "#2196F3" },
+    { id: 55, name: "GTX 1050 Ti 4GB", hashrate: 4.2, price: 540, tier: 2, multiplier: 1.39, limited: false, color: "#2196F3" },
+    { id: 56, name: "GTX 1050 Ti 8GB", hashrate: 4.5, price: 560, tier: 2, multiplier: 1.41, limited: false, color: "#2196F3" },
+    { id: 57, name: "GTX 1060 3GB", hashrate: 5.5, price: 600, tier: 2, multiplier: 1.47, limited: false, color: "#2196F3" },
+    { id: 58, name: "GTX 1060 6GB", hashrate: 6.0, price: 650, tier: 2, multiplier: 1.51, limited: false, color: "#2196F3" },
+    { id: 59, name: "GTX 1060 12GB", hashrate: 6.5, price: 680, tier: 2, multiplier: 1.53, limited: false, color: "#2196F3" },
+    { id: 60, name: "GTX 1070 8GB", hashrate: 7.0, price: 750, tier: 2, multiplier: 1.57, limited: false, color: "#2196F3" },
+    // УРОВЕНЬ 3 (30 карт)
+    { id: 61, name: "GTX 1070 16GB", hashrate: 7.5, price: 800, tier: 3, multiplier: 1.70, limited: false, color: "#FF9800" },
+    { id: 62, name: "GTX 1070 Ti 8GB", hashrate: 8.0, price: 900, tier: 3, multiplier: 1.72, limited: false, color: "#FF9800" },
+    { id: 63, name: "GTX 1080 8GB", hashrate: 8.5, price: 1000, tier: 3, multiplier: 1.74, limited: false, color: "#FF9800" },
+    { id: 64, name: "GTX 1080 16GB", hashrate: 9.0, price: 1100, tier: 3, multiplier: 1.76, limited: false, color: "#FF9800" },
+    { id: 65, name: "GTX 1080 Ti 11GB", hashrate: 10.0, price: 1200, tier: 3, multiplier: 1.78, limited: false, color: "#FF9800" },
+    { id: 66, name: "GTX 1080 Ti 22GB", hashrate: 10.5, price: 1300, tier: 3, multiplier: 1.80, limited: false, color: "#FF9800" },
+    { id: 67, name: "Titan X 12GB", hashrate: 9.5, price: 1200, tier: 3, multiplier: 1.78, limited: false, color: "#FF9800" },
+    { id: 68, name: "Titan X 24GB", hashrate: 10.0, price: 1300, tier: 3, multiplier: 1.80, limited: false, color: "#FF9800" },
+    { id: 69, name: "Radeon R9 270", hashrate: 4.5, price: 700, tier: 3, multiplier: 1.68, limited: false, color: "#FF9800" },
+    { id: 70, name: "Radeon R9 270X", hashrate: 5.0, price: 750, tier: 3, multiplier: 1.70, limited: false, color: "#FF9800" },
+    { id: 71, name: "Radeon R9 280", hashrate: 5.5, price: 800, tier: 3, multiplier: 1.72, limited: false, color: "#FF9800" },
+    { id: 72, name: "Radeon R9 280X", hashrate: 6.0, price: 850, tier: 3, multiplier: 1.74, limited: false, color: "#FF9800" },
+    { id: 73, name: "Radeon R9 290", hashrate: 7.0, price: 900, tier: 3, multiplier: 1.76, limited: false, color: "#FF9800" },
+    { id: 74, name: "Radeon R9 290X", hashrate: 7.5, price: 950, tier: 3, multiplier: 1.78, limited: false, color: "#FF9800" },
+    { id: 75, name: "Radeon R9 380", hashrate: 6.0, price: 800, tier: 3, multiplier: 1.72, limited: false, color: "#FF9800" },
+    { id: 76, name: "Radeon R9 380X", hashrate: 6.5, price: 850, tier: 3, multiplier: 1.74, limited: false, color: "#FF9800" },
+    { id: 77, name: "Radeon R9 390", hashrate: 7.5, price: 900, tier: 3, multiplier: 1.76, limited: false, color: "#FF9800" },
+    { id: 78, name: "Radeon R9 390X", hashrate: 8.0, price: 950, tier: 3, multiplier: 1.78, limited: false, color: "#FF9800" },
+    { id: 79, name: "RX 460 2GB", hashrate: 4.5, price: 700, tier: 3, multiplier: 1.68, limited: false, color: "#FF9800" },
+    { id: 80, name: "RX 460 4GB", hashrate: 5.0, price: 750, tier: 3, multiplier: 1.70, limited: false, color: "#FF9800" },
+    { id: 81, name: "RX 470 4GB", hashrate: 6.0, price: 800, tier: 3, multiplier: 1.72, limited: false, color: "#FF9800" },
+    { id: 82, name: "RX 470 8GB", hashrate: 6.5, price: 850, tier: 3, multiplier: 1.74, limited: false, color: "#FF9800" },
+    { id: 83, name: "RX 480 4GB", hashrate: 7.0, price: 900, tier: 3, multiplier: 1.76, limited: false, color: "#FF9800" },
+    { id: 84, name: "RX 480 8GB", hashrate: 7.5, price: 950, tier: 3, multiplier: 1.78, limited: false, color: "#FF9800" },
+    { id: 85, name: "RX 550 2GB", hashrate: 3.0, price: 500, tier: 3, multiplier: 1.60, limited: false, color: "#FF9800" },
+    { id: 86, name: "RX 550 4GB", hashrate: 3.5, price: 550, tier: 3, multiplier: 1.62, limited: false, color: "#FF9800" },
+    { id: 87, name: "RX 560 2GB", hashrate: 4.0, price: 600, tier: 3, multiplier: 1.64, limited: false, color: "#FF9800" },
+    { id: 88, name: "RX 560 4GB", hashrate: 4.5, price: 650, tier: 3, multiplier: 1.66, limited: false, color: "#FF9800" },
+    { id: 89, name: "RX 570 4GB", hashrate: 7.5, price: 1000, tier: 3, multiplier: 1.80, limited: false, color: "#FF9800" },
+    { id: 90, name: "RX 570 8GB", hashrate: 8.0, price: 1050, tier: 3, multiplier: 1.82, limited: false, color: "#FF9800" },
+    // УРОВЕНЬ 4 (30 карт)
+    { id: 91, name: "RX 580 4GB", hashrate: 8.5, price: 1100, tier: 4, multiplier: 2.05, limited: false, color: "#F44336" },
+    { id: 92, name: "RX 580 8GB", hashrate: 9.0, price: 1150, tier: 4, multiplier: 2.06, limited: false, color: "#F44336" },
+    { id: 93, name: "RX 590 8GB", hashrate: 9.5, price: 1200, tier: 4, multiplier: 2.07, limited: false, color: "#F44336" },
+    { id: 94, name: "RX 590 16GB", hashrate: 10.0, price: 1250, tier: 4, multiplier: 2.08, limited: false, color: "#F44336" },
+    { id: 95, name: "RX 5500 XT 4GB", hashrate: 8.0, price: 1000, tier: 4, multiplier: 2.05, limited: false, color: "#F44336" },
+    { id: 96, name: "RX 5500 XT 8GB", hashrate: 8.5, price: 1050, tier: 4, multiplier: 2.06, limited: false, color: "#F44336" },
+    { id: 97, name: "RX 5600 XT 6GB", hashrate: 9.5, price: 1100, tier: 4, multiplier: 2.07, limited: false, color: "#F44336" },
+    { id: 98, name: "RX 5600 XT 12GB", hashrate: 10.0, price: 1150, tier: 4, multiplier: 2.08, limited: false, color: "#F44336" },
+    { id: 99, name: "RX 5700 8GB", hashrate: 11.0, price: 1200, tier: 4, multiplier: 2.09, limited: false, color: "#F44336" },
+    { id: 100, name: "RX 5700 XT 8GB", hashrate: 12.0, price: 1250, tier: 4, multiplier: 2.10, limited: false, color: "#F44336" },
+    { id: 101, name: "RX 5700 XT 16GB", hashrate: 12.5, price: 1300, tier: 4, multiplier: 2.11, limited: false, color: "#F44336" },
+    { id: 102, name: "RTX 2060 6GB", hashrate: 15.0, price: 1500, tier: 4, multiplier: 2.15, limited: false, color: "#F44336" },
+    { id: 103, name: "RTX 2060 12GB", hashrate: 15.5, price: 1600, tier: 4, multiplier: 2.16, limited: false, color: "#F44336" },
+    { id: 104, name: "RTX 2060 Super 8GB", hashrate: 16.5, price: 1700, tier: 4, multiplier: 2.17, limited: false, color: "#F44336" },
+    { id: 105, name: "RTX 2070 8GB", hashrate: 18.0, price: 1800, tier: 4, multiplier: 2.18, limited: false, color: "#F44336" },
+    { id: 106, name: "RTX 2070 Super 8GB", hashrate: 19.0, price: 1900, tier: 4, multiplier: 2.19, limited: false, color: "#F44336" },
+    { id: 107, name: "RTX 2080 8GB", hashrate: 20.0, price: 2000, tier: 4, multiplier: 2.20, limited: false, color: "#F44336" },
+    { id: 108, name: "RTX 2080 Super 8GB", hashrate: 21.0, price: 2100, tier: 4, multiplier: 2.21, limited: false, color: "#F44336" },
+    { id: 109, name: "RTX 2080 Ti 11GB", hashrate: 22.0, price: 2200, tier: 4, multiplier: 2.22, limited: false, color: "#F44336" },
+    { id: 110, name: "RTX 2080 Ti 22GB", hashrate: 22.5, price: 2300, tier: 4, multiplier: 2.23, limited: false, color: "#F44336" },
+    { id: 111, name: "Titan V 12GB", hashrate: 20.0, price: 2000, tier: 4, multiplier: 2.20, limited: false, color: "#F44336" },
+    { id: 112, name: "Titan V 24GB", hashrate: 20.5, price: 2100, tier: 4, multiplier: 2.21, limited: false, color: "#F44336" },
+    { id: 113, name: "RTX 3050 8GB", hashrate: 12.0, price: 1200, tier: 4, multiplier: 2.10, limited: false, color: "#F44336" },
+    { id: 114, name: "RTX 3050 12GB", hashrate: 12.5, price: 1300, tier: 4, multiplier: 2.11, limited: false, color: "#F44336" },
+    { id: 115, name: "RTX 3060 8GB", hashrate: 16.0, price: 1500, tier: 4, multiplier: 2.15, limited: false, color: "#F44336" },
+    { id: 116, name: "RTX 3060 12GB", hashrate: 16.5, price: 1600, tier: 4, multiplier: 2.16, limited: false, color: "#F44336" },
+    { id: 117, name: "RTX 3060 Ti 8GB", hashrate: 18.0, price: 1700, tier: 4, multiplier: 2.17, limited: false, color: "#F44336" },
+    { id: 118, name: "RTX 3070 8GB", hashrate: 19.0, price: 1800, tier: 4, multiplier: 2.18, limited: false, color: "#F44336" },
+    { id: 119, name: "RTX 3070 Ti 8GB", hashrate: 20.0, price: 1900, tier: 4, multiplier: 2.19, limited: false, color: "#F44336" },
+    { id: 120, name: "RTX 3080 10GB", hashrate: 22.0, price: 2000, tier: 4, multiplier: 2.20, limited: false, color: "#F44336" },
+    // УРОВЕНЬ 5 (30 карт)
+    { id: 121, name: "RTX 3080 Ti 12GB", hashrate: 24.0, price: 2200, tier: 5, multiplier: 2.40, limited: false, color: "#9C27B0" },
+    { id: 122, name: "RTX 3080 Ti 24GB", hashrate: 24.5, price: 2300, tier: 5, multiplier: 2.41, limited: false, color: "#9C27B0" },
+    { id: 123, name: "RTX 3090 24GB", hashrate: 26.0, price: 2400, tier: 5, multiplier: 2.42, limited: false, color: "#9C27B0" },
+    { id: 124, name: "RTX 3090 Ti 24GB", hashrate: 28.0, price: 2500, tier: 5, multiplier: 2.43, limited: false, color: "#9C27B0" },
+    { id: 125, name: "RTX 3090 Ti 48GB", hashrate: 28.5, price: 2600, tier: 5, multiplier: 2.44, limited: false, color: "#9C27B0" },
+    { id: 126, name: "RX 6600 8GB", hashrate: 15.0, price: 1500, tier: 5, multiplier: 2.35, limited: false, color: "#9C27B0" },
+    { id: 127, name: "RX 6600 XT 8GB", hashrate: 16.5, price: 1600, tier: 5, multiplier: 2.36, limited: false, color: "#9C27B0" },
+    { id: 128, name: "RX 6700 XT 12GB", hashrate: 18.0, price: 1700, tier: 5, multiplier: 2.37, limited: false, color: "#9C27B0" },
+    { id: 129, name: "RX 6800 16GB", hashrate: 19.5, price: 1800, tier: 5, multiplier: 2.38, limited: false, color: "#9C27B0" },
+    { id: 130, name: "RX 6800 XT 16GB", hashrate: 21.0, price: 1900, tier: 5, multiplier: 2.39, limited: false, color: "#9C27B0" },
+    { id: 131, name: "RX 6900 XT 16GB", hashrate: 22.5, price: 2000, tier: 5, multiplier: 2.40, limited: false, color: "#9C27B0" },
+    { id: 132, name: "RX 6900 XT 32GB", hashrate: 23.0, price: 2100, tier: 5, multiplier: 2.41, limited: false, color: "#9C27B0" },
+    { id: 133, name: "RX 7600 8GB", hashrate: 16.5, price: 1600, tier: 5, multiplier: 2.36, limited: false, color: "#9C27B0" },
+    { id: 134, name: "RX 7600 XT 12GB", hashrate: 18.0, price: 1700, tier: 5, multiplier: 2.37, limited: false, color: "#9C27B0" },
+    { id: 135, name: "RX 7700 XT 12GB", hashrate: 19.5, price: 1800, tier: 5, multiplier: 2.38, limited: false, color: "#9C27B0" },
+    { id: 136, name: "RX 7800 XT 16GB", hashrate: 21.0, price: 1900, tier: 5, multiplier: 2.39, limited: false, color: "#9C27B0" },
+    { id: 137, name: "RX 7900 XT 20GB", hashrate: 22.5, price: 2000, tier: 5, multiplier: 2.40, limited: false, color: "#9C27B0" },
+    { id: 138, name: "RX 7900 XTX 24GB", hashrate: 24.0, price: 2100, tier: 5, multiplier: 2.41, limited: false, color: "#9C27B0" },
+    { id: 139, name: "RTX 4070 12GB", hashrate: 22.5, price: 2200, tier: 5, multiplier: 2.42, limited: false, color: "#9C27B0" },
+    { id: 140, name: "RTX 4070 Super 12GB", hashrate: 24.0, price: 2300, tier: 5, multiplier: 2.43, limited: false, color: "#9C27B0" },
+    { id: 141, name: "RTX 4070 Ti 12GB", hashrate: 25.5, price: 2400, tier: 5, multiplier: 2.44, limited: false, color: "#9C27B0" },
+    { id: 142, name: "RTX 4070 Ti Super 16GB", hashrate: 27.0, price: 2500, tier: 5, multiplier: 2.45, limited: false, color: "#9C27B0" },
+    { id: 143, name: "RTX 4080 16GB", hashrate: 28.5, price: 2600, tier: 5, multiplier: 2.46, limited: false, color: "#9C27B0" },
+    { id: 144, name: "RTX 4080 Super 16GB", hashrate: 30.0, price: 2700, tier: 5, multiplier: 2.47, limited: false, color: "#9C27B0" },
+    { id: 145, name: "RTX 4090 24GB", hashrate: 32.0, price: 2800, tier: 5, multiplier: 2.48, limited: false, color: "#9C27B0" },
+    { id: 146, name: "RTX 4090 Ti 24GB", hashrate: 34.0, price: 2900, tier: 5, multiplier: 2.49, limited: false, color: "#9C27B0" },
+    { id: 147, name: "RTX 4090 Ti 48GB", hashrate: 34.5, price: 3000, tier: 5, multiplier: 2.50, limited: false, color: "#9C27B0" },
+    { id: 148, name: "Titan RTX 24GB", hashrate: 28.5, price: 2600, tier: 5, multiplier: 2.46, limited: false, color: "#9C27B0" },
+    { id: 149, name: "Titan RTX 48GB", hashrate: 29.0, price: 2700, tier: 5, multiplier: 2.47, limited: false, color: "#9C27B0" },
+    { id: 150, name: "Radeon VII 16GB", hashrate: 21.0, price: 1900, tier: 5, multiplier: 2.39, limited: false, color: "#9C27B0" },
+    // УРОВЕНЬ 6 (30 карт)
+    { id: 151, name: "RTX 4090 Ti Super 24GB", hashrate: 36.0, price: 3200, tier: 6, multiplier: 2.75, limited: false, color: "#E91E63" },
+    { id: 152, name: "RTX 4090 Ti Super 48GB", hashrate: 36.5, price: 3300, tier: 6, multiplier: 2.76, limited: false, color: "#E91E63" },
+    { id: 153, name: "RTX 5090 32GB", hashrate: 40.0, price: 3400, tier: 6, multiplier: 2.77, limited: false, color: "#E91E63" },
+    { id: 154, name: "RTX 5090 Ti 32GB", hashrate: 42.0, price: 3500, tier: 6, multiplier: 2.78, limited: false, color: "#E91E63" },
+    { id: 155, name: "RTX 5090 Ti 64GB", hashrate: 42.5, price: 3600, tier: 6, multiplier: 2.79, limited: false, color: "#E91E63" },
+    { id: 156, name: "RTX 6090 48GB", hashrate: 48.0, price: 3700, tier: 6, multiplier: 2.80, limited: false, color: "#E91E63" },
+    { id: 157, name: "RTX 6090 Ti 48GB", hashrate: 50.0, price: 3800, tier: 6, multiplier: 2.81, limited: false, color: "#E91E63" },
+    { id: 158, name: "RTX 6090 Ti 96GB", hashrate: 50.5, price: 3900, tier: 6, multiplier: 2.82, limited: false, color: "#E91E63" },
+    { id: 159, name: "RTX 7090 64GB", hashrate: 55.0, price: 4000, tier: 6, multiplier: 2.83, limited: false, color: "#E91E63" },
+    { id: 160, name: "RTX 7090 Ti 64GB", hashrate: 58.0, price: 4100, tier: 6, multiplier: 2.84, limited: false, color: "#E91E63" },
+    { id: 161, name: "RTX 7090 Ti 128GB", hashrate: 58.5, price: 4200, tier: 6, multiplier: 2.85, limited: false, color: "#E91E63" },
+    { id: 162, name: "RTX 8090 128GB", hashrate: 65.0, price: 4300, tier: 6, multiplier: 2.86, limited: false, color: "#E91E63" },
+    { id: 163, name: "RTX 8090 Ti 128GB", hashrate: 70.0, price: 4400, tier: 6, multiplier: 2.87, limited: false, color: "#E91E63" },
+    { id: 164, name: "RTX 8090 Ti 256GB", hashrate: 70.5, price: 4500, tier: 6, multiplier: 2.88, limited: false, color: "#E91E63" },
+    { id: 165, name: "RTX 9090 256GB", hashrate: 75.0, price: 4600, tier: 6, multiplier: 2.89, limited: false, color: "#E91E63" },
+    { id: 166, name: "RTX 9090 Ti 256GB", hashrate: 80.0, price: 4700, tier: 6, multiplier: 2.90, limited: false, color: "#E91E63" },
+    { id: 167, name: "RTX 9090 Ti 512GB", hashrate: 80.5, price: 4800, tier: 6, multiplier: 2.91, limited: false, color: "#E91E63" },
+    { id: 168, name: "RTX A6000 48GB", hashrate: 55.0, price: 4000, tier: 6, multiplier: 2.83, limited: false, color: "#E91E63" },
+    { id: 169, name: "RTX A6000 96GB", hashrate: 55.5, price: 4100, tier: 6, multiplier: 2.84, limited: false, color: "#E91E63" },
+    { id: 170, name: "RTX A800 80GB", hashrate: 60.0, price: 4200, tier: 6, multiplier: 2.85, limited: false, color: "#E91E63" },
+    { id: 171, name: "RTX A800 160GB", hashrate: 60.5, price: 4300, tier: 6, multiplier: 2.86, limited: false, color: "#E91E63" },
+    { id: 172, name: "RTX A100 80GB", hashrate: 65.0, price: 4400, tier: 6, multiplier: 2.87, limited: false, color: "#E91E63" },
+    { id: 173, name: "RTX A100 160GB", hashrate: 65.5, price: 4500, tier: 6, multiplier: 2.88, limited: false, color: "#E91E63" },
+    { id: 174, name: "RTX H100 80GB", hashrate: 75.0, price: 4600, tier: 6, multiplier: 2.89, limited: false, color: "#E91E63" },
+    { id: 175, name: "RTX H100 160GB", hashrate: 75.5, price: 4700, tier: 6, multiplier: 2.90, limited: false, color: "#E91E63" },
+    { id: 176, name: "RTX B200 192GB", hashrate: 90.0, price: 4800, tier: 6, multiplier: 2.91, limited: false, color: "#E91E63" },
+    { id: 177, name: "RTX B200 384GB", hashrate: 90.5, price: 4900, tier: 6, multiplier: 2.92, limited: false, color: "#E91E63" },
+    { id: 178, name: "RTX B100 192GB", hashrate: 95.0, price: 5000, tier: 6, multiplier: 2.93, limited: false, color: "#E91E63" },
+    { id: 179, name: "RTX B100 384GB", hashrate: 95.5, price: 5100, tier: 6, multiplier: 2.94, limited: false, color: "#E91E63" },
+    { id: 180, name: "RTX X100 256GB", hashrate: 100.0, price: 5200, tier: 6, multiplier: 2.95, limited: false, color: "#E91E63" },
+    // УРОВЕНЬ 7 (20 карт)
+    { id: 181, name: "RTX X100 512GB", hashrate: 105.0, price: 5300, tier: 7, multiplier: 3.10, limited: false, color: "#00BCD4" },
+    { id: 182, name: "RTX X200 256GB", hashrate: 110.0, price: 5400, tier: 7, multiplier: 3.12, limited: false, color: "#00BCD4" },
+    { id: 183, name: "RTX X200 512GB", hashrate: 115.0, price: 5500, tier: 7, multiplier: 3.14, limited: false, color: "#00BCD4" },
+    { id: 184, name: "RTX Z100 512GB", hashrate: 120.0, price: 5600, tier: 7, multiplier: 3.16, limited: false, color: "#00BCD4" },
+    { id: 185, name: "RTX Z100 1TB", hashrate: 125.0, price: 5700, tier: 7, multiplier: 3.18, limited: false, color: "#00BCD4" },
+    { id: 186, name: "RTX Z200 512GB", hashrate: 130.0, price: 5800, tier: 7, multiplier: 3.20, limited: false, color: "#00BCD4" },
+    { id: 187, name: "RTX Z200 1TB", hashrate: 135.0, price: 5900, tier: 7, multiplier: 3.22, limited: false, color: "#00BCD4" },
+    { id: 188, name: "Pelemeshka Core 16GB", hashrate: 40.0, price: 3500, tier: 7, multiplier: 3.00, limited: false, color: "#00BCD4" },
+    { id: 189, name: "Pelemeshka Pro 32GB", hashrate: 50.0, price: 3600, tier: 7, multiplier: 3.02, limited: false, color: "#00BCD4" },
+    { id: 190, name: "Pelemeshka Max 64GB", hashrate: 60.0, price: 3700, tier: 7, multiplier: 3.04, limited: false, color: "#00BCD4" },
+    { id: 191, name: "Pelemeshka Ultra 128GB", hashrate: 80.0, price: 3800, tier: 7, multiplier: 3.06, limited: false, color: "#00BCD4" },
+    { id: 192, name: "Pelemeshka Titan 256GB", hashrate: 100.0, price: 3900, tier: 7, multiplier: 3.08, limited: false, color: "#00BCD4" },
+    { id: 193, name: "Pelemeshka Quantum 512GB", hashrate: 150.0, price: 4000, tier: 7, multiplier: 3.10, limited: false, color: "#00BCD4" },
+    { id: 194, name: "Pelemeshka Quantum Pro 1TB", hashrate: 200.0, price: 4100, tier: 7, multiplier: 3.12, limited: false, color: "#00BCD4" },
+    { id: 195, name: "ASIC X10 10TH/s", hashrate: 300.0, price: 500000, tier: 7, multiplier: 3.50, limited: false, color: "#00BCD4" },
+    { id: 196, name: "ASIC X20 20TH/s", hashrate: 600.0, price: 1000000, tier: 7, multiplier: 3.70, limited: false, color: "#00BCD4" },
+    { id: 197, name: "ASIC X50 50TH/s", hashrate: 1200.0, price: 2000000, tier: 7, multiplier: 3.90, limited: false, color: "#00BCD4" },
+    { id: 198, name: "ASIC X100 100TH/s", hashrate: 1800.0, price: 3000000, tier: 7, multiplier: 4.10, limited: false, color: "#00BCD4" },
+    { id: 199, name: "ASIC X500 500TH/s", hashrate: 2400.0, price: 4000000, tier: 7, multiplier: 4.30, limited: false, color: "#00BCD4" },
+    { id: 200, name: "ASIC X1000 1PH/s", hashrate: 3000.0, price: 5000000, tier: 7, multiplier: 4.50, limited: false, color: "#00BCD4" },
+    // ЛИМИТИРОВАННАЯ
+    { id: LIMITED_GPU_ID, name: "🐷 Хрюка RTX 5090", hashrate: 5000.0, price: 75000000, tier: 7, multiplier: 5.00, limited: true, color: "#FF1493", maxStock: 500 }
 ];
 
 // ========================================================================
-// 3. СОСТОЯНИЕ ИГРЫ И ВСЕ ФУНКЦИИ (БЕЗ ИЗМЕНЕНИЙ)
+// 3. СОСТОЯНИЕ ИГРЫ
 // ========================================================================
 let G = {
     budget: 100,
     total_earned: 100,
     clicks: 0,
     click_rate: 1000,
-    click_reward: 10,
+    click_reward: 5,
     mining_active: false,
     gpus: [],
     mining_coin: "POMOJNYI",
@@ -492,8 +491,8 @@ let G = {
     work_max: 10,
     work_cooldown: 60,
     work_cooldown_left: 0,
-    work_min: 10,
-    work_max_earn: 20,
+    work_min: 5,
+    work_max_earn: 15,
     work_count: 0,
     portfolio: {},
     wallet: {},
@@ -501,9 +500,13 @@ let G = {
     trade_history: [],
     coins_data: [],
     selected_coin: null,
-    loaded: false
+    loaded: false,
+    limitedGpuStock: 500
 };
 
+// ========================================================================
+// 4. ВСЕ ФУНКЦИИ ИГРЫ
+// ========================================================================
 function initGame() {
     G.coins_data = COINS.map(c => ({
         ...c,
@@ -513,6 +516,7 @@ function initGame() {
     }));
     COINS.forEach(c => { G.portfolio[c.name] = 0; G.wallet[c.name] = 0; });
     G.selected_coin = G.coins_data[0];
+    G.limitedGpuStock = limitedGpuStock;
     loadFromStorage();
     G.loaded = true;
     updateUI();
@@ -523,24 +527,7 @@ function initGame() {
     initPriceChart();
     startAutoSave();
     setStatus('✅ Игра загружена', 'ok');
-}
-
-function getMaxTier() {
-    if (G.gpus.length === 0) return 0;
-    return Math.max(...G.gpus.map(g => g.tier));
-}
-
-function getAvailableCoins() {
-    const maxTier = getMaxTier();
-    if (maxTier === 0) return G.coins_data.slice(0, 2);
-    const tierMap = { 1: 2, 2: 4, 3: 6, 4: 8, 5: 10, 6: 12, 7: 18 };
-    const count = tierMap[maxTier] || 2;
-    return G.coins_data.slice(0, count);
-}
-
-function canMineCoin(coinName) {
-    const available = getAvailableCoins();
-    return available.some(c => c.name === coinName);
+    updatePlayTime();
 }
 
 function getRealEps() {
@@ -548,65 +535,21 @@ function getRealEps() {
     const hashrate = G.gpus.reduce((s, g) => s + g.hashrate, 0);
     const price = G.coins_data.find(c => c.name === G.mining_coin)?.current_price || 0;
     const totalMultiplier = G.gpus.reduce((s, g) => s + (g.multiplier || 1.0), 0);
-    const eps = hashrate * 0.00001 * price * totalMultiplier;
-    const maxEps = 1000000;
-    return Math.min(eps, maxEps);
+    const eps = hashrate * 0.000005 * price * totalMultiplier;
+    return Math.min(eps, 1000000);
 }
 
-function setFilter(filter) {
-    currentFilter = filter;
-    document.querySelectorAll('.filter-group .btn').forEach(b => b.classList.remove('active-filter'));
-    const btn = document.getElementById('filter_' + filter);
-    if (btn) btn.classList.add('active-filter');
-    updateGPUList();
-}
-
-function getFilteredGPUs() {
-    const search = document.getElementById('gpuSearch')?.value?.toLowerCase() || '';
-    let filtered = ALL_GPUS.filter(g => g.name.toLowerCase().includes(search));
-    switch(currentFilter) {
-        case 'price_asc': filtered.sort((a, b) => a.price - b.price); break;
-        case 'price_desc': filtered.sort((a, b) => b.price - a.price); break;
-        case 'hashrate_asc': filtered.sort((a, b) => a.hashrate - b.hashrate); break;
-        case 'hashrate_desc': filtered.sort((a, b) => b.hashrate - a.hashrate); break;
-        case 'tier_asc': filtered.sort((a, b) => a.tier - b.tier); break;
-        case 'tier_desc': filtered.sort((a, b) => b.tier - a.tier); break;
-        default: break;
+function doClick() {
+    G.clicks++;
+    const prog = G.clicks % G.click_rate;
+    document.getElementById('clickCounter').textContent = prog + ' / ' + G.click_rate;
+    if (prog === 0) {
+        G.budget += G.click_reward;
+        G.total_earned += G.click_reward;
+        updateUI();
+        saveToStorage();
     }
-    return filtered;
-}
-
-function toggleMining() {
-    if (G.gpus.length === 0) { alert('⚠️ Купи видеокарту!'); return; }
-    if (!canMineCoin(G.mining_coin)) {
-        const avail = getAvailableCoins();
-        alert('❌ Эта монета недоступна!\nДоступны: ' + avail.map(c => c.name).join(', '));
-        return;
-    }
-    G.mining_active = !G.mining_active;
-    document.getElementById('miningBtn').textContent = G.mining_active ? '⏸️ ОСТАНОВИТЬ' : '▶️ ЗАПУСТИТЬ';
     updateUI();
-}
-
-function startMiningLoop() {
-    setInterval(() => {
-        if (!G.mining_active || G.gpus.length === 0) return;
-        const earn = getRealEps();
-        if (earn > 0) { G.budget += earn; G.total_earned += earn; updateUI(); }
-    }, 1000);
-}
-
-function changeMiningCoin() {
-    const select = document.getElementById('miningCoinSelect');
-    G.mining_coin = select.value;
-    updateUI();
-}
-
-function fillMiningCoinSelect() {
-    const select = document.getElementById('miningCoinSelect');
-    const available = getAvailableCoins();
-    const list = available.length > 0 ? available : G.coins_data.slice(0, 2);
-    select.innerHTML = list.map(c => `<option value="${c.name}" ${c.name === G.mining_coin ? 'selected' : ''}>${c.symbol} ${c.name}</option>`).join('');
 }
 
 function startWork() {
@@ -642,17 +585,24 @@ function startWork() {
     }, 1000);
 }
 
-function doClick() {
-    G.clicks++;
-    const prog = G.clicks % G.click_rate;
-    document.getElementById('clickCounter').textContent = prog + ' / ' + G.click_rate;
-    if (prog === 0) {
-        G.budget += G.click_reward;
-        G.total_earned += G.click_reward;
-        updateUI();
-        saveToStorage();
-    }
+function toggleMining() {
+    if (G.gpus.length === 0) { alert('⚠️ Купи видеокарту!'); return; }
+    G.mining_active = !G.mining_active;
+    document.getElementById('miningBtn').textContent = G.mining_active ? '⏸️ ОСТАНОВИТЬ' : '▶️ ЗАПУСТИТЬ';
     updateUI();
+}
+
+function changeMiningCoin() {
+    const select = document.getElementById('miningCoinSelect');
+    G.mining_coin = select.value;
+    updateUI();
+}
+
+function fillMiningCoinSelect() {
+    const select = document.getElementById('miningCoinSelect');
+    select.innerHTML = G.coins_data.map(c => 
+        `<option value="${c.name}" ${c.name === G.mining_coin ? 'selected' : ''}>${c.symbol} ${c.name}</option>`
+    ).join('');
 }
 
 function buyCoin() {
@@ -689,15 +639,40 @@ function sellCoin() {
 
 function fillTradeCoinSelect() {
     const select = document.getElementById('tradeCoinSelect');
-    select.innerHTML = G.coins_data.map(c => `<option value="${c.name}" ${c.name === G.selected_coin?.name ? 'selected' : ''}>${c.symbol} ${c.name}</option>`).join('');
+    select.innerHTML = G.coins_data.map(c => 
+        `<option value="${c.name}" ${c.name === G.selected_coin?.name ? 'selected' : ''}>${c.symbol} ${c.name}</option>`
+    ).join('');
 }
 
 function buyGpu(id) {
     const gpu = ALL_GPUS.find(g => g.id === id);
     if (!gpu) { alert('❌ Карта не найдена!'); return; }
-    if (G.budget < gpu.price) { alert('❌ Нужно ' + gpu.price.toLocaleString() + ' ₽'); return; }
+    
+    if (gpu.limited) {
+        if (G.limitedGpuStock <= 0) {
+            alert('❌ Все 500 штук Хрюка RTX 5090 уже распроданы!');
+            return;
+        }
+        if (G.budget < gpu.price) {
+            alert('❌ Нужно ' + gpu.price.toLocaleString() + ' ₽');
+            return;
+        }
+        G.budget -= gpu.price;
+        G.gpus.push({ id: gpu.id + '_' + Date.now(), name: gpu.name, hashrate: gpu.hashrate, price: gpu.price, tier: gpu.tier, multiplier: gpu.multiplier || 1.0, color: gpu.color, limited: true });
+        G.limitedGpuStock--;
+        checkAchievements();
+        saveToStorage();
+        updateUI();
+        return;
+    }
+    
+    if (G.budget < gpu.price) {
+        alert('❌ Нужно ' + gpu.price.toLocaleString() + ' ₽');
+        return;
+    }
     G.budget -= gpu.price;
     G.gpus.push({ id: gpu.id + '_' + Date.now(), name: gpu.name, hashrate: gpu.hashrate, price: gpu.price, tier: gpu.tier, multiplier: gpu.multiplier || 1.0, color: gpu.color });
+    checkAchievements();
     saveToStorage();
     updateUI();
 }
@@ -710,6 +685,184 @@ function sellGpu(index) {
     G.gpus.splice(index, 1);
     saveToStorage();
     updateUI();
+}
+
+function checkAchievements() {
+    if (G.gpus.length >= 10 && !achievementsUnlocked.includes('10_gpus')) {
+        achievementsUnlocked.push('10_gpus');
+        G.budget += 5000;
+        setStatus('🏆 Достижение: 10 видеокарт! +5000 ₽', 'ok');
+    }
+    if (G.gpus.length >= 50 && !achievementsUnlocked.includes('50_gpus')) {
+        achievementsUnlocked.push('50_gpus');
+        G.budget += 50000;
+        setStatus('🏆 Достижение: 50 видеокарт! +50000 ₽', 'ok');
+    }
+    if (G.gpus.length >= 100 && !achievementsUnlocked.includes('100_gpus')) {
+        achievementsUnlocked.push('100_gpus');
+        G.budget += 200000;
+        setStatus('🏆 Достижение: 100 видеокарт! +200000 ₽', 'ok');
+    }
+    if (G.gpus.length >= 200 && !achievementsUnlocked.includes('200_gpus')) {
+        achievementsUnlocked.push('200_gpus');
+        G.budget += 1000000;
+        setStatus('🏆 Достижение: 200 видеокарт! +1000000 ₽', 'ok');
+    }
+    if (G.total_earned >= 1000000 && !achievementsUnlocked.includes('millionaire')) {
+        achievementsUnlocked.push('millionaire');
+        G.budget += 500000;
+        setStatus('🏆 Достижение: Миллионер! +500000 ₽', 'ok');
+    }
+    if (G.total_earned >= 10000000 && !achievementsUnlocked.includes('ten_million')) {
+        achievementsUnlocked.push('ten_million');
+        G.budget += 2000000;
+        setStatus('🏆 Достижение: 10 миллионов! +2000000 ₽', 'ok');
+    }
+    if (G.total_earned >= 100000000 && !achievementsUnlocked.includes('hundred_million')) {
+        achievementsUnlocked.push('hundred_million');
+        G.budget += 10000000;
+        setStatus('🏆 Достижение: 100 миллионов! +10000000 ₽', 'ok');
+    }
+}
+
+function updatePlayTime() {
+    setInterval(() => {
+        const playTime = Math.floor((Date.now() - gameStartTime) / 1000);
+        const h = String(Math.floor(playTime / 3600)).padStart(2, '0');
+        const m = String(Math.floor((playTime % 3600) / 60)).padStart(2, '0');
+        const s = String(playTime % 60).padStart(2, '0');
+        document.getElementById('playTimeDisplay').textContent = `${h}:${m}:${s}`;
+        document.getElementById('statAchievements').textContent = achievementsUnlocked.length;
+    }, 1000);
+}
+
+function setFilter(filter) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-group .btn').forEach(b => b.classList.remove('active-filter'));
+    const btn = document.getElementById('filter_' + filter);
+    if (btn) btn.classList.add('active-filter');
+    updateGPUList();
+}
+
+function getFilteredGPUs() {
+    const search = document.getElementById('gpuSearch')?.value?.toLowerCase() || '';
+    let filtered = ALL_GPUS.filter(g => g.name.toLowerCase().includes(search));
+    
+    filtered = filtered.map(g => {
+        if (g.limited) {
+            return { ...g, stock: G.limitedGpuStock };
+        }
+        return g;
+    });
+    
+    switch(currentFilter) {
+        case 'price_asc': filtered.sort((a, b) => a.price - b.price); break;
+        case 'price_desc': filtered.sort((a, b) => b.price - a.price); break;
+        case 'hashrate_asc': filtered.sort((a, b) => a.hashrate - b.hashrate); break;
+        case 'hashrate_desc': filtered.sort((a, b) => b.hashrate - a.hashrate); break;
+        case 'tier_asc': filtered.sort((a, b) => a.tier - b.tier); break;
+        case 'tier_desc': filtered.sort((a, b) => b.tier - a.tier); break;
+        default: break;
+    }
+    return filtered;
+}
+
+function updateGPUList() {
+    const filtered = getFilteredGPUs();
+    const list = document.getElementById('gpuMarketList');
+    if (filtered.length === 0) {
+        list.innerHTML = '<div style="color:#808080; font-size:11px; text-align:center; padding:20px;">Нет карт</div>';
+    } else {
+        list.innerHTML = filtered.map(g => {
+            let limitedHtml = '';
+            if (g.limited) {
+                limitedHtml = `<div class="limited-badge">🔥 ${g.stock}/500</div>`;
+                if (g.stock <= 0) {
+                    return `<div class="gpu-card sold-out" style="border-color:${g.color}; opacity:0.5;">
+                        <div class="gpu-name" style="color:${g.color};">${g.name}</div>
+                        <div class="gpu-info">⚡ ${g.hashrate} MH/s · Уровень ${g.tier} · ×${g.multiplier?.toFixed(2) || '1.00'}</div>
+                        <div class="gpu-price">💰 ${g.price.toLocaleString()} ₽</div>
+                        <div style="color:#f00; font-size:10px;">❌ РАСПРОДАНО</div>
+                        ${limitedHtml}
+                    </div>`;
+                }
+            }
+            return `<div class="gpu-card" style="border-color:${g.color};">
+                ${limitedHtml}
+                <div class="gpu-name" style="color:${g.color};">${g.name}</div>
+                <div class="gpu-info">⚡ ${g.hashrate} MH/s · Уровень ${g.tier} · ×${g.multiplier?.toFixed(2) || '1.00'}</div>
+                <div class="gpu-price">💰 ${g.price.toLocaleString()} ₽</div>
+                <button class="btn btn-green" onclick="buyGpu(${g.id})">КУПИТЬ</button>
+                ${g.limited ? `<div class="limited-remaining">Осталось: ${g.stock} шт.</div>` : ''}
+            </div>`;
+        }).join('');
+    }
+}
+
+function updateMyGpus() {
+    const list = document.getElementById('myGpuList');
+    if (G.gpus.length === 0) {
+        list.innerHTML = '<div style="color:#808080; font-size:11px; text-align:center; padding:10px;">Нет карт</div>';
+    } else {
+        list.innerHTML = G.gpus.map((g, idx) => `
+            <div class="coin-item">
+                <span class="name" style="color:${g.color};">${g.name}</span>
+                <span>⚡ ${g.hashrate} MH/s</span>
+                <span>Уровень ${g.tier}</span>
+                <span style="color:#ff0;">×${g.multiplier?.toFixed(2) || '1.00'}</span>
+                <button class="btn btn-red btn-sm" onclick="sellGpu(${idx})">Продать</button>
+            </div>
+        `).join('');
+    }
+}
+
+function updateAllCoinsList() {
+    const list = document.getElementById('allCoinsList');
+    list.innerHTML = G.coins_data.map(c => `
+        <div class="coin-item">
+            <span class="name" style="color:${c.color};">${c.symbol} ${c.name}</span>
+            <span>💰 ${c.current_price.toFixed(0)} ₽</span>
+            <span style="color:${c.change >= 0 ? '#0f0' : '#f00'};">${(c.change >= 0 ? '+' : '') + c.change.toFixed(2)}%</span>
+        </div>
+    `).join('');
+}
+
+function updatePortfolio() {
+    let total = 0;
+    let html = '';
+    G.coins_data.forEach(c => {
+        const amt = G.portfolio[c.name] || 0;
+        const val = amt * c.current_price;
+        if (amt > 0) {
+            html += `
+                <div class="coin-item">
+                    <span class="name" style="color:${c.color};">${c.symbol} ${c.name}</span>
+                    <span>${amt.toFixed(4)}</span>
+                    <span class="value gold">${val.toFixed(0)} ₽</span>
+                </div>
+            `;
+            total += val;
+        }
+    });
+    document.getElementById('portfolioTotal').textContent = total.toFixed(0) + ' ₽';
+    document.getElementById('walletTotal').textContent = G.gpus.length;
+    document.getElementById('portfolioList').innerHTML = html || '<div style="color:#808080; font-size:11px; text-align:center; padding:10px;">Нет монет</div>';
+}
+
+function updateHistory() {
+    const list = document.getElementById('tradeHistoryList');
+    if (G.trade_history.length === 0) {
+        list.innerHTML = '<div style="color:#808080; font-size:11px; text-align:center; padding:10px;">Нет сделок</div>';
+    } else {
+        list.innerHTML = G.trade_history.slice(-20).reverse().map(t => `
+            <div class="coin-item" style="border-color: ${t.type === 'BUY' ? '#003300' : '#330000'};">
+                <span style="color:${t.type === 'BUY' ? '#0f0' : '#f00'};">${t.type}</span>
+                <span class="name">${t.coin}</span>
+                <span>${t.amount.toFixed(4)}</span>
+                <span class="value">💵 ${t.total.toFixed(2)} ₽</span>
+            </div>
+        `).join('');
+    }
 }
 
 function initPriceChart() {
@@ -753,6 +906,29 @@ function updatePriceChart() {
     priceChart.update();
 }
 
+function updatePricesLoop() {
+    setInterval(() => {
+        G.coins_data.forEach(coin => {
+            const vol = 0.01 + (coin.price / 500000000) * 0.02;
+            const ch = (Math.random() - 0.5) * 2 * vol;
+            coin.current_price *= (1 + ch);
+            coin.current_price = Math.max(coin.min, Math.min(coin.max, coin.current_price));
+            coin.change = ch * 100;
+            coin.history.shift();
+            coin.history.push(coin.current_price);
+        });
+        updateUI();
+    }, 3000);
+}
+
+function startMiningLoop() {
+    setInterval(() => {
+        if (!G.mining_active || G.gpus.length === 0) return;
+        const earn = getRealEps();
+        if (earn > 0) { G.budget += earn; G.total_earned += earn; updateUI(); }
+    }, 1000);
+}
+
 function updateUI() {
     document.getElementById('budgetDisplay').textContent = G.budget.toFixed(2) + ' ₽';
     document.getElementById('earnedDisplay').textContent = G.total_earned.toFixed(2) + ' ₽';
@@ -789,106 +965,6 @@ function updateUI() {
     }
 }
 
-function updateGPUList() {
-    const filtered = getFilteredGPUs();
-    const list = document.getElementById('gpuMarketList');
-    if (filtered.length === 0) {
-        list.innerHTML = '<div style="color:#808080; font-size:11px; text-align:center; padding:20px;">Нет карт</div>';
-    } else {
-        list.innerHTML = filtered.map(g => `
-            <div class="gpu-card" style="border-color:${g.color};">
-                <div class="gpu-name" style="color:${g.color};">${g.name}</div>
-                <div class="gpu-info">⚡ ${g.hashrate} MH/s · Уровень ${g.tier} · ×${g.multiplier?.toFixed(2) || '1.00'}</div>
-                <div class="gpu-price">💰 ${g.price.toLocaleString()} ₽</div>
-                <button class="btn btn-green" onclick="buyGpu(${g.id})">КУПИТЬ</button>
-            </div>
-        `).join('');
-    }
-}
-
-function updateMyGpus() {
-    const list = document.getElementById('myGpuList');
-    if (G.gpus.length === 0) {
-        list.innerHTML = '<div style="color:#808080; font-size:11px; text-align:center; padding:10px;">Нет карт</div>';
-    } else {
-        list.innerHTML = G.gpus.map((g, idx) => `
-            <div class="coin-item">
-                <span class="name" style="color:${g.color};">${g.name}</span>
-                <span>⚡ ${g.hashrate} MH/s</span>
-                <span>Уровень ${g.tier}</span>
-                <span style="color:#ff0;">×${g.multiplier?.toFixed(2) || '1.00'}</span>
-                <button class="btn btn-red btn-sm" onclick="sellGpu(${idx})">Продать</button>
-            </div>
-        `).join('');
-    }
-}
-
-function updateAllCoinsList() {
-    const list = document.getElementById('allCoinsList');
-    list.innerHTML = G.coins_data.map(c => `
-        <div class="coin-item">
-            <span class="name" style="color:${c.color};">${c.symbol} ${c.name}</span>
-            <span>💰 ${c.current_price.toFixed(0)} ₽</span>
-            <span style="color:${c.change >= 0 ? '#0f0' : '#f00'};">${(c.change >= 0 ? '+' : '') + c.change.toFixed(2)}%</span>
-        </div>
-    `).join('');
-}
-
-function updatePortfolio() {
-    let total = 0;
-    let html = '';
-    G.coins_data.forEach(c => {
-        const amt = G.portfolio[c.name] || 0;
-        const wal = G.wallet[c.name] || 0;
-        const val = amt * c.current_price;
-        if (amt > 0 || wal > 0) {
-            html += `
-                <div class="coin-item">
-                    <span class="name">${c.symbol} ${c.name}</span>
-                    <span>${amt.toFixed(4)}</span>
-                    <span class="value gold">${val.toFixed(0)} ₽</span>
-                    <span class="value blue">💎 ${wal.toFixed(4)}</span>
-                </div>
-            `;
-            total += val;
-        }
-    });
-    document.getElementById('portfolioTotal').textContent = total.toFixed(0) + ' ₽';
-    document.getElementById('walletTotal').textContent = G.gpus.length;
-    document.getElementById('portfolioList').innerHTML = html || '<div style="color:#808080; font-size:11px; text-align:center; padding:10px;">Нет монет</div>';
-}
-
-function updateHistory() {
-    const list = document.getElementById('tradeHistoryList');
-    if (G.trade_history.length === 0) {
-        list.innerHTML = '<div style="color:#808080; font-size:11px; text-align:center; padding:10px;">Нет сделок</div>';
-    } else {
-        list.innerHTML = G.trade_history.slice(-20).reverse().map(t => `
-            <div class="coin-item" style="border-color: ${t.type === 'BUY' ? '#003300' : '#330000'};">
-                <span style="color:${t.type === 'BUY' ? '#0f0' : '#f00'};">${t.type}</span>
-                <span class="name">${t.coin}</span>
-                <span>${t.amount.toFixed(4)}</span>
-                <span class="value">💵 ${t.total.toFixed(2)} ₽</span>
-            </div>
-        `).join('');
-    }
-}
-
-function updatePricesLoop() {
-    setInterval(() => {
-        G.coins_data.forEach(coin => {
-            const vol = 0.01 + (coin.price / 500000000) * 0.02;
-            const ch = (Math.random() - 0.5) * 2 * vol;
-            coin.current_price *= (1 + ch);
-            coin.current_price = Math.max(coin.min, Math.min(coin.max, coin.current_price));
-            coin.change = ch * 100;
-            coin.history.shift();
-            coin.history.push(coin.current_price);
-        });
-        updateUI();
-    }, 3000);
-}
-
 function saveToStorage() {
     try {
         const data = {
@@ -902,6 +978,7 @@ function saveToStorage() {
             trade_count: G.trade_count,
             trade_history: G.trade_history.slice(-200),
             work_count: G.work_count,
+            limitedGpuStock: G.limitedGpuStock,
             coins_data: G.coins_data.map(c => ({ name: c.name, current_price: c.current_price }))
         };
         localStorage.setItem('pelemeshka_save', JSON.stringify(data));
@@ -919,6 +996,7 @@ function loadFromStorage() {
         G.gpus = data.gpus || [];
         G.mining_coin = data.mining_coin || "POMOJNYI";
         G.work_count = data.work_count || 0;
+        G.limitedGpuStock = data.limitedGpuStock || 500;
         if (data.portfolio) Object.assign(G.portfolio, data.portfolio);
         if (data.wallet) Object.assign(G.wallet, data.wallet);
         G.trade_count = data.trade_count || 0;
@@ -929,28 +1007,11 @@ function loadFromStorage() {
                 if (coin) coin.current_price = d.current_price || coin.price;
             });
         }
+        limitedGpuStock = G.limitedGpuStock;
     } catch(e) { console.error('Load error:', e); }
 }
 
 function startAutoSave() { setInterval(saveToStorage, 10000); }
-
-function base64ToBytes(base64) {
-    try { return Uint8Array.from(atob(base64), c => c.charCodeAt(0)); } catch(e) { return null; }
-}
-
-function decryptData(encryptedStr) {
-    try {
-        const encryptedBytes = base64ToBytes(encryptedStr);
-        if (!encryptedBytes) return null;
-        const keyBytes = new TextEncoder().encode(ENCRYPTION_KEY);
-        const decryptedBytes = new Uint8Array(encryptedBytes.length);
-        for (let i = 0; i < encryptedBytes.length; i++) {
-            decryptedBytes[i] = encryptedBytes[i] ^ keyBytes[i % keyBytes.length];
-        }
-        const decompressed = pako.inflate(decryptedBytes, { to: 'string' });
-        return JSON.parse(decompressed);
-    } catch(e) { return null; }
-}
 
 function loadFile() {
     const input = document.getElementById('fileInput');
@@ -960,13 +1021,7 @@ function loadFile() {
     reader.onload = function(e) {
         try {
             const content = e.target.result;
-            let data;
-            if (file.name.endsWith('.pele')) {
-                data = decryptData(content);
-                if (!data) { setStatus('❌ Ошибка .pele', 'error'); return; }
-            } else {
-                data = JSON.parse(content);
-            }
+            let data = JSON.parse(content);
             Object.assign(G, data);
             G.coins_data = COINS.map(c => ({ ...c, current_price: c.price, history: Array(50).fill(c.price), change: 0 }));
             if (data.coins_data) {
@@ -1000,6 +1055,9 @@ function setStatus(msg, type) {
     if (type === 'error') el.classList.add('error');
 }
 
+// ========================================================================
+// 5. СОБЫТИЯ И ЗАПУСК
+// ========================================================================
 document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', function() {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1029,26 +1087,11 @@ setInterval(() => {
     }
 }, 1000);
 
-(function loadPako() {
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js';
-    document.head.appendChild(script);
-    script.onload = function() { console.log('✅ pako загружен'); initGame(); };
-    script.onerror = function() {
-        window.pako = { inflate: function(data, opts) { try { return new TextDecoder().decode(data); } catch(e) { return ''; } } };
-        initGame();
-    };
-})();
+initGame();
 
-console.log('🔥 200 РУЧНЫХ КАРТ – ЧЁТКИЕ УРОВНИ!');
-console.log('📊 Уровень 1: 30 карт (100-500 ₽)');
-console.log('📊 Уровень 2: 30 карт (500-2000 ₽)');
-console.log('📊 Уровень 3: 30 карт (2000-8000 ₽)');
-console.log('📊 Уровень 4: 30 карт (8000-30000 ₽)');
-console.log('📊 Уровень 5: 30 карт (30000-100000 ₽)');
-console.log('📊 Уровень 6: 30 карт (100000-500000 ₽)');
-console.log('📊 Уровень 7: 20 карт (500000-5000000 ₽)');
-console.log('💎 ВСЕГО: 200 КАРТ!');
+console.log('🔥 201 КАРТА – СБАЛАНСИРОВАННАЯ ЭКОНОМИКА!');
+console.log('🐷 ЛИМИТИРОВАННАЯ: Хрюка RTX 5090 – 75 млн ₽, 500 шт!');
+console.log('⏱️ СТАНЬ БОГАТЫМ ЗА НЕДЕЛИ, А НЕ ЗА ЧАС!');
 </script>
 </body>
-</html>
+    </html>
