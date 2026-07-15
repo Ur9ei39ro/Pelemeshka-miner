@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🥟 ПЕЛЕМЕШКА ТРЕЙДЕР – MMO</title>
+    <title>🥟 ПЕЛЕМЕШКА ТРЕЙДЕР – 501 КАРТА</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: #0a0f0f; color: #0f0; font-family: 'Courier New', monospace; padding: 8px; padding-bottom: 80px; }
@@ -66,7 +66,6 @@
         .auth-modal .btn { width: 100%; padding: 14px; font-size: 16px; }
         .user-display { position: fixed; top: 8px; right: 8px; background: #001020; border: 1px solid #0f0; border-radius: 20px; padding: 6px 14px; font-size: 12px; color: #0f0; z-index: 100; display: none; cursor: pointer; }
         .user-display:hover { background: #003030; }
-        /* ОКНО ТРЕЙДА */
         .trade-window-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.92); z-index: 1000; padding: 20px; overflow-y: auto; display: none; }
         .trade-window-box { max-width: 750px; margin: 0 auto; background: #001020; border: 2px solid #0f0; border-radius: 16px; padding: 20px; }
         .trade-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -85,6 +84,8 @@
         .trade-status.ready { color: #0f0; }
         .trade-status.not-ready { color: #f00; }
         .trade-execute-btn { margin-top: 12px; font-size: 16px; padding: 14px; }
+        .boost-indicator { background: #402000; border: 2px solid #ff0; border-radius: 8px; padding: 6px 12px; text-align: center; font-weight: bold; color: #ff0; margin: 4px 0; display: none; }
+        .promo-input { width: 100%; padding: 10px; background: #001020; border: 1px solid #0f0; border-radius: 8px; color: #0f0; font-size: 14px; margin: 4px 0; }
         @media (max-width: 480px) { .gpu-grid { grid-template-columns: 1fr 1fr; } .trade-grid { grid-template-columns: 1fr; } }
         @media (max-width: 360px) { .gpu-grid { grid-template-columns: 1fr; } }
     </style>
@@ -122,7 +123,7 @@
 <!-- ШАПКА -->
 <div class="header">
     <h1>🥟 ПЕЛЕМЕШКА ТРЕЙДЕР</h1>
-    <div class="sub">MMO · 201 карта · Обмен как в ММО</div>
+    <div class="sub">501 карта · Безлимитный доход</div>
 </div>
 
 <!-- БАЛАНС -->
@@ -132,6 +133,9 @@
     <div class="row"><span class="label">⏱️ ВРЕМЯ</span><span class="value blue" id="playTimeDisplay">00:00:00</span></div>
     <div class="row"><span class="label">👤 ИГРОК</span><span class="value" id="nickDisplay">Не авторизован</span></div>
 </div>
+
+<!-- БУФФ 2x -->
+<div class="boost-indicator" id="boostIndicator">🚀 2x ЗАРАБОТОК АКТИВЕН! <span id="boostTimer">60</span>с</div>
 
 <!-- КЛИКЕР -->
 <button class="clicker-btn" onclick="doClick()">🖱️ КЛИКНИ<br><span style="font-size:14px;" id="clickCounter">0 / 1000</span></button>
@@ -146,6 +150,7 @@
     <div class="tab" data-tab="tab-wallet">💼 Кошелёк</div>
     <div class="tab" data-tab="tab-chart">📈 График</div>
     <div class="tab" data-tab="tab-leaderboard">🏆 Лидерборд</div>
+    <div class="tab" data-tab="tab-promo">🎫 Промокоды</div>
     <div class="tab" data-tab="tab-trade-global">🔄 Обмен</div>
 </div>
 
@@ -193,7 +198,7 @@
 <!-- GPU -->
 <div id="tab-gpu" class="tab-content">
     <div class="card">
-        <h3>🛒 МАРКЕТ GPU (201 карта)</h3>
+        <h3>🛒 МАРКЕТ GPU (501 карта)</h3>
         <input type="text" id="gpuSearch" class="search-input" placeholder="🔍 Поиск карты...">
         <div class="filter-group" style="display:flex; gap:4px; flex-wrap:wrap; margin:4px 0;">
             <button class="btn btn-blue btn-sm active-filter" onclick="setFilter('default')" id="filter_default">Все</button>
@@ -260,7 +265,20 @@
     </div>
 </div>
 
-<!-- ОБМЕН КАК В ММО -->
+<!-- ПРОМОКОДЫ -->
+<div id="tab-promo" class="tab-content">
+    <div class="card">
+        <h3>🎫 ПРОМОКОДЫ</h3>
+        <input type="text" id="promoInput" class="promo-input" placeholder="Введите промокод...">
+        <button class="btn btn-orange" onclick="activatePromo()">🎫 АКТИВИРОВАТЬ</button>
+        <div id="promoMessage" style="margin-top:6px; font-size:12px; color:#808080;"></div>
+        <hr style="border-color:#003030; margin:8px 0;">
+        <h4 style="color:#0ff; font-size:12px;">📋 Доступные промокоды:</h4>
+        <div id="promoList" style="font-size:11px; color:#808080;"></div>
+    </div>
+</div>
+
+<!-- ОБМЕН -->
 <div id="tab-trade-global" class="tab-content">
     <div class="card">
         <h3>🔄 ОБМЕН (как в ММО)</h3>
@@ -272,24 +290,20 @@
     </div>
 </div>
 
-<!-- ОКНО ТРЕЙДА (всплывающее) -->
+<!-- ОКНО ТРЕЙДА -->
 <div class="trade-window-overlay" id="tradeWindowOverlay">
     <div class="trade-window-box">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
             <h3 style="color:#0ff;">🔄 ОБМЕН С <span id="tradePartnerDisplay">???</span></h3>
             <button class="btn btn-red" onclick="closeTradeWindow()" style="width:auto; padding:8px 16px; font-size:12px;">❌ ЗАКРЫТЬ</button>
         </div>
-        
         <div class="trade-grid">
-            <!-- ЛЕВАЯ КОЛОНКА (ТЫ) -->
             <div class="trade-col my">
                 <h4 style="color:#0f0;">👤 ТЫ</h4>
                 <div class="balance">💰 Баланс: <span class="value gold" id="tradeMyBalance">0 ₽</span></div>
                 <hr style="border-color:#003030; margin:6px 0;">
                 <div style="font-size:12px; color:#0ff;">📦 Твой лот:</div>
-                <div class="trade-offer-box" id="tradeMyOffer">
-                    <span class="empty">Ничего не выбрано</span>
-                </div>
+                <div class="trade-offer-box" id="tradeMyOffer"><span class="empty">Ничего не выбрано</span></div>
                 <div style="display:flex; gap:4px; flex-wrap:wrap; margin-top:6px;">
                     <input type="number" id="tradeMyMoney" placeholder="💰 Сумма" style="flex:1; min-width:60px; padding:6px; background:#001020; border:1px solid #0f0; border-radius:6px; color:#0f0; font-size:12px;">
                     <button class="btn btn-green btn-sm" onclick="addMoneyToTrade()" style="flex:0;">➕ Деньги</button>
@@ -303,21 +317,15 @@
                 <button class="btn btn-blue trade-ready-btn" onclick="toggleTradeReady()" id="tradeReadyBtn">✅ ГОТОВ</button>
                 <div class="trade-status not-ready" id="tradeMyStatus">❌ Не готов</div>
             </div>
-
-            <!-- ПРАВАЯ КОЛОНКА (СОПЕРНИК) -->
             <div class="trade-col their">
                 <h4 style="color:#f00;">👤 <span id="tradePartnerName">???</span></h4>
                 <div class="balance">💰 Баланс: <span class="value gold" id="tradePartnerBalance">0 ₽</span></div>
                 <hr style="border-color:#003030; margin:6px 0;">
                 <div style="font-size:12px; color:#ff0;">📦 Лот соперника:</div>
-                <div class="trade-offer-box" id="tradePartnerOffer">
-                    <span class="empty">Ожидание...</span>
-                </div>
+                <div class="trade-offer-box" id="tradePartnerOffer"><span class="empty">Ожидание...</span></div>
                 <div style="font-size:11px; color:#808080; margin-top:8px;" class="trade-status not-ready" id="tradePartnerStatus">⏳ Ожидает...</div>
             </div>
         </div>
-
-        <!-- КНОПКА ОБМЕНА -->
         <button class="btn btn-orange trade-execute-btn" onclick="executeTrade()" id="tradeExecuteBtn">🔄 ПОДТВЕРДИТЬ ОБМЕН</button>
         <div id="tradeError" style="color:#f00; font-size:12px; text-align:center; margin-top:4px;"></div>
     </div>
@@ -348,12 +356,17 @@ console.log = function() {}; console.warn = function() {}; console.error = funct
 // ========================================================================
 // 1. НАСТРОЙКИ
 // ========================================================================
-const ENCRYPTION_KEY = "Pelemeshka_Super_Secret_Key_2026";
 let priceChart = null;
 let chartHistory = [];
 let currentFilter = 'default';
 let gameStartTime = Date.now();
 let achievementsUnlocked = [];
+let boostActive = false;
+let boostTimer = null;
+let boostRemaining = 0;
+let usedPromoCodes = [];
+let globalPromoUsed = 0;
+const MAX_GLOBAL_PROMO = 10000;
 
 const COINS = [
     { name: "POMOJNYI", price: 50, color: "#8B4513", min: 30, max: 100, symbol: "POM", tier: 0 },
@@ -377,7 +390,7 @@ const COINS = [
 ];
 
 // ========================================================================
-// 2. ВСЕ КАРТЫ (201 штука)
+// 2. ВСЕ КАРТЫ (500 + 1 Хрюка)
 // ========================================================================
 const LIMITED_GPU_ID = 999;
 let limitedGpuStock = 500;
@@ -386,125 +399,227 @@ function generateAllGpus() {
     const gpus = [];
     let id = 1;
     
-    // УРОВЕНЬ 1 (30 карт)
+    // УРОВЕНЬ 1 (50 карт, 100-500 ₽, 1-5 MH/s)
     const tier1Names = [
-        "GT 1030 2GB", "GT 1030 4GB", "GTX 650 1GB", "GTX 650 2GB", 
-        "GTX 750 1GB", "GTX 750 2GB", "GTX 750 Ti 2GB", "GTX 750 Ti 4GB",
-        "GT 710 1GB", "GT 710 2GB", "GT 720 2GB", "GT 730 2GB",
-        "GT 730 4GB", "Radeon HD 6450", "Radeon HD 6570", "Radeon HD 6670",
-        "Radeon HD 7750", "Radeon HD 7770", "Radeon R7 240", "Radeon R7 250",
-        "Radeon R7 260", "Radeon R7 360", "GTX 550 Ti 1GB", "GTX 550 Ti 2GB",
-        "GTX 560 1GB", "GTX 560 2GB", "GTX 560 Ti 1GB", "GTX 560 Ti 2GB",
-        "GTX 660 2GB", "GTX 660 Ti 2GB"
+        "GT 1030 2GB", "GT 1030 4GB", "GTX 650 1GB", "GTX 650 2GB", "GTX 750 1GB",
+        "GTX 750 2GB", "GTX 750 Ti 2GB", "GTX 750 Ti 4GB", "GT 710 1GB", "GT 710 2GB",
+        "GT 720 2GB", "GT 730 2GB", "GT 730 4GB", "Radeon HD 6450", "Radeon HD 6570",
+        "Radeon HD 6670", "Radeon HD 7750", "Radeon HD 7770", "Radeon R7 240", "Radeon R7 250",
+        "Radeon R7 260", "Radeon R7 360", "GTX 550 Ti 1GB", "GTX 550 Ti 2GB", "GTX 560 1GB",
+        "GTX 560 2GB", "GTX 560 Ti 1GB", "GTX 560 Ti 2GB", "GTX 660 2GB", "GTX 660 Ti 2GB",
+        "GTX 650 Ti 1GB", "GTX 650 Ti 2GB", "GT 630 1GB", "GT 630 2GB", "Radeon R5 230",
+        "Radeon R5 240", "Radeon R7 250X", "Radeon R7 260X", "GTX 645 1GB", "GTX 645 2GB",
+        "GTX 640 1GB", "GTX 640 2GB", "GT 620 1GB", "GT 620 2GB", "Radeon HD 5450",
+        "Radeon HD 5550", "Radeon HD 5570", "Radeon HD 5670", "Radeon HD 5750", "Radeon HD 5770"
     ];
     tier1Names.forEach((name, i) => {
-        const h = 1 + (i % 5) * 0.4;
-        const p = 100 + i * 15;
-        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 1, multiplier: 1.0 + i * 0.01, limited: false, color: "#4CAF50" });
+        const h = 1 + (i % 5) * 0.3;
+        const p = 100 + i * 8;
+        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 1, multiplier: 1.0 + i * 0.005, limited: false, color: "#4CAF50" });
     });
     
-    // УРОВЕНЬ 2 (30 карт)
+    // УРОВЕНЬ 2 (50 карт, 500-2000 ₽, 5-15 MH/s)
     const tier2Names = [
-        "GTX 670 2GB", "GTX 670 4GB", "GTX 680 2GB", "GTX 680 4GB",
-        "GTX 760 2GB", "GTX 760 4GB", "GTX 770 2GB", "GTX 770 4GB",
-        "GTX 780 3GB", "GTX 780 6GB", "GTX 780 Ti 3GB", "GTX 780 Ti 6GB",
-        "GTX 950 2GB", "GTX 950 4GB", "GTX 960 2GB", "GTX 960 4GB",
-        "GTX 970 4GB", "GTX 970 8GB", "GTX 980 4GB", "GTX 980 8GB",
-        "GTX 980 Ti 6GB", "GTX 980 Ti 12GB", "GTX 1050 2GB", "GTX 1050 4GB",
-        "GTX 1050 Ti 4GB", "GTX 1050 Ti 8GB", "GTX 1060 3GB", "GTX 1060 6GB",
-        "GTX 1060 12GB", "GTX 1070 8GB"
+        "GTX 670 2GB", "GTX 670 4GB", "GTX 680 2GB", "GTX 680 4GB", "GTX 760 2GB",
+        "GTX 760 4GB", "GTX 770 2GB", "GTX 770 4GB", "GTX 780 3GB", "GTX 780 6GB",
+        "GTX 780 Ti 3GB", "GTX 780 Ti 6GB", "GTX 950 2GB", "GTX 950 4GB", "GTX 960 2GB",
+        "GTX 960 4GB", "GTX 970 4GB", "GTX 970 8GB", "GTX 980 4GB", "GTX 980 8GB",
+        "GTX 980 Ti 6GB", "GTX 980 Ti 12GB", "GTX 1050 2GB", "GTX 1050 4GB", "GTX 1050 Ti 4GB",
+        "GTX 1050 Ti 8GB", "GTX 1060 3GB", "GTX 1060 6GB", "GTX 1060 12GB", "GTX 1070 8GB",
+        "GTX 1070 16GB", "GTX 1070 Ti 8GB", "GTX 1080 8GB", "GTX 1080 16GB", "GTX 1080 Ti 11GB",
+        "GTX 1080 Ti 22GB", "Titan X 12GB", "Titan X 24GB", "Titan Xp 12GB", "Titan Xp 24GB",
+        "Radeon R9 270", "Radeon R9 270X", "Radeon R9 280", "Radeon R9 280X", "Radeon R9 290",
+        "Radeon R9 290X", "Radeon R9 380", "Radeon R9 380X", "Radeon R9 390", "Radeon R9 390X"
     ];
     tier2Names.forEach((name, i) => {
-        const h = 5 + i * 0.35;
-        const p = 500 + i * 25;
-        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 2, multiplier: 1.35 + i * 0.01, limited: false, color: "#2196F3" });
+        const h = 5 + i * 0.2;
+        const p = 500 + i * 30;
+        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 2, multiplier: 1.35 + i * 0.005, limited: false, color: "#2196F3" });
     });
     
-    // УРОВЕНЬ 3 (30 карт)
+    // УРОВЕНЬ 3 (50 карт, 2000-8000 ₽, 15-40 MH/s)
     const tier3Names = [
-        "GTX 1070 16GB", "GTX 1070 Ti 8GB", "GTX 1080 8GB", "GTX 1080 16GB",
-        "GTX 1080 Ti 11GB", "GTX 1080 Ti 22GB", "Titan X 12GB", "Titan X 24GB",
-        "Radeon R9 270", "Radeon R9 270X", "Radeon R9 280", "Radeon R9 280X",
-        "Radeon R9 290", "Radeon R9 290X", "Radeon R9 380", "Radeon R9 380X",
-        "Radeon R9 390", "Radeon R9 390X", "RX 460 2GB", "RX 460 4GB",
-        "RX 470 4GB", "RX 470 8GB", "RX 480 4GB", "RX 480 8GB",
-        "RX 550 2GB", "RX 550 4GB", "RX 560 2GB", "RX 560 4GB",
-        "RX 570 4GB", "RX 570 8GB"
+        "RX 460 2GB", "RX 460 4GB", "RX 470 4GB", "RX 470 8GB", "RX 480 4GB",
+        "RX 480 8GB", "RX 550 2GB", "RX 550 4GB", "RX 560 2GB", "RX 560 4GB",
+        "RX 570 4GB", "RX 570 8GB", "RX 580 4GB", "RX 580 8GB", "RX 590 8GB",
+        "RX 590 16GB", "RX 5500 XT 4GB", "RX 5500 XT 8GB", "RX 5600 XT 6GB", "RX 5600 XT 12GB",
+        "RX 5700 8GB", "RX 5700 XT 8GB", "RX 5700 XT 16GB", "RTX 2060 6GB", "RTX 2060 12GB",
+        "RTX 2060 Super 8GB", "RTX 2070 8GB", "RTX 2070 Super 8GB", "RTX 2080 8GB", "RTX 2080 Super 8GB",
+        "RTX 2080 Ti 11GB", "RTX 2080 Ti 22GB", "Titan V 12GB", "Titan V 24GB", "RTX 3050 8GB",
+        "RTX 3050 12GB", "RTX 3060 8GB", "RTX 3060 12GB", "RTX 3060 Ti 8GB", "RTX 3070 8GB",
+        "RTX 3070 Ti 8GB", "RTX 3080 10GB", "RTX 3080 12GB", "RTX 3080 Ti 12GB", "RTX 3080 Ti 24GB",
+        "RTX 3090 24GB", "RTX 3090 Ti 24GB", "RTX 3090 Ti 48GB", "RX 6600 8GB", "RX 6600 XT 8GB"
     ];
     tier3Names.forEach((name, i) => {
-        const h = 15 + i * 0.8;
-        const p = 2000 + i * 100;
-        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 3, multiplier: 1.70 + i * 0.01, limited: false, color: "#FF9800" });
+        const h = 15 + i * 0.5;
+        const p = 2000 + i * 120;
+        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 3, multiplier: 1.70 + i * 0.005, limited: false, color: "#FF9800" });
     });
     
-    // УРОВЕНЬ 4 (30 карт)
+    // УРОВЕНЬ 4 (50 карт, 8000-30000 ₽, 40-100 MH/s)
     const tier4Names = [
-        "RX 580 4GB", "RX 580 8GB", "RX 590 8GB", "RX 590 16GB",
-        "RX 5500 XT 4GB", "RX 5500 XT 8GB", "RX 5600 XT 6GB", "RX 5600 XT 12GB",
-        "RX 5700 8GB", "RX 5700 XT 8GB", "RX 5700 XT 16GB", "RTX 2060 6GB",
-        "RTX 2060 12GB", "RTX 2060 Super 8GB", "RTX 2070 8GB", "RTX 2070 Super 8GB",
-        "RTX 2080 8GB", "RTX 2080 Super 8GB", "RTX 2080 Ti 11GB", "RTX 2080 Ti 22GB",
-        "Titan V 12GB", "Titan V 24GB", "RTX 3050 8GB", "RTX 3050 12GB",
-        "RTX 3060 8GB", "RTX 3060 12GB", "RTX 3060 Ti 8GB", "RTX 3070 8GB",
-        "RTX 3070 Ti 8GB", "RTX 3080 10GB"
+        "RX 6700 XT 12GB", "RX 6800 16GB", "RX 6800 XT 16GB", "RX 6900 XT 16GB", "RX 6900 XT 32GB",
+        "RX 7600 8GB", "RX 7600 XT 12GB", "RX 7700 XT 12GB", "RX 7800 XT 16GB", "RX 7900 XT 20GB",
+        "RX 7900 XTX 24GB", "RTX 4070 12GB", "RTX 4070 Super 12GB", "RTX 4070 Ti 12GB", "RTX 4070 Ti Super 16GB",
+        "RTX 4080 16GB", "RTX 4080 Super 16GB", "RTX 4090 24GB", "RTX 4090 Ti 24GB", "RTX 4090 Ti 48GB",
+        "Titan RTX 24GB", "Titan RTX 48GB", "Radeon VII 16GB", "Radeon VII 32GB", "RTX 4090 Ti Super 24GB",
+        "RTX 4090 Ti Super 48GB", "RTX 5090 32GB", "RTX 5090 Ti 32GB", "RTX 5090 Ti 64GB", "RTX 6090 48GB",
+        "RTX 6090 Ti 48GB", "RTX 6090 Ti 96GB", "RTX 7090 64GB", "RTX 7090 Ti 64GB", "RTX 7090 Ti 128GB",
+        "RTX 8090 128GB", "RTX 8090 Ti 128GB", "RTX 8090 Ti 256GB", "RTX 9090 256GB", "RTX 9090 Ti 256GB",
+        "RTX 9090 Ti 512GB", "RTX A6000 48GB", "RTX A6000 96GB", "RTX A800 80GB", "RTX A800 160GB",
+        "RTX A100 80GB", "RTX A100 160GB", "RTX H100 80GB", "RTX H100 160GB", "RTX B200 192GB"
     ];
     tier4Names.forEach((name, i) => {
-        const h = 40 + i * 2;
-        const p = 8000 + i * 400;
-        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 4, multiplier: 2.05 + i * 0.01, limited: false, color: "#F44336" });
+        const h = 40 + i * 1.2;
+        const p = 8000 + i * 440;
+        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 4, multiplier: 2.05 + i * 0.005, limited: false, color: "#F44336" });
     });
     
-    // УРОВЕНЬ 5 (30 карт)
+    // УРОВЕНЬ 5 (50 карт, 30000-100000 ₽, 100-250 MH/s)
     const tier5Names = [
-        "RTX 3080 Ti 12GB", "RTX 3080 Ti 24GB", "RTX 3090 24GB", "RTX 3090 Ti 24GB",
-        "RTX 3090 Ti 48GB", "RX 6600 8GB", "RX 6600 XT 8GB", "RX 6700 XT 12GB",
-        "RX 6800 16GB", "RX 6800 XT 16GB", "RX 6900 XT 16GB", "RX 6900 XT 32GB",
-        "RX 7600 8GB", "RX 7600 XT 12GB", "RX 7700 XT 12GB", "RX 7800 XT 16GB",
-        "RX 7900 XT 20GB", "RX 7900 XTX 24GB", "RTX 4070 12GB", "RTX 4070 Super 12GB",
-        "RTX 4070 Ti 12GB", "RTX 4070 Ti Super 16GB", "RTX 4080 16GB", "RTX 4080 Super 16GB",
-        "RTX 4090 24GB", "RTX 4090 Ti 24GB", "RTX 4090 Ti 48GB", "Titan RTX 24GB",
-        "Titan RTX 48GB", "Radeon VII 16GB"
+        "RTX B200 384GB", "RTX B100 192GB", "RTX B100 384GB", "RTX X100 256GB", "RTX X100 512GB",
+        "RTX X200 256GB", "RTX X200 512GB", "RTX Z100 512GB", "RTX Z100 1TB", "RTX Z200 512GB",
+        "RTX Z200 1TB", "Pelemeshka Core 16GB", "Pelemeshka Core 32GB", "Pelemeshka Pro 32GB", "Pelemeshka Pro 64GB",
+        "Pelemeshka Max 64GB", "Pelemeshka Max 128GB", "Pelemeshka Ultra 128GB", "Pelemeshka Ultra 256GB", "Pelemeshka Titan 256GB",
+        "Pelemeshka Titan 512GB", "Pelemeshka Quantum 512GB", "Pelemeshka Quantum 1TB", "Pelemeshka Quantum Pro 1TB", "Pelemeshka Quantum Pro 2TB",
+        "ASIC X10 10TH/s", "ASIC X20 20TH/s", "ASIC X30 30TH/s", "ASIC X50 50TH/s", "ASIC X75 75TH/s",
+        "ASIC X100 100TH/s", "ASIC X150 150TH/s", "ASIC X200 200TH/s", "ASIC X300 300TH/s", "ASIC X500 500TH/s",
+        "ASIC X750 750TH/s", "ASIC X1000 1PH/s", "ASIC X1500 1.5PH/s", "ASIC X2000 2PH/s", "ASIC X3000 3PH/s",
+        "ASIC X5000 5PH/s", "ASIC X10000 10PH/s", "Quantum Core V1", "Quantum Core V2", "Quantum Core V3",
+        "Quantum Core V4", "Quantum Core V5", "Quantum Core V6", "Quantum Core V7", "Quantum Core V8"
     ];
     tier5Names.forEach((name, i) => {
-        const h = 100 + i * 5;
-        const p = 30000 + i * 1500;
-        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 5, multiplier: 2.40 + i * 0.01, limited: false, color: "#9C27B0" });
+        const h = 100 + i * 3;
+        const p = 30000 + i * 1400;
+        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 5, multiplier: 2.40 + i * 0.005, limited: false, color: "#9C27B0" });
     });
     
-    // УРОВЕНЬ 6 (30 карт)
+    // УРОВЕНЬ 6 (50 карт, 100000-500000 ₽, 250-500 MH/s)
     const tier6Names = [
-        "RTX 4090 Ti Super 24GB", "RTX 4090 Ti Super 48GB", "RTX 5090 32GB", "RTX 5090 Ti 32GB",
-        "RTX 5090 Ti 64GB", "RTX 6090 48GB", "RTX 6090 Ti 48GB", "RTX 6090 Ti 96GB",
-        "RTX 7090 64GB", "RTX 7090 Ti 64GB", "RTX 7090 Ti 128GB", "RTX 8090 128GB",
-        "RTX 8090 Ti 128GB", "RTX 8090 Ti 256GB", "RTX 9090 256GB", "RTX 9090 Ti 256GB",
-        "RTX 9090 Ti 512GB", "RTX A6000 48GB", "RTX A6000 96GB", "RTX A800 80GB",
-        "RTX A800 160GB", "RTX A100 80GB", "RTX A100 160GB", "RTX H100 80GB",
-        "RTX H100 160GB", "RTX B200 192GB", "RTX B200 384GB", "RTX B100 192GB",
-        "RTX B100 384GB", "RTX X100 256GB"
+        "Quantum Core V9", "Quantum Core V10", "Quantum Core X1", "Quantum Core X2", "Quantum Core X3",
+        "Quantum Core X4", "Quantum Core X5", "Quantum Core X6", "Quantum Core X7", "Quantum Core X8",
+        "Quantum Core X9", "Quantum Core X10", "Stellar GPU 1", "Stellar GPU 2", "Stellar GPU 3",
+        "Stellar GPU 4", "Stellar GPU 5", "Nova Core 1", "Nova Core 2", "Nova Core 3",
+        "Nova Core 4", "Nova Core 5", "Pulsar GPU 1", "Pulsar GPU 2", "Pulsar GPU 3",
+        "Pulsar GPU 4", "Pulsar GPU 5", "Galaxy GPU 1", "Galaxy GPU 2", "Galaxy GPU 3",
+        "Galaxy GPU 4", "Galaxy GPU 5", "Universe Core 1", "Universe Core 2", "Universe Core 3",
+        "Universe Core 4", "Universe Core 5", "Cosmos GPU 1", "Cosmos GPU 2", "Cosmos GPU 3",
+        "Cosmos GPU 4", "Cosmos GPU 5", "Eclipse GPU 1", "Eclipse GPU 2", "Eclipse GPU 3",
+        "Eclipse GPU 4", "Eclipse GPU 5", "Infinity Core 1", "Infinity Core 2", "Infinity Core 3"
     ];
     tier6Names.forEach((name, i) => {
-        const h = 250 + i * 8;
-        const p = 100000 + i * 5000;
-        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 6, multiplier: 2.75 + i * 0.01, limited: false, color: "#E91E63" });
+        const h = 250 + i * 5;
+        const p = 100000 + i * 8000;
+        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 6, multiplier: 2.75 + i * 0.005, limited: false, color: "#E91E63" });
     });
     
-    // УРОВЕНЬ 7 (20 карт)
+    // УРОВЕНЬ 7 (50 карт, 500000-5 млн ₽, 500-5000 MH/s)
     const tier7Names = [
-        "RTX X100 512GB", "RTX X200 256GB", "RTX X200 512GB", "RTX Z100 512GB",
-        "RTX Z100 1TB", "RTX Z200 512GB", "RTX Z200 1TB", "Pelemeshka Core 16GB",
-        "Pelemeshka Pro 32GB", "Pelemeshka Max 64GB", "Pelemeshka Ultra 128GB",
-        "Pelemeshka Titan 256GB", "Pelemeshka Quantum 512GB", "Pelemeshka Quantum Pro 1TB",
-        "ASIC X10 10TH/s", "ASIC X20 20TH/s", "ASIC X50 50TH/s", "ASIC X100 100TH/s",
-        "ASIC X500 500TH/s", "ASIC X1000 1PH/s"
+        "Infinity Core 4", "Infinity Core 5", "Omega Core 1", "Omega Core 2", "Omega Core 3",
+        "Omega Core 4", "Omega Core 5", "Titan Core 1", "Titan Core 2", "Titan Core 3",
+        "Titan Core 4", "Titan Core 5", "Zeus GPU 1", "Zeus GPU 2", "Zeus GPU 3",
+        "Zeus GPU 4", "Zeus GPU 5", "Atlas Core 1", "Atlas Core 2", "Atlas Core 3",
+        "Atlas Core 4", "Atlas Core 5", "Prometheus GPU 1", "Prometheus GPU 2", "Prometheus GPU 3",
+        "Prometheus GPU 4", "Prometheus GPU 5", "Hercules Core 1", "Hercules Core 2", "Hercules Core 3",
+        "Hercules Core 4", "Hercules Core 5", "Apex GPU 1", "Apex GPU 2", "Apex GPU 3",
+        "Apex GPU 4", "Apex GPU 5", "Summit Core 1", "Summit Core 2", "Summit Core 3",
+        "Summit Core 4", "Summit Core 5", "Pinnacle GPU 1", "Pinnacle GPU 2", "Pinnacle GPU 3",
+        "Pinnacle GPU 4", "Pinnacle GPU 5", "Ultimate Core 1", "Ultimate Core 2", "Ultimate Core 3"
     ];
     tier7Names.forEach((name, i) => {
-        const h = 500 + i * 225;
-        const p = 500000 + i * 250000;
-        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 7, multiplier: 3.10 + i * 0.02, limited: false, color: "#00BCD4" });
+        const h = 500 + i * 90;
+        const p = 500000 + i * 90000;
+        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 7, multiplier: 3.10 + i * 0.01, limited: false, color: "#00BCD4" });
     });
     
-    // ЛИМИТИРОВАННАЯ
-    gpus.push({ id: LIMITED_GPU_ID, name: "🐷 Хрюка RTX 5090", hashrate: 5000, price: 75000000, tier: 7, multiplier: 5.00, limited: true, color: "#FF1493", maxStock: 500 });
+    // УРОВЕНЬ 8 (50 карт, 5-50 млн ₽, 5000-25000 MH/s)
+    const tier8Names = [
+        "Ultimate Core 4", "Ultimate Core 5", "Mega Core 1", "Mega Core 2", "Mega Core 3",
+        "Mega Core 4", "Mega Core 5", "Hyper GPU 1", "Hyper GPU 2", "Hyper GPU 3",
+        "Hyper GPU 4", "Hyper GPU 5", "SuperCore 1", "SuperCore 2", "SuperCore 3",
+        "SuperCore 4", "SuperCore 5", "Maximus GPU 1", "Maximus GPU 2", "Maximus GPU 3",
+        "Maximus GPU 4", "Maximus GPU 5", "Prime Core 1", "Prime Core 2", "Prime Core 3",
+        "Prime Core 4", "Prime Core 5", "Elite GPU 1", "Elite GPU 2", "Elite GPU 3",
+        "Elite GPU 4", "Elite GPU 5", "Omega X 1", "Omega X 2", "Omega X 3",
+        "Omega X 4", "Omega X 5", "Titan Z 1", "Titan Z 2", "Titan Z 3",
+        "Titan Z 4", "Titan Z 5", "Phoenix Core 1", "Phoenix Core 2", "Phoenix Core 3",
+        "Phoenix Core 4", "Phoenix Core 5", "Aurora GPU 1", "Aurora GPU 2", "Aurora GPU 3"
+    ];
+    tier8Names.forEach((name, i) => {
+        const h = 5000 + i * 400;
+        const p = 5000000 + i * 900000;
+        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 8, multiplier: 4.00 + i * 0.02, limited: false, color: "#FF5722" });
+    });
+    
+    // УРОВЕНЬ 9 (50 карт, 50-500 млн ₽, 25000-100000 MH/s)
+    const tier9Names = [
+        "Aurora GPU 4", "Aurora GPU 5", "Nebula Core 1", "Nebula Core 2", "Nebula Core 3",
+        "Nebula Core 4", "Nebula Core 5", "Vortex GPU 1", "Vortex GPU 2", "Vortex GPU 3",
+        "Vortex GPU 4", "Vortex GPU 5", "Quantum X 1", "Quantum X 2", "Quantum X 3",
+        "Quantum X 4", "Quantum X 5", "Stellaris Core 1", "Stellaris Core 2", "Stellaris Core 3",
+        "Stellaris Core 4", "Stellaris Core 5", "Nova X 1", "Nova X 2", "Nova X 3",
+        "Nova X 4", "Nova X 5", "Galaxy X 1", "Galaxy X 2", "Galaxy X 3",
+        "Galaxy X 4", "Galaxy X 5", "Universe X 1", "Universe X 2", "Universe X 3",
+        "Universe X 4", "Universe X 5", "Cosmos X 1", "Cosmos X 2", "Cosmos X 3",
+        "Cosmos X 4", "Cosmos X 5", "Eclipse X 1", "Eclipse X 2", "Eclipse X 3",
+        "Eclipse X 4", "Eclipse X 5", "Infinity X 1", "Infinity X 2", "Infinity X 3"
+    ];
+    tier9Names.forEach((name, i) => {
+        const h = 25000 + i * 1500;
+        const p = 50000000 + i * 9000000;
+        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 9, multiplier: 5.00 + i * 0.03, limited: false, color: "#FF6F00" });
+    });
+    
+    // УРОВЕНЬ 10 (50 карт, 500 млн - 5 млрд ₽, 100000-500000 MH/s)
+    const tier10Names = [
+        "Infinity X 4", "Infinity X 5", "Omnipotent Core 1", "Omnipotent Core 2", "Omnipotent Core 3",
+        "Omnipotent Core 4", "Omnipotent Core 5", "Absolute GPU 1", "Absolute GPU 2", "Absolute GPU 3",
+        "Absolute GPU 4", "Absolute GPU 5", "Eternal Core 1", "Eternal Core 2", "Eternal Core 3",
+        "Eternal Core 4", "Eternal Core 5", "Immortal GPU 1", "Immortal GPU 2", "Immortal GPU 3",
+        "Immortal GPU 4", "Immortal GPU 5", "Celestial Core 1", "Celestial Core 2", "Celestial Core 3",
+        "Celestial Core 4", "Celestial Core 5", "Divine GPU 1", "Divine GPU 2", "Divine GPU 3",
+        "Divine GPU 4", "Divine GPU 5", "Paragon Core 1", "Paragon Core 2", "Paragon Core 3",
+        "Paragon Core 4", "Paragon Core 5", "Supreme GPU 1", "Supreme GPU 2", "Supreme GPU 3",
+        "Supreme GPU 4", "Supreme GPU 5", "Ultima Core 1", "Ultima Core 2", "Ultima Core 3",
+        "Ultima Core 4", "Ultima Core 5", "Final Core 1", "Final Core 2", "Final Core 3"
+    ];
+    tier10Names.forEach((name, i) => {
+        const h = 100000 + i * 8000;
+        const p = 500000000 + i * 90000000;
+        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 10, multiplier: 6.00 + i * 0.04, limited: false, color: "#00E676" });
+    });
+    
+    // УРОВЕНЬ 11 (50 карт, 5-50 млрд ₽, 500000-2 млн MH/s)
+    const tier11Names = [
+        "Final Core 4", "Final Core 5", "Transcendent Core 1", "Transcendent Core 2", "Transcendent Core 3",
+        "Transcendent Core 4", "Transcendent Core 5", "Ascended GPU 1", "Ascended GPU 2", "Ascended GPU 3",
+        "Ascended GPU 4", "Ascended GPU 5", "Godlike Core 1", "Godlike Core 2", "Godlike Core 3",
+        "Godlike Core 4", "Godlike Core 5", "Mythical GPU 1", "Mythical GPU 2", "Mythical GPU 3",
+        "Mythical GPU 4", "Mythical GPU 5", "Legendary Core 1", "Legendary Core 2", "Legendary Core 3",
+        "Legendary Core 4", "Legendary Core 5", "Epic GPU 1", "Epic GPU 2", "Epic GPU 3",
+        "Epic GPU 4", "Epic GPU 5", "Fabled Core 1", "Fabled Core 2", "Fabled Core 3",
+        "Fabled Core 4", "Fabled Core 5", "Ancient GPU 1", "Ancient GPU 2", "Ancient GPU 3",
+        "Ancient GPU 4", "Ancient GPU 5", "Primordial Core 1", "Primordial Core 2", "Primordial Core 3",
+        "Primordial Core 4", "Primordial Core 5", "Genesis GPU 1", "Genesis GPU 2", "Genesis GPU 3"
+    ];
+    tier11Names.forEach((name, i) => {
+        const h = 500000 + i * 30000;
+        const p = 5000000000 + i * 900000000;
+        gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 11, multiplier: 7.00 + i * 0.05, limited: false, color: "#00BCD4" });
+    });
+    
+    // ===== ЛИМИТИРОВАННАЯ ХРЮКА =====
+    gpus.push({ 
+        id: LIMITED_GPU_ID, 
+        name: "🐷 Хрюка RTX 5090", 
+        hashrate: 5000000, 
+        price: 396000000000000000000000, 
+        tier: 12, 
+        multiplier: 10.00, 
+        limited: true, 
+        color: "#FF1493", 
+        maxStock: 500 
+    });
     
     return gpus;
 }
@@ -512,17 +627,31 @@ function generateAllGpus() {
 const ALL_GPUS = generateAllGpus();
 
 // ========================================================================
-// 3. МАЙНИНГ ПО УРОВНЯМ
+// 3. ПРОМОКОДЫ
+// ========================================================================
+const PROMOCODES = {
+    'Start100': { type: 'money', amount: 100, desc: '+100 ₽ на баланс' },
+    'FFFFFFGA123': { type: 'boost', duration: 60, desc: '2x заработок на 1 минуту' },
+    'Bonus2': { type: 'money', amount: 200, desc: '+200 ₽ на баланс' },
+    'Newlimited': { type: 'money+boost', amount: 300, duration: 60, desc: '+300 ₽ + 2x заработок на 1 минуту', globalLimit: 10000 }
+};
+
+// ========================================================================
+// 4. МАЙНИНГ ПО УРОВНЯМ
 // ========================================================================
 function getMiningTier() {
     const count = G.gpus.length;
-    if (count >= 200) return 7;
-    if (count >= 150) return 6;
-    if (count >= 100) return 5;
-    if (count >= 50) return 4;
-    if (count >= 25) return 3;
-    if (count >= 10) return 2;
-    if (count >= 1) return 1;
+    if (count >= 500) return 11;
+    if (count >= 450) return 10;
+    if (count >= 400) return 9;
+    if (count >= 350) return 8;
+    if (count >= 300) return 7;
+    if (count >= 250) return 6;
+    if (count >= 200) return 5;
+    if (count >= 150) return 4;
+    if (count >= 100) return 3;
+    if (count >= 50) return 2;
+    if (count >= 10) return 1;
     return 0;
 }
 
@@ -550,7 +679,7 @@ function fillMiningCoinSelect() {
 }
 
 // ========================================================================
-// 4. СОСТОЯНИЕ ИГРЫ
+// 5. СОСТОЯНИЕ ИГРЫ
 // ========================================================================
 let G = {
     budget: 100,
@@ -583,10 +712,6 @@ let G = {
 
 let leaderboard = [];
 let tradeOffers = [];
-
-// ========================================================================
-// 5. СИСТЕМА ОБМЕНА (как в ММО)
-// ========================================================================
 let tradeState = {
     partner: null,
     myOffer: { money: 0, gpuIndex: null },
@@ -596,510 +721,9 @@ let tradeState = {
     active: false
 };
 
-function openTradeWindow() {
-    if (!G.nickname) { alert('⚠️ Сначала авторизуйся!'); return; }
-    const partner = document.getElementById('tradePartnerNick').value.trim();
-    if (!partner) { alert('❌ Введите ник игрока для обмена!'); return; }
-    if (partner === G.nickname) { alert('❌ Нельзя обмениваться с самим собой!'); return; }
-    
-    // Проверяем, существует ли игрок
-    const users = getUsers();
-    if (!users.find(u => u.nickname === partner)) {
-        alert('❌ Игрок с таким ником не найден!');
-        return;
-    }
-    
-    tradeState.partner = partner;
-    tradeState.active = true;
-    tradeState.myReady = false;
-    tradeState.theirReady = false;
-    tradeState.myOffer = { money: 0, gpuIndex: null };
-    tradeState.theirOffer = { money: 0, gpuIndex: null };
-    
-    document.getElementById('tradePartnerDisplay').textContent = partner;
-    document.getElementById('tradePartnerName').textContent = partner;
-    document.getElementById('tradeWindowOverlay').style.display = 'block';
-    
-    updateTradeUI();
-    setStatus(`📂 Открыт обмен с ${partner}`, 'ok');
-}
-
-function closeTradeWindow() {
-    document.getElementById('tradeWindowOverlay').style.display = 'none';
-    tradeState.active = false;
-    tradeState.partner = null;
-    setStatus('❌ Обмен закрыт', 'error');
-}
-
-function addMoneyToTrade() {
-    if (!tradeState.active) return;
-    const amount = parseFloat(document.getElementById('tradeMyMoney').value) || 0;
-    if (amount <= 0) { alert('❌ Введите сумму больше 0!'); return; }
-    if (amount > G.budget) { alert('❌ Не хватает денег! Баланс: ' + G.budget + ' ₽'); return; }
-    
-    tradeState.myOffer.money = amount;
-    tradeState.myReady = false;
-    document.getElementById('tradeReadyBtn').textContent = '✅ ГОТОВ';
-    document.getElementById('tradeReadyBtn').className = 'btn btn-blue trade-ready-btn';
-    document.getElementById('tradeMyStatus').textContent = '❌ Не готов';
-    document.getElementById('tradeMyStatus').className = 'trade-status not-ready';
-    updateTradeUI();
-}
-
-function addGpuToTrade() {
-    if (!tradeState.active) return;
-    const select = document.getElementById('tradeMyGpuSelect');
-    const idx = parseInt(select.value);
-    if (isNaN(idx) || idx < 0 || idx >= G.gpus.length) {
-        alert('❌ Выберите видеокарту!');
-        return;
-    }
-    
-    tradeState.myOffer.gpuIndex = idx;
-    tradeState.myReady = false;
-    document.getElementById('tradeReadyBtn').textContent = '✅ ГОТОВ';
-    document.getElementById('tradeReadyBtn').className = 'btn btn-blue trade-ready-btn';
-    document.getElementById('tradeMyStatus').textContent = '❌ Не готов';
-    document.getElementById('tradeMyStatus').className = 'trade-status not-ready';
-    updateTradeUI();
-}
-
-function removeMyMoney() {
-    if (!tradeState.active) return;
-    tradeState.myOffer.money = 0;
-    tradeState.myReady = false;
-    document.getElementById('tradeReadyBtn').textContent = '✅ ГОТОВ';
-    document.getElementById('tradeReadyBtn').className = 'btn btn-blue trade-ready-btn';
-    document.getElementById('tradeMyStatus').textContent = '❌ Не готов';
-    document.getElementById('tradeMyStatus').className = 'trade-status not-ready';
-    updateTradeUI();
-}
-
-function removeMyGpu() {
-    if (!tradeState.active) return;
-    tradeState.myOffer.gpuIndex = null;
-    tradeState.myReady = false;
-    document.getElementById('tradeReadyBtn').textContent = '✅ ГОТОВ';
-    document.getElementById('tradeReadyBtn').className = 'btn btn-blue trade-ready-btn';
-    document.getElementById('tradeMyStatus').textContent = '❌ Не готов';
-    document.getElementById('tradeMyStatus').className = 'trade-status not-ready';
-    updateTradeUI();
-}
-
-function toggleTradeReady() {
-    if (!tradeState.active) return;
-    if (tradeState.myOffer.money === 0 && tradeState.myOffer.gpuIndex === null) {
-        alert('❌ Добавьте что-то в лот (деньги или видеокарту)!');
-        return;
-    }
-    
-    tradeState.myReady = !tradeState.myReady;
-    
-    if (tradeState.myReady) {
-        document.getElementById('tradeReadyBtn').textContent = '⏳ ОЖИДАНИЕ...';
-        document.getElementById('tradeReadyBtn').className = 'btn btn-orange trade-ready-btn';
-        document.getElementById('tradeMyStatus').textContent = '✅ ГОТОВ';
-        document.getElementById('tradeMyStatus').className = 'trade-status ready';
-        setStatus('✅ Ты готов к обмену. Ожидай соперника...', 'ok');
-    } else {
-        document.getElementById('tradeReadyBtn').textContent = '✅ ГОТОВ';
-        document.getElementById('tradeReadyBtn').className = 'btn btn-blue trade-ready-btn';
-        document.getElementById('tradeMyStatus').textContent = '❌ Не готов';
-        document.getElementById('tradeMyStatus').className = 'trade-status not-ready';
-        setStatus('❌ Ты отменил готовность', 'error');
-    }
-    
-    // Проверяем, готовы ли оба
-    checkBothReady();
-}
-
-function checkBothReady() {
-    if (tradeState.myReady && tradeState.theirReady) {
-        document.getElementById('tradeExecuteBtn').style.display = 'block';
-        document.getElementById('tradeExecuteBtn').textContent = '🔄 ПОДТВЕРДИТЬ ОБМЕН';
-        setStatus('✅ Оба готовы! Нажми "Подтвердить обмен"', 'ok');
-    } else {
-        document.getElementById('tradeExecuteBtn').style.display = 'block';
-        document.getElementById('tradeExecuteBtn').textContent = '⏳ Ожидание подтверждения...';
-        if (!tradeState.myReady) {
-            document.getElementById('tradeExecuteBtn').textContent = '⏳ Ты не готов!';
-        } else if (!tradeState.theirReady) {
-            document.getElementById('tradeExecuteBtn').textContent = '⏳ Ожидаем соперника...';
-        }
-    }
-}
-
-function executeTrade() {
-    if (!tradeState.active) return;
-    if (!tradeState.myReady || !tradeState.theirReady) {
-        alert('❌ Оба игрока должны быть готовы!');
-        return;
-    }
-    
-    // Проверяем, есть ли ещё ресурсы
-    if (tradeState.myOffer.money > 0 && tradeState.myOffer.money > G.budget) {
-        alert('❌ У тебя не хватает денег!');
-        tradeState.myReady = false;
-        updateTradeUI();
-        return;
-    }
-    
-    if (tradeState.myOffer.gpuIndex !== null) {
-        const idx = tradeState.myOffer.gpuIndex;
-        if (idx >= G.gpus.length) {
-            alert('❌ Этой видеокарты больше нет!');
-            tradeState.myReady = false;
-            updateTradeUI();
-            return;
-        }
-    }
-    
-    // ===== ВЫПОЛНЯЕМ ОБМЕН =====
-    // 1. Забираем у тебя
-    if (tradeState.myOffer.money > 0) {
-        G.budget -= tradeState.myOffer.money;
-    }
-    let myGpu = null;
-    if (tradeState.myOffer.gpuIndex !== null) {
-        myGpu = G.gpus.splice(tradeState.myOffer.gpuIndex, 1)[0];
-    }
-    
-    // 2. Забираем у соперника (имитация - в реальности нужен сервер)
-    // В локальной версии просто симулируем получение
-    let theirGpu = null;
-    let theirMoney = tradeState.theirOffer.money;
-    
-    // Симуляция: если соперник кладёт GPU, создаём его
-    if (tradeState.theirOffer.gpuIndex !== null) {
-        // В реальной игре тут был бы запрос к серверу
-        // Сейчас просто создаём рандомную карту для демонстрации
-        const randomGpu = ALL_GPUS[Math.floor(Math.random() * ALL_GPUS.length)];
-        theirGpu = { ...randomGpu, id: randomGpu.id + '_' + Date.now() };
-    }
-    
-    // 3. Добавляем тебе
-    if (theirMoney > 0) {
-        G.budget += theirMoney;
-    }
-    if (theirGpu) {
-        G.gpus.push(theirGpu);
-    }
-    
-    // 4. Логируем
-    setStatus(`🔄 Обмен с ${tradeState.partner} выполнен!`, 'ok');
-    G.trade_count++;
-    
-    // 5. Закрываем окно и обновляем
-    closeTradeWindow();
-    saveToStorage();
-    updateUI();
-    addToLeaderboard();
-    alert('✅ Обмен успешно выполнен!');
-}
-
-function updateTradeUI() {
-    if (!tradeState.active) return;
-    
-    // Обновляем баланс
-    document.getElementById('tradeMyBalance').textContent = G.budget + ' ₽';
-    document.getElementById('tradePartnerBalance').textContent = '?'; // В реальности нужен запрос
-    
-    // Обновляем GPU селект
-    const select = document.getElementById('tradeMyGpuSelect');
-    select.innerHTML = '<option value="">🎮 Выбери GPU</option>' + 
-        G.gpus.map((g, i) => `<option value="${i}">${g.name} (⚡${g.hashrate} MH/s)</option>`).join('');
-    
-    // Мой лот
-    const myOfferDiv = document.getElementById('tradeMyOffer');
-    let myHtml = '';
-    if (tradeState.myOffer.money > 0) {
-        myHtml += `<span class="trade-item">💰 ${tradeState.myOffer.money} ₽ <span class="remove" onclick="removeMyMoney()">✕</span></span>`;
-    }
-    if (tradeState.myOffer.gpuIndex !== null && tradeState.myOffer.gpuIndex < G.gpus.length) {
-        const g = G.gpus[tradeState.myOffer.gpuIndex];
-        myHtml += `<span class="trade-item">🎮 ${g.name} <span class="remove" onclick="removeMyGpu()">✕</span></span>`;
-    }
-    myOfferDiv.innerHTML = myHtml || '<span class="empty">Ничего не выбрано</span>';
-    
-    // Лот соперника (симуляция)
-    const theirOfferDiv = document.getElementById('tradePartnerOffer');
-    if (tradeState.theirOffer.money > 0 || tradeState.theirOffer.gpuIndex !== null) {
-        let theirHtml = '';
-        if (tradeState.theirOffer.money > 0) {
-            theirHtml += `<span class="trade-item">💰 ${tradeState.theirOffer.money} ₽</span>`;
-        }
-        if (tradeState.theirOffer.gpuIndex !== null) {
-            // В реальности тут была бы карта соперника
-            theirHtml += `<span class="trade-item">🎮 Карта соперника</span>`;
-        }
-        theirOfferDiv.innerHTML = theirHtml;
-    } else {
-        theirOfferDiv.innerHTML = '<span class="empty">Ожидание...</span>';
-    }
-    
-    // Статусы
-    document.getElementById('tradeMyStatus').textContent = tradeState.myReady ? '✅ ГОТОВ' : '❌ Не готов';
-    document.getElementById('tradeMyStatus').className = tradeState.myReady ? 'trade-status ready' : 'trade-status not-ready';
-    
-    document.getElementById('tradePartnerStatus').textContent = tradeState.theirReady ? '✅ ГОТОВ' : '⏳ Ожидает...';
-    document.getElementById('tradePartnerStatus').className = tradeState.theirReady ? 'trade-status ready' : 'trade-status not-ready';
-    
-    // Кнопка обмена
-    const execBtn = document.getElementById('tradeExecuteBtn');
-    if (tradeState.myReady && tradeState.theirReady) {
-        execBtn.style.display = 'block';
-        execBtn.textContent = '🔄 ПОДТВЕРДИТЬ ОБМЕН';
-        execBtn.className = 'btn btn-orange trade-execute-btn';
-    } else {
-        execBtn.style.display = 'block';
-        if (!tradeState.myReady) {
-            execBtn.textContent = '⏳ Ты не готов!';
-        } else if (!tradeState.theirReady) {
-            execBtn.textContent = '⏳ Ожидаем соперника...';
-        } else {
-            execBtn.textContent = '⏳ Ожидание...';
-        }
-        execBtn.className = 'btn btn-blue trade-execute-btn';
-    }
-}
-
 // ========================================================================
-// 6. ОСТАЛЬНЫЕ ФУНКЦИИ
+// 6. ОСНОВНЫЕ ФУНКЦИИ
 // ========================================================================
-function initGame() {
-    G.coins_data = COINS.map(c => ({
-        ...c,
-        current_price: c.price,
-        history: Array(50).fill(c.price),
-        change: 0
-    }));
-    COINS.forEach(c => { G.portfolio[c.name] = 0; G.wallet[c.name] = 0; });
-    G.selected_coin = G.coins_data[0];
-    G.limitedGpuStock = limitedGpuStock;
-    
-    loadFromStorage();
-    loadLeaderboard();
-    checkAutoLogin();
-    
-    G.loaded = true;
-    updateUI();
-    fillMiningCoinSelect();
-    fillTradeCoinSelect();
-    startMiningLoop();
-    updatePricesLoop();
-    initPriceChart();
-    startAutoSave();
-    setStatus('✅ Игра загружена', 'ok');
-    updatePlayTime();
-}
-
-function checkAutoLogin() {
-    try {
-        const saved = localStorage.getItem('pelemeshka_session');
-        if (saved) {
-            const data = JSON.parse(saved);
-            const users = getUsers();
-            const user = users.find(u => u.nickname === data.nick && u.password === data.pass);
-            if (user) {
-                G.nickname = data.nick;
-                G.password = data.pass;
-                document.getElementById('authModal').style.display = 'none';
-                document.getElementById('userDisplay').textContent = '👤 ' + G.nickname;
-                document.getElementById('userDisplay').style.display = 'block';
-                document.getElementById('nickDisplay').textContent = G.nickname;
-                loadPlayerData(G.nickname);
-                addToLeaderboard();
-                updateUI();
-            }
-        }
-    } catch(e) {}
-}
-
-function switchAuthTab(tab) {
-    if (tab === 'login') {
-        document.getElementById('authLoginForm').style.display = 'block';
-        document.getElementById('authRegisterForm').style.display = 'none';
-        document.getElementById('authLoginTab').style.borderColor = '#0f0';
-        document.getElementById('authRegisterTab').style.borderColor = '#003030';
-    } else {
-        document.getElementById('authLoginForm').style.display = 'none';
-        document.getElementById('authRegisterForm').style.display = 'block';
-        document.getElementById('authRegisterTab').style.borderColor = '#0f0';
-        document.getElementById('authLoginTab').style.borderColor = '#003030';
-    }
-}
-
-function registerUser() {
-    const nick = document.getElementById('regNick').value.trim();
-    const pass = document.getElementById('regPass').value;
-    const pass2 = document.getElementById('regPass2').value;
-    
-    if (!nick || nick.length < 2) { alert('❌ Ник минимум 2 символа!'); return; }
-    if (pass.length < 4) { alert('❌ Пароль минимум 4 символа!'); return; }
-    if (pass !== pass2) { alert('❌ Пароли не совпадают!'); return; }
-    
-    const users = getUsers();
-    if (users.find(u => u.nickname === nick)) {
-        alert('❌ Такой ник уже занят!');
-        return;
-    }
-    
-    users.push({
-        nickname: nick,
-        password: btoa(pass),
-        created: Date.now()
-    });
-    localStorage.setItem('pelemeshka_users', JSON.stringify(users));
-    
-    G.nickname = nick;
-    G.password = btoa(pass);
-    localStorage.setItem('pelemeshka_session', JSON.stringify({ nick, pass: G.password }));
-    
-    document.getElementById('authModal').style.display = 'none';
-    document.getElementById('userDisplay').textContent = '👤 ' + nick;
-    document.getElementById('userDisplay').style.display = 'block';
-    document.getElementById('nickDisplay').textContent = nick;
-    
-    setStatus(`✅ Добро пожаловать, ${nick}!`, 'ok');
-    addToLeaderboard();
-    updateUI();
-}
-
-function loginUser() {
-    const nick = document.getElementById('loginNick').value.trim();
-    const pass = document.getElementById('loginPass').value;
-    
-    const users = getUsers();
-    const user = users.find(u => u.nickname === nick && u.password === btoa(pass));
-    if (!user) { alert('❌ Неверный ник или пароль!'); return; }
-    
-    G.nickname = nick;
-    G.password = btoa(pass);
-    localStorage.setItem('pelemeshka_session', JSON.stringify({ nick, pass: G.password }));
-    
-    document.getElementById('authModal').style.display = 'none';
-    document.getElementById('userDisplay').textContent = '👤 ' + nick;
-    document.getElementById('userDisplay').style.display = 'block';
-    document.getElementById('nickDisplay').textContent = nick;
-    
-    loadPlayerData(nick);
-    setStatus(`✅ Добро пожаловать, ${nick}!`, 'ok');
-    addToLeaderboard();
-    updateUI();
-}
-
-function logoutUser() {
-    if (!confirm('Выйти из аккаунта?')) return;
-    localStorage.removeItem('pelemeshka_session');
-    G.nickname = '';
-    G.password = '';
-    document.getElementById('userDisplay').style.display = 'none';
-    document.getElementById('nickDisplay').textContent = 'Не авторизован';
-    document.getElementById('authModal').style.display = 'flex';
-    setStatus('👋 Выход выполнен', 'ok');
-}
-
-function getUsers() {
-    try {
-        const saved = localStorage.getItem('pelemeshka_users');
-        return saved ? JSON.parse(saved) : [];
-    } catch(e) { return []; }
-}
-
-function loadPlayerData(nick) {
-    try {
-        const key = 'pelemeshka_save_' + nick;
-        const raw = localStorage.getItem(key);
-        if (!raw) return;
-        const data = JSON.parse(raw);
-        Object.assign(G, data);
-        G.coins_data = COINS.map(c => {
-            const saved = data.coins_data?.find(d => d.name === c.name);
-            return {
-                ...c,
-                current_price: saved?.current_price || c.price,
-                history: Array(50).fill(saved?.current_price || c.price),
-                change: 0
-            };
-        });
-        updateUI();
-    } catch(e) { console.error('Load player error:', e); }
-}
-
-function savePlayerData() {
-    if (!G.nickname) return;
-    try {
-        const key = 'pelemeshka_save_' + G.nickname;
-        const data = {
-            budget: G.budget,
-            total_earned: G.total_earned,
-            clicks: G.clicks,
-            gpus: G.gpus,
-            mining_coin: G.mining_coin,
-            portfolio: G.portfolio,
-            wallet: G.wallet,
-            trade_count: G.trade_count,
-            trade_history: G.trade_history.slice(-200),
-            work_count: G.work_count,
-            limitedGpuStock: G.limitedGpuStock,
-            coins_data: G.coins_data.map(c => ({ name: c.name, current_price: c.current_price }))
-        };
-        localStorage.setItem(key, JSON.stringify(data));
-    } catch(e) { console.error('Save player error:', e); }
-}
-
-function addToLeaderboard() {
-    if (!G.nickname) return;
-    const entry = {
-        nickname: G.nickname,
-        budget: G.budget,
-        total_earned: G.total_earned,
-        gpus: G.gpus.length,
-        time: Date.now()
-    };
-    
-    const existing = leaderboard.findIndex(l => l.nickname === entry.nickname);
-    if (existing !== -1) {
-        if (entry.budget > leaderboard[existing].budget) {
-            leaderboard[existing] = entry;
-        }
-    } else {
-        leaderboard.push(entry);
-    }
-    
-    leaderboard.sort((a, b) => b.budget - a.budget);
-    if (leaderboard.length > 100) leaderboard = leaderboard.slice(0, 100);
-    
-    localStorage.setItem('pelemeshka_leaderboard', JSON.stringify(leaderboard));
-    updateLeaderboardUI();
-}
-
-function loadLeaderboard() {
-    try {
-        const saved = localStorage.getItem('pelemeshka_leaderboard');
-        if (saved) leaderboard = JSON.parse(saved);
-    } catch(e) {}
-}
-
-function updateLeaderboardUI() {
-    const list = document.getElementById('leaderboardList');
-    if (!list) return;
-    if (leaderboard.length === 0) {
-        list.innerHTML = '<div style="color:#808080; font-size:11px; text-align:center; padding:10px;">Нет игроков</div>';
-        return;
-    }
-    list.innerHTML = leaderboard.map((p, i) => `
-        <div class="coin-item" style="${i === 0 ? 'background:#002030; border-color:#ff0;' : ''}">
-            <span style="font-weight:bold; color:${i === 0 ? '#ff0' : '#0ff'};">
-                ${i === 0 ? '👑 ' : ''}#${i+1}
-            </span>
-            <span class="name">${p.nickname}</span>
-            <span class="value gold">💰 ${p.budget.toFixed(0)} ₽</span>
-            <span class="value blue">🎮 ${p.gpus}</span>
-        </div>
-    `).join('');
-}
-
 function getRealEps() {
     if (G.gpus.length === 0 || !G.mining_active) return 0;
     const hashrate = G.gpus.reduce((s, g) => s + g.hashrate, 0);
@@ -1107,8 +731,9 @@ function getRealEps() {
     if (!coin) return 0;
     const price = coin.current_price;
     const totalMultiplier = G.gpus.reduce((s, g) => s + (g.multiplier || 1.0), 0);
-    const eps = hashrate * 0.000005 * price * totalMultiplier;
-    return Math.min(eps, 1000000);
+    let eps = hashrate * 0.0000001 * price * totalMultiplier;
+    if (boostActive) eps *= 2;
+    return eps;
 }
 
 function doClick() {
@@ -1116,8 +741,10 @@ function doClick() {
     const prog = G.clicks % G.click_rate;
     document.getElementById('clickCounter').textContent = prog + ' / ' + G.click_rate;
     if (prog === 0) {
-        G.budget += G.click_reward;
-        G.total_earned += G.click_reward;
+        let reward = G.click_reward;
+        if (boostActive) reward *= 2;
+        G.budget += reward;
+        G.total_earned += reward;
         updateUI();
         savePlayerData();
     }
@@ -1139,7 +766,8 @@ function startWork() {
         document.getElementById('workProgressText').textContent = progress + '/' + G.work_max + ' сек';
         if (progress >= G.work_max) {
             clearInterval(interval);
-            const earn = Math.floor(Math.random() * (G.work_max_earn - G.work_min + 1)) + G.work_min;
+            let earn = Math.floor(Math.random() * (G.work_max_earn - G.work_min + 1)) + G.work_min;
+            if (boostActive) earn *= 2;
             G.budget += earn;
             G.total_earned += earn;
             G.work_count++;
@@ -1288,6 +916,11 @@ function checkAchievements() {
         G.budget += 1000000;
         setStatus('🏆 Достижение: 200 видеокарт! +1000000 ₽', 'ok');
     }
+    if (G.gpus.length >= 500 && !achievementsUnlocked.includes('500_gpus')) {
+        achievementsUnlocked.push('500_gpus');
+        G.budget += 10000000;
+        setStatus('🏆 Достижение: 500 видеокарт! +10000000 ₽', 'ok');
+    }
     if (G.total_earned >= 1000000 && !achievementsUnlocked.includes('millionaire')) {
         achievementsUnlocked.push('millionaire');
         G.budget += 500000;
@@ -1302,6 +935,11 @@ function checkAchievements() {
         achievementsUnlocked.push('hundred_million');
         G.budget += 10000000;
         setStatus('🏆 Достижение: 100 миллионов! +10000000 ₽', 'ok');
+    }
+    if (G.total_earned >= 1000000000 && !achievementsUnlocked.includes('billion')) {
+        achievementsUnlocked.push('billion');
+        G.budget += 50000000;
+        setStatus('🏆 Достижение: Миллиардер! +50000000 ₽', 'ok');
     }
 }
 
@@ -1390,7 +1028,6 @@ function updateMyGpus() {
             </div>
         `).join('');
     }
-    // Обновляем селект в окне трейда
     const select = document.getElementById('tradeMyGpuSelect');
     if (select) {
         select.innerHTML = '<option value="">🎮 Выбери GPU</option>' + 
@@ -1521,9 +1158,9 @@ function updateUI() {
     document.getElementById('statTrades').textContent = G.trade_count;
     const hashrate = G.gpus.reduce((s, g) => s + g.hashrate, 0);
     const eps = getRealEps();
-    document.getElementById('statHashrate').textContent = hashrate + ' MH/s';
+    document.getElementById('statHashrate').textContent = hashrate.toFixed(0) + ' MH/s';
     document.getElementById('statEps').textContent = eps.toFixed(4) + ' ₽/с';
-    document.getElementById('miningHashrate').textContent = hashrate + ' MH/s';
+    document.getElementById('miningHashrate').textContent = hashrate.toFixed(0) + ' MH/s';
     document.getElementById('miningGpus').textContent = G.gpus.length;
     document.getElementById('miningEps').textContent = eps.toFixed(4) + ' ₽/с';
     document.getElementById('workIncome').textContent = G.work_min + '-' + G.work_max_earn + ' ₽';
@@ -1544,11 +1181,8 @@ function updateUI() {
     updateHistory();
     updateLeaderboardUI();
     document.getElementById('nickDisplay').textContent = G.nickname || 'Не авторизован';
-    
-    // Обновляем окно трейда, если открыто
-    if (tradeState.active) {
-        updateTradeUI();
-    }
+    if (tradeState.active) updateTradeUI();
+    updatePromoList();
 }
 
 function saveToStorage() {
@@ -1567,8 +1201,620 @@ function setStatus(msg, type) {
 }
 
 // ========================================================================
-// 7. СОБЫТИЯ И ЗАПУСК
+// 7. АВТОРИЗАЦИЯ
 // ========================================================================
+function switchAuthTab(tab) {
+    if (tab === 'login') {
+        document.getElementById('authLoginForm').style.display = 'block';
+        document.getElementById('authRegisterForm').style.display = 'none';
+        document.getElementById('authLoginTab').style.borderColor = '#0f0';
+        document.getElementById('authRegisterTab').style.borderColor = '#003030';
+    } else {
+        document.getElementById('authLoginForm').style.display = 'none';
+        document.getElementById('authRegisterForm').style.display = 'block';
+        document.getElementById('authRegisterTab').style.borderColor = '#0f0';
+        document.getElementById('authLoginTab').style.borderColor = '#003030';
+    }
+}
+
+function registerUser() {
+    const nick = document.getElementById('regNick').value.trim();
+    const pass = document.getElementById('regPass').value;
+    const pass2 = document.getElementById('regPass2').value;
+    
+    if (!nick || nick.length < 2) { alert('❌ Ник минимум 2 символа!'); return; }
+    if (pass.length < 4) { alert('❌ Пароль минимум 4 символа!'); return; }
+    if (pass !== pass2) { alert('❌ Пароли не совпадают!'); return; }
+    
+    const users = getUsers();
+    if (users.find(u => u.nickname === nick)) {
+        alert('❌ Такой ник уже занят!');
+        return;
+    }
+    
+    users.push({
+        nickname: nick,
+        password: btoa(pass),
+        created: Date.now()
+    });
+    localStorage.setItem('pelemeshka_users', JSON.stringify(users));
+    
+    G.nickname = nick;
+    G.password = btoa(pass);
+    localStorage.setItem('pelemeshka_session', JSON.stringify({ nick, pass: G.password }));
+    
+    document.getElementById('authModal').style.display = 'none';
+    document.getElementById('userDisplay').textContent = '👤 ' + nick;
+    document.getElementById('userDisplay').style.display = 'block';
+    document.getElementById('nickDisplay').textContent = nick;
+    
+    setStatus(`✅ Добро пожаловать, ${nick}!`, 'ok');
+    addToLeaderboard();
+    updateUI();
+}
+
+function loginUser() {
+    const nick = document.getElementById('loginNick').value.trim();
+    const pass = document.getElementById('loginPass').value;
+    
+    const users = getUsers();
+    const user = users.find(u => u.nickname === nick && u.password === btoa(pass));
+    if (!user) { alert('❌ Неверный ник или пароль!'); return; }
+    
+    G.nickname = nick;
+    G.password = btoa(pass);
+    localStorage.setItem('pelemeshka_session', JSON.stringify({ nick, pass: G.password }));
+    
+    document.getElementById('authModal').style.display = 'none';
+    document.getElementById('userDisplay').textContent = '👤 ' + nick;
+    document.getElementById('userDisplay').style.display = 'block';
+    document.getElementById('nickDisplay').textContent = nick;
+    
+    loadPlayerData(nick);
+    setStatus(`✅ Добро пожаловать, ${nick}!`, 'ok');
+    addToLeaderboard();
+    updateUI();
+}
+
+function logoutUser() {
+    if (!confirm('Выйти из аккаунта?')) return;
+    localStorage.removeItem('pelemeshka_session');
+    G.nickname = '';
+    G.password = '';
+    document.getElementById('userDisplay').style.display = 'none';
+    document.getElementById('nickDisplay').textContent = 'Не авторизован';
+    document.getElementById('authModal').style.display = 'flex';
+    setStatus('👋 Выход выполнен', 'ok');
+}
+
+function getUsers() {
+    try {
+        const saved = localStorage.getItem('pelemeshka_users');
+        return saved ? JSON.parse(saved) : [];
+    } catch(e) { return []; }
+}
+
+function loadPlayerData(nick) {
+    try {
+        const key = 'pelemeshka_save_' + nick;
+        const raw = localStorage.getItem(key);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        Object.assign(G, data);
+        G.coins_data = COINS.map(c => {
+            const saved = data.coins_data?.find(d => d.name === c.name);
+            return {
+                ...c,
+                current_price: saved?.current_price || c.price,
+                history: Array(50).fill(saved?.current_price || c.price),
+                change: 0
+            };
+        });
+        if (data.usedPromoCodes) usedPromoCodes = data.usedPromoCodes;
+        if (data.globalPromoUsed) globalPromoUsed = data.globalPromoUsed;
+        if (data.limitedGpuStock !== undefined) G.limitedGpuStock = data.limitedGpuStock;
+        updateUI();
+    } catch(e) { console.error('Load player error:', e); }
+}
+
+function savePlayerData() {
+    if (!G.nickname) return;
+    try {
+        const key = 'pelemeshka_save_' + G.nickname;
+        const data = {
+            budget: G.budget,
+            total_earned: G.total_earned,
+            clicks: G.clicks,
+            gpus: G.gpus,
+            mining_coin: G.mining_coin,
+            portfolio: G.portfolio,
+            wallet: G.wallet,
+            trade_count: G.trade_count,
+            trade_history: G.trade_history.slice(-200),
+            work_count: G.work_count,
+            limitedGpuStock: G.limitedGpuStock,
+            usedPromoCodes: usedPromoCodes,
+            globalPromoUsed: globalPromoUsed,
+            coins_data: G.coins_data.map(c => ({ name: c.name, current_price: c.current_price }))
+        };
+        localStorage.setItem(key, JSON.stringify(data));
+    } catch(e) { console.error('Save player error:', e); }
+}
+
+// ========================================================================
+// 8. ЛИДЕРБОРД
+// ========================================================================
+function addToLeaderboard() {
+    if (!G.nickname) return;
+    const entry = {
+        nickname: G.nickname,
+        budget: G.budget,
+        total_earned: G.total_earned,
+        gpus: G.gpus.length,
+        time: Date.now()
+    };
+    
+    const existing = leaderboard.findIndex(l => l.nickname === entry.nickname);
+    if (existing !== -1) {
+        if (entry.budget > leaderboard[existing].budget) {
+            leaderboard[existing] = entry;
+        }
+    } else {
+        leaderboard.push(entry);
+    }
+    
+    leaderboard.sort((a, b) => b.budget - a.budget);
+    if (leaderboard.length > 100) leaderboard = leaderboard.slice(0, 100);
+    
+    localStorage.setItem('pelemeshka_leaderboard', JSON.stringify(leaderboard));
+    updateLeaderboardUI();
+}
+
+function loadLeaderboard() {
+    try {
+        const saved = localStorage.getItem('pelemeshka_leaderboard');
+        if (saved) leaderboard = JSON.parse(saved);
+    } catch(e) {}
+}
+
+function updateLeaderboardUI() {
+    const list = document.getElementById('leaderboardList');
+    if (!list) return;
+    if (leaderboard.length === 0) {
+        list.innerHTML = '<div style="color:#808080; font-size:11px; text-align:center; padding:10px;">Нет игроков</div>';
+        return;
+    }
+    list.innerHTML = leaderboard.map((p, i) => `
+        <div class="coin-item" style="${i === 0 ? 'background:#002030; border-color:#ff0;' : ''}">
+            <span style="font-weight:bold; color:${i === 0 ? '#ff0' : '#0ff'};">
+                ${i === 0 ? '👑 ' : ''}#${i+1}
+            </span>
+            <span class="name">${p.nickname}</span>
+            <span class="value gold">💰 ${p.budget.toFixed(0)} ₽</span>
+            <span class="value blue">🎮 ${p.gpus}</span>
+        </div>
+    `).join('');
+}
+
+// ========================================================================
+// 9. ПРОМОКОДЫ
+// ========================================================================
+function activatePromo() {
+    if (!G.nickname) { alert('⚠️ Сначала авторизуйся!'); return; }
+    const code = document.getElementById('promoInput').value.trim();
+    if (!code) { alert('❌ Введите промокод!'); return; }
+    
+    const promo = PROMOCODES[code];
+    if (!promo) {
+        document.getElementById('promoMessage').innerHTML = '❌ Промокод не найден!';
+        document.getElementById('promoMessage').style.color = '#f00';
+        return;
+    }
+    
+    // Проверка: использовал ли уже игрок этот промокод
+    if (usedPromoCodes.includes(code)) {
+        document.getElementById('promoMessage').innerHTML = '❌ Вы уже использовали этот промокод!';
+        document.getElementById('promoMessage').style.color = '#f00';
+        return;
+    }
+    
+    // Проверка глобального лимита (для Newlimited)
+    if (promo.globalLimit) {
+        if (globalPromoUsed >= promo.globalLimit) {
+            document.getElementById('promoMessage').innerHTML = '❌ Промокод больше недоступен (все 10000 использованы)!';
+            document.getElementById('promoMessage').style.color = '#f00';
+            return;
+        }
+    }
+    
+    // Активируем промокод
+    usedPromoCodes.push(code);
+    if (promo.globalLimit) globalPromoUsed++;
+    
+    let msg = '✅ Промокод активирован! ';
+    
+    if (promo.type === 'money' || promo.type === 'money+boost') {
+        G.budget += promo.amount;
+        G.total_earned += promo.amount;
+        msg += `+${promo.amount} ₽ `;
+    }
+    
+    if (promo.type === 'boost' || promo.type === 'money+boost') {
+        activateBoost(promo.duration || 60);
+        msg += `+2x заработок на ${promo.duration || 60}с `;
+    }
+    
+    document.getElementById('promoMessage').innerHTML = msg;
+    document.getElementById('promoMessage').style.color = '#0f0';
+    document.getElementById('promoInput').value = '';
+    savePlayerData();
+    updateUI();
+}
+
+function activateBoost(duration) {
+    if (boostActive) {
+        // Продлеваем
+        clearTimeout(boostTimer);
+        boostRemaining += duration;
+    } else {
+        boostActive = true;
+        boostRemaining = duration;
+        document.getElementById('boostIndicator').style.display = 'block';
+    }
+    
+    updateBoostUI();
+    boostTimer = setInterval(() => {
+        boostRemaining--;
+        updateBoostUI();
+        if (boostRemaining <= 0) {
+            boostActive = false;
+            clearInterval(boostTimer);
+            document.getElementById('boostIndicator').style.display = 'none';
+            setStatus('⏰ 2x заработок закончился', 'error');
+            updateUI();
+        }
+    }, 1000);
+}
+
+function updateBoostUI() {
+    document.getElementById('boostTimer').textContent = boostRemaining;
+}
+
+function updatePromoList() {
+    const list = document.getElementById('promoList');
+    if (!list) return;
+    list.innerHTML = Object.entries(PROMOCODES).map(([code, data]) => {
+        const used = usedPromoCodes.includes(code);
+        const globalLeft = data.globalLimit ? (data.globalLimit - globalPromoUsed) : '∞';
+        return `<div style="padding:2px 0; color:${used ? '#808080' : '#0f0'};">
+            <span style="font-weight:bold;">${code}</span> — ${data.desc}
+            ${used ? ' ✅' : ''}
+            ${data.globalLimit ? ` (осталось ${globalLeft}/${data.globalLimit})` : ''}
+        </div>`;
+    }).join('');
+}
+
+// ========================================================================
+// 10. СИСТЕМА ОБМЕНА
+// ========================================================================
+function openTradeWindow() {
+    if (!G.nickname) { alert('⚠️ Сначала авторизуйся!'); return; }
+    const partner = document.getElementById('tradePartnerNick').value.trim();
+    if (!partner) { alert('❌ Введите ник игрока для обмена!'); return; }
+    if (partner === G.nickname) { alert('❌ Нельзя обмениваться с самим собой!'); return; }
+    
+    const users = getUsers();
+    if (!users.find(u => u.nickname === partner)) {
+        alert('❌ Игрок с таким ником не найден!');
+        return;
+    }
+    
+    tradeState.partner = partner;
+    tradeState.active = true;
+    tradeState.myReady = false;
+    tradeState.theirReady = false;
+    tradeState.myOffer = { money: 0, gpuIndex: null };
+    tradeState.theirOffer = { money: 0, gpuIndex: null };
+    
+    document.getElementById('tradePartnerDisplay').textContent = partner;
+    document.getElementById('tradePartnerName').textContent = partner;
+    document.getElementById('tradeWindowOverlay').style.display = 'block';
+    
+    updateTradeUI();
+    setStatus(`📂 Открыт обмен с ${partner}`, 'ok');
+}
+
+function closeTradeWindow() {
+    document.getElementById('tradeWindowOverlay').style.display = 'none';
+    tradeState.active = false;
+    tradeState.partner = null;
+    setStatus('❌ Обмен закрыт', 'error');
+}
+
+function addMoneyToTrade() {
+    if (!tradeState.active) return;
+    const amount = parseFloat(document.getElementById('tradeMyMoney').value) || 0;
+    if (amount <= 0) { alert('❌ Введите сумму больше 0!'); return; }
+    if (amount > G.budget) { alert('❌ Не хватает денег! Баланс: ' + G.budget + ' ₽'); return; }
+    
+    tradeState.myOffer.money = amount;
+    tradeState.myReady = false;
+    document.getElementById('tradeReadyBtn').textContent = '✅ ГОТОВ';
+    document.getElementById('tradeReadyBtn').className = 'btn btn-blue trade-ready-btn';
+    document.getElementById('tradeMyStatus').textContent = '❌ Не готов';
+    document.getElementById('tradeMyStatus').className = 'trade-status not-ready';
+    updateTradeUI();
+}
+
+function addGpuToTrade() {
+    if (!tradeState.active) return;
+    const select = document.getElementById('tradeMyGpuSelect');
+    const idx = parseInt(select.value);
+    if (isNaN(idx) || idx < 0 || idx >= G.gpus.length) {
+        alert('❌ Выберите видеокарту!');
+        return;
+    }
+    
+    tradeState.myOffer.gpuIndex = idx;
+    tradeState.myReady = false;
+    document.getElementById('tradeReadyBtn').textContent = '✅ ГОТОВ';
+    document.getElementById('tradeReadyBtn').className = 'btn btn-blue trade-ready-btn';
+    document.getElementById('tradeMyStatus').textContent = '❌ Не готов';
+    document.getElementById('tradeMyStatus').className = 'trade-status not-ready';
+    updateTradeUI();
+}
+
+function removeMyMoney() {
+    if (!tradeState.active) return;
+    tradeState.myOffer.money = 0;
+    tradeState.myReady = false;
+    document.getElementById('tradeReadyBtn').textContent = '✅ ГОТОВ';
+    document.getElementById('tradeReadyBtn').className = 'btn btn-blue trade-ready-btn';
+    document.getElementById('tradeMyStatus').textContent = '❌ Не готов';
+    document.getElementById('tradeMyStatus').className = 'trade-status not-ready';
+    updateTradeUI();
+}
+
+function removeMyGpu() {
+    if (!tradeState.active) return;
+    tradeState.myOffer.gpuIndex = null;
+    tradeState.myReady = false;
+    document.getElementById('tradeReadyBtn').textContent = '✅ ГОТОВ';
+    document.getElementById('tradeReadyBtn').className = 'btn btn-blue trade-ready-btn';
+    document.getElementById('tradeMyStatus').textContent = '❌ Не готов';
+    document.getElementById('tradeMyStatus').className = 'trade-status not-ready';
+    updateTradeUI();
+}
+
+function toggleTradeReady() {
+    if (!tradeState.active) return;
+    if (tradeState.myOffer.money === 0 && tradeState.myOffer.gpuIndex === null) {
+        alert('❌ Добавьте что-то в лот (деньги или видеокарту)!');
+        return;
+    }
+    
+    tradeState.myReady = !tradeState.myReady;
+    
+    if (tradeState.myReady) {
+        document.getElementById('tradeReadyBtn').textContent = '⏳ ОЖИДАНИЕ...';
+        document.getElementById('tradeReadyBtn').className = 'btn btn-orange trade-ready-btn';
+        document.getElementById('tradeMyStatus').textContent = '✅ ГОТОВ';
+        document.getElementById('tradeMyStatus').className = 'trade-status ready';
+        setStatus('✅ Ты готов к обмену. Ожидай соперника...', 'ok');
+    } else {
+        document.getElementById('tradeReadyBtn').textContent = '✅ ГОТОВ';
+        document.getElementById('tradeReadyBtn').className = 'btn btn-blue trade-ready-btn';
+        document.getElementById('tradeMyStatus').textContent = '❌ Не готов';
+        document.getElementById('tradeMyStatus').className = 'trade-status not-ready';
+        setStatus('❌ Ты отменил готовность', 'error');
+    }
+    checkBothReady();
+}
+
+function checkBothReady() {
+    if (tradeState.myReady && tradeState.theirReady) {
+        document.getElementById('tradeExecuteBtn').style.display = 'block';
+        document.getElementById('tradeExecuteBtn').textContent = '🔄 ПОДТВЕРДИТЬ ОБМЕН';
+        document.getElementById('tradeExecuteBtn').className = 'btn btn-orange trade-execute-btn';
+        setStatus('✅ Оба готовы! Нажми "Подтвердить обмен"', 'ok');
+    } else {
+        document.getElementById('tradeExecuteBtn').style.display = 'block';
+        if (!tradeState.myReady) {
+            document.getElementById('tradeExecuteBtn').textContent = '⏳ Ты не готов!';
+            document.getElementById('tradeExecuteBtn').className = 'btn btn-blue trade-execute-btn';
+        } else if (!tradeState.theirReady) {
+            document.getElementById('tradeExecuteBtn').textContent = '⏳ Ожидаем соперника...';
+            document.getElementById('tradeExecuteBtn').className = 'btn btn-blue trade-execute-btn';
+        }
+    }
+}
+
+function executeTrade() {
+    if (!tradeState.active) return;
+    if (!tradeState.myReady || !tradeState.theirReady) {
+        alert('❌ Оба игрока должны быть готовы!');
+        return;
+    }
+    
+    if (tradeState.myOffer.money > 0 && tradeState.myOffer.money > G.budget) {
+        alert('❌ У тебя не хватает денег!');
+        tradeState.myReady = false;
+        updateTradeUI();
+        return;
+    }
+    
+    if (tradeState.myOffer.gpuIndex !== null) {
+        const idx = tradeState.myOffer.gpuIndex;
+        if (idx >= G.gpus.length) {
+            alert('❌ Этой видеокарты больше нет!');
+            tradeState.myReady = false;
+            updateTradeUI();
+            return;
+        }
+    }
+    
+    // Выполняем обмен
+    if (tradeState.myOffer.money > 0) G.budget -= tradeState.myOffer.money;
+    let myGpu = null;
+    if (tradeState.myOffer.gpuIndex !== null) {
+        myGpu = G.gpus.splice(tradeState.myOffer.gpuIndex, 1)[0];
+    }
+    
+    let theirGpu = null;
+    let theirMoney = tradeState.theirOffer.money;
+    if (tradeState.theirOffer.gpuIndex !== null) {
+        const randomGpu = ALL_GPUS[Math.floor(Math.random() * ALL_GPUS.length)];
+        theirGpu = { ...randomGpu, id: randomGpu.id + '_' + Date.now() };
+    }
+    
+    if (theirMoney > 0) G.budget += theirMoney;
+    if (theirGpu) G.gpus.push(theirGpu);
+    
+    setStatus(`🔄 Обмен с ${tradeState.partner} выполнен!`, 'ok');
+    G.trade_count++;
+    closeTradeWindow();
+    saveToStorage();
+    updateUI();
+    addToLeaderboard();
+    alert('✅ Обмен успешно выполнен!');
+}
+
+function updateTradeUI() {
+    if (!tradeState.active) return;
+    
+    document.getElementById('tradeMyBalance').textContent = G.budget + ' ₽';
+    document.getElementById('tradePartnerBalance').textContent = '?';
+    
+    const select = document.getElementById('tradeMyGpuSelect');
+    select.innerHTML = '<option value="">🎮 Выбери GPU</option>' + 
+        G.gpus.map((g, i) => `<option value="${i}">${g.name} (⚡${g.hashrate} MH/s)</option>`).join('');
+    
+    const myOfferDiv = document.getElementById('tradeMyOffer');
+    let myHtml = '';
+    if (tradeState.myOffer.money > 0) {
+        myHtml += `<span class="trade-item">💰 ${tradeState.myOffer.money} ₽ <span class="remove" onclick="removeMyMoney()">✕</span></span>`;
+    }
+    if (tradeState.myOffer.gpuIndex !== null && tradeState.myOffer.gpuIndex < G.gpus.length) {
+        const g = G.gpus[tradeState.myOffer.gpuIndex];
+        myHtml += `<span class="trade-item">🎮 ${g.name} <span class="remove" onclick="removeMyGpu()">✕</span></span>`;
+    }
+    myOfferDiv.innerHTML = myHtml || '<span class="empty">Ничего не выбрано</span>';
+    
+    const theirOfferDiv = document.getElementById('tradePartnerOffer');
+    if (tradeState.theirOffer.money > 0 || tradeState.theirOffer.gpuIndex !== null) {
+        let theirHtml = '';
+        if (tradeState.theirOffer.money > 0) theirHtml += `<span class="trade-item">💰 ${tradeState.theirOffer.money} ₽</span>`;
+        if (tradeState.theirOffer.gpuIndex !== null) theirHtml += `<span class="trade-item">🎮 Карта соперника</span>`;
+        theirOfferDiv.innerHTML = theirHtml;
+    } else {
+        theirOfferDiv.innerHTML = '<span class="empty">Ожидание...</span>';
+    }
+    
+    document.getElementById('tradeMyStatus').textContent = tradeState.myReady ? '✅ ГОТОВ' : '❌ Не готов';
+    document.getElementById('tradeMyStatus').className = tradeState.myReady ? 'trade-status ready' : 'trade-status not-ready';
+    document.getElementById('tradePartnerStatus').textContent = tradeState.theirReady ? '✅ ГОТОВ' : '⏳ Ожидает...';
+    document.getElementById('tradePartnerStatus').className = tradeState.theirReady ? 'trade-status ready' : 'trade-status not-ready';
+    
+    const execBtn = document.getElementById('tradeExecuteBtn');
+    if (tradeState.myReady && tradeState.theirReady) {
+        execBtn.style.display = 'block';
+        execBtn.textContent = '🔄 ПОДТВЕРДИТЬ ОБМЕН';
+        execBtn.className = 'btn btn-orange trade-execute-btn';
+    } else {
+        execBtn.style.display = 'block';
+        if (!tradeState.myReady) {
+            execBtn.textContent = '⏳ Ты не готов!';
+        } else if (!tradeState.theirReady) {
+            execBtn.textContent = '⏳ Ожидаем соперника...';
+        } else {
+            execBtn.textContent = '⏳ Ожидание...';
+        }
+        execBtn.className = 'btn btn-blue trade-execute-btn';
+    }
+}
+
+// ========================================================================
+// 11. ЗАПУСК
+// ========================================================================
+function initGame() {
+    G.coins_data = COINS.map(c => ({
+        ...c,
+        current_price: c.price,
+        history: Array(50).fill(c.price),
+        change: 0
+    }));
+    COINS.forEach(c => { G.portfolio[c.name] = 0; G.wallet[c.name] = 0; });
+    G.selected_coin = G.coins_data[0];
+    G.limitedGpuStock = limitedGpuStock;
+    
+    loadFromStorage();
+    loadLeaderboard();
+    checkAutoLogin();
+    loadTradeOffers();
+    
+    G.loaded = true;
+    updateUI();
+    fillMiningCoinSelect();
+    fillTradeCoinSelect();
+    startMiningLoop();
+    updatePricesLoop();
+    initPriceChart();
+    startAutoSave();
+    setStatus('✅ Игра загружена', 'ok');
+    updatePlayTime();
+}
+
+function checkAutoLogin() {
+    try {
+        const saved = localStorage.getItem('pelemeshka_session');
+        if (saved) {
+            const data = JSON.parse(saved);
+            const users = getUsers();
+            const user = users.find(u => u.nickname === data.nick && u.password === data.pass);
+            if (user) {
+                G.nickname = data.nick;
+                G.password = data.pass;
+                document.getElementById('authModal').style.display = 'none';
+                document.getElementById('userDisplay').textContent = '👤 ' + G.nickname;
+                document.getElementById('userDisplay').style.display = 'block';
+                document.getElementById('nickDisplay').textContent = G.nickname;
+                loadPlayerData(G.nickname);
+                addToLeaderboard();
+                updateUI();
+            }
+        }
+    } catch(e) {}
+}
+
+function loadFromStorage() {
+    try {
+        const raw = localStorage.getItem('pelemeshka_save');
+        if (raw) {
+            const data = JSON.parse(raw);
+            G.budget = data.budget || 100;
+            G.total_earned = data.total_earned || 100;
+            G.clicks = data.clicks || 0;
+            G.gpus = data.gpus || [];
+            G.mining_coin = data.mining_coin || "POMOJNYI";
+            G.work_count = data.work_count || 0;
+            G.limitedGpuStock = data.limitedGpuStock || 500;
+            if (data.portfolio) Object.assign(G.portfolio, data.portfolio);
+            if (data.wallet) Object.assign(G.wallet, data.wallet);
+            G.trade_count = data.trade_count || 0;
+            G.trade_history = data.trade_history || [];
+            if (data.usedPromoCodes) usedPromoCodes = data.usedPromoCodes;
+            if (data.globalPromoUsed) globalPromoUsed = data.globalPromoUsed;
+        }
+    } catch(e) { console.error('Load error:', e); }
+}
+
+function loadTradeOffers() {
+    try {
+        const saved = localStorage.getItem('pelemeshka_trades');
+        if (saved) tradeOffers = JSON.parse(saved);
+    } catch(e) {}
+}
+
 document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', function() {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1600,11 +1846,10 @@ setInterval(() => {
 
 initGame();
 
-console.log('🔥 ПЕЛЕМЕШКА ТРЕЙДЕР – MMO ВЕРСИЯ!');
-console.log('👤 АВТОРИЗАЦИЯ – ВХОД/РЕГИСТРАЦИЯ');
-console.log('🏆 ЛИДЕРБОРД – ТОП ИГРОКОВ');
-console.log('🔄 ОБМЕН КАК В ММО – ОКНО С ПОДТВЕРЖДЕНИЕМ');
-console.log('⛏️ МАЙНИНГ ПО УРОВНЯМ – КАЖДАЯ МОНЕТА НА СВОЁМ УРОВНЕ');
+console.log('🔥 ПЕЛЕМЕШКА ТРЕЙДЕР – 501 КАРТА!');
+console.log('🐷 ХРЮКА RTX 5090 – 500 ШТУК В МИРЕ!');
+console.log('🚀 БЕЗЛИМИТНЫЙ ДОХОД!');
+console.log('🎫 ПРОМОКОДЫ: Start100, FFFFFFGA123, Bonus2, Newlimited');
 </script>
 </body>
 </html>
