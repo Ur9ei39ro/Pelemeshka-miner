@@ -388,33 +388,27 @@ const COINS = [
 ];
 
 // ========================================================================
-// 2. ВСЕ КАРТЫ (500 + 1 Хрюка)
-// ========================================================================
-const LIMITED_GPU_ID = 999;
-let limitedGpuStock = 500;
-
-// ========================================================================
-// 3. ПРОМОКОДЫ
+// 2. ПРОМОКОДЫ
 // ========================================================================
 const PROMOCODES = {
     'Start100': { type: 'money', amount: 100, desc: '+100 ₽ на баланс' },
     'FFFFFFGA123': { type: 'boost', duration: 60, desc: '2x заработок на 1 минуту' },
     'Bonus2': { type: 'money', amount: 200, desc: '+200 ₽ на баланс' },
-    'PELMESHKA_TOP': { 
-    type: 'money+boost', 
-    amount: 1000,        // ← 1000 ₽
-    duration: 120,       // ← 2 минуты (120 секунд)
-    desc: 'СЕКРЕТНЫЙ ПРОМОКОД! +1000 ₽ + 2x заработок на 2 минуты',
-    hidden: true 
-}
-    'Newlimited': { type: 'money+boost', amount: 300, duration: 60, desc: '+300 ₽ + 2x заработок на 1 минуту', globalLimit: 10000 }
+    'Newlimited': { type: 'money+boost', amount: 300, duration: 60, desc: '+300 ₽ + 2x заработок на 1 минуту', globalLimit: 10000 },
+    'PELMESHKA_TOP': { type: 'money+boost', amount: 1000, duration: 120, desc: 'СЕКРЕТНЫЙ ПРОМОКОД! +1000 ₽ + 2x заработок на 2 минуты', hidden: true }
 };
+
+// ========================================================================
+// 3. ВСЕ КАРТЫ (500 + 1 Хрюка)
+// ========================================================================
+const LIMITED_GPU_ID = 999;
+let limitedGpuStock = 500;
 
 function generateAllGpus() {
     const gpus = [];
     let id = 1;
     
-    // УРОВЕНЬ 1 (50 карт, 100-500 ₽, 1-5 MH/s)
+    // УРОВЕНЬ 1 (50 карт)
     const tier1Names = [
         "GT 1030 2GB", "GT 1030 4GB", "GTX 650 1GB", "GTX 650 2GB", "GTX 750 1GB",
         "GTX 750 2GB", "GTX 750 Ti 2GB", "GTX 750 Ti 4GB", "GT 710 1GB", "GT 710 2GB",
@@ -433,7 +427,7 @@ function generateAllGpus() {
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 1, multiplier: 1.0 + i * 0.005, limited: false, color: "#4CAF50" });
     });
     
-    // УРОВЕНЬ 2 (50 карт, 500-2000 ₽, 5-15 MH/s)
+    // УРОВЕНЬ 2 (50 карт)
     const tier2Names = [
         "GTX 670 2GB", "GTX 670 4GB", "GTX 680 2GB", "GTX 680 4GB", "GTX 760 2GB",
         "GTX 760 4GB", "GTX 770 2GB", "GTX 770 4GB", "GTX 780 3GB", "GTX 780 6GB",
@@ -452,7 +446,7 @@ function generateAllGpus() {
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 2, multiplier: 1.35 + i * 0.005, limited: false, color: "#2196F3" });
     });
     
-    // УРОВЕНЬ 3 (50 карт, 2000-8000 ₽, 15-40 MH/s)
+    // УРОВЕНЬ 3 (50 карт)
     const tier3Names = [
         "RX 460 2GB", "RX 460 4GB", "RX 470 4GB", "RX 470 8GB", "RX 480 4GB",
         "RX 480 8GB", "RX 550 2GB", "RX 550 4GB", "RX 560 2GB", "RX 560 4GB",
@@ -471,7 +465,7 @@ function generateAllGpus() {
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 3, multiplier: 1.70 + i * 0.005, limited: false, color: "#FF9800" });
     });
     
-    // УРОВЕНЬ 4 (50 карт, 8000-30000 ₽, 40-100 MH/s)
+    // УРОВЕНЬ 4 (50 карт)
     const tier4Names = [
         "RX 6700 XT 12GB", "RX 6800 16GB", "RX 6800 XT 16GB", "RX 6900 XT 16GB", "RX 6900 XT 32GB",
         "RX 7600 8GB", "RX 7600 XT 12GB", "RX 7700 XT 12GB", "RX 7800 XT 16GB", "RX 7900 XT 20GB",
@@ -490,7 +484,7 @@ function generateAllGpus() {
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 4, multiplier: 2.05 + i * 0.005, limited: false, color: "#F44336" });
     });
     
-    // УРОВЕНЬ 5 (50 карт, 30000-100000 ₽, 100-250 MH/s)
+    // УРОВЕНЬ 5 (50 карт)
     const tier5Names = [
         "RTX B200 384GB", "RTX B100 192GB", "RTX B100 384GB", "RTX X100 256GB", "RTX X100 512GB",
         "RTX X200 256GB", "RTX X200 512GB", "RTX Z100 512GB", "RTX Z100 1TB", "RTX Z200 512GB",
@@ -509,7 +503,7 @@ function generateAllGpus() {
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 5, multiplier: 2.40 + i * 0.005, limited: false, color: "#9C27B0" });
     });
     
-    // УРОВЕНЬ 6 (50 карт, 100000-500000 ₽, 250-500 MH/s)
+    // УРОВЕНЬ 6 (50 карт)
     const tier6Names = [
         "Quantum Core V9", "Quantum Core V10", "Quantum Core X1", "Quantum Core X2", "Quantum Core X3",
         "Quantum Core X4", "Quantum Core X5", "Quantum Core X6", "Quantum Core X7", "Quantum Core X8",
@@ -528,7 +522,7 @@ function generateAllGpus() {
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 6, multiplier: 2.75 + i * 0.005, limited: false, color: "#E91E63" });
     });
     
-    // УРОВЕНЬ 7 (50 карт, 500000-5 млн ₽, 500-5000 MH/s)
+    // УРОВЕНЬ 7 (50 карт)
     const tier7Names = [
         "Infinity Core 4", "Infinity Core 5", "Omega Core 1", "Omega Core 2", "Omega Core 3",
         "Omega Core 4", "Omega Core 5", "Titan Core 1", "Titan Core 2", "Titan Core 3",
@@ -547,7 +541,7 @@ function generateAllGpus() {
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 7, multiplier: 3.10 + i * 0.01, limited: false, color: "#00BCD4" });
     });
     
-    // УРОВЕНЬ 8 (50 карт, 5-50 млн ₽, 5000-25000 MH/s)
+    // УРОВЕНЬ 8 (50 карт)
     const tier8Names = [
         "Ultimate Core 4", "Ultimate Core 5", "Mega Core 1", "Mega Core 2", "Mega Core 3",
         "Mega Core 4", "Mega Core 5", "Hyper GPU 1", "Hyper GPU 2", "Hyper GPU 3",
@@ -566,7 +560,7 @@ function generateAllGpus() {
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 8, multiplier: 4.00 + i * 0.02, limited: false, color: "#FF5722" });
     });
     
-    // УРОВЕНЬ 9 (50 карт, 50-500 млн ₽, 25000-100000 MH/s)
+    // УРОВЕНЬ 9 (50 карт)
     const tier9Names = [
         "Aurora GPU 4", "Aurora GPU 5", "Nebula Core 1", "Nebula Core 2", "Nebula Core 3",
         "Nebula Core 4", "Nebula Core 5", "Vortex GPU 1", "Vortex GPU 2", "Vortex GPU 3",
@@ -585,7 +579,7 @@ function generateAllGpus() {
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 9, multiplier: 5.00 + i * 0.03, limited: false, color: "#FF6F00" });
     });
     
-    // УРОВЕНЬ 10 (50 карт, 500 млн - 5 млрд ₽, 100000-500000 MH/s)
+    // УРОВЕНЬ 10 (50 карт)
     const tier10Names = [
         "Infinity X 4", "Infinity X 5", "Omnipotent Core 1", "Omnipotent Core 2", "Omnipotent Core 3",
         "Omnipotent Core 4", "Omnipotent Core 5", "Absolute GPU 1", "Absolute GPU 2", "Absolute GPU 3",
@@ -604,7 +598,7 @@ function generateAllGpus() {
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 10, multiplier: 6.00 + i * 0.04, limited: false, color: "#00E676" });
     });
     
-    // УРОВЕНЬ 11 (50 карт, 5-50 млрд ₽, 500000-2 млн MH/s)
+    // УРОВЕНЬ 11 (50 карт)
     const tier11Names = [
         "Final Core 4", "Final Core 5", "Transcendent Core 1", "Transcendent Core 2", "Transcendent Core 3",
         "Transcendent Core 4", "Transcendent Core 5", "Ascended GPU 1", "Ascended GPU 2", "Ascended GPU 3",
@@ -1497,7 +1491,9 @@ function updateBoostUI() {
 function updatePromoList() {
     const list = document.getElementById('promoList');
     if (!list) return;
-    list.innerHTML = Object.entries(PROMOCODES).map(([code, data]) => {
+    // Показываем только НЕ скрытые промокоды
+    const visible = Object.entries(PROMOCODES).filter(([code, data]) => !data.hidden);
+    list.innerHTML = visible.map(([code, data]) => {
         const used = usedPromoCodes.includes(code);
         const globalLeft = data.globalLimit ? (data.globalLimit - globalPromoUsed) : '∞';
         return `<div style="padding:2px 0; color:${used ? '#808080' : '#0f0'};">
@@ -1863,7 +1859,7 @@ console.log('🔥 ПЕЛЕМЕШКА ТРЕЙДЕР – 501 КАРТА!');
 console.log('🐷 ХРЮКА RTX 5090 – 500 ШТУК В МИРЕ!');
 console.log('💰 СБАЛАНСИРОВАННАЯ ЭКОНОМИКА!');
 console.log('📊 GTX 660 → 0.0100 ₽/с');
-console.log('🎫 ПРОМОКОДЫ: Start100, FFFFFFGA123, Bonus2, Newlimited');
+console.log('🎫 ПРОМОКОДЫ: Start100, FFFFFFGA123, Bonus2, Newlimited, PELMESHKA_TOP (секретный)');
 console.log('🔄 ОБМЕН: работает!');
 </script>
 </body>
