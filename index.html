@@ -393,6 +393,16 @@ const COINS = [
 const LIMITED_GPU_ID = 999;
 let limitedGpuStock = 500;
 
+// ========================================================================
+// 3. ПРОМОКОДЫ
+// ========================================================================
+const PROMOCODES = {
+    'Start100': { type: 'money', amount: 100, desc: '+100 ₽ на баланс' },
+    'FFFFFFGA123': { type: 'boost', duration: 60, desc: '2x заработок на 1 минуту' },
+    'Bonus2': { type: 'money', amount: 200, desc: '+200 ₽ на баланс' },
+    'Newlimited': { type: 'money+boost', amount: 300, duration: 60, desc: '+300 ₽ + 2x заработок на 1 минуту', globalLimit: 10000 }
+};
+
 function generateAllGpus() {
     const gpus = [];
     let id = 1;
@@ -625,16 +635,6 @@ function generateAllGpus() {
 const ALL_GPUS = generateAllGpus();
 
 // ========================================================================
-// 3. ПРОМОКОДЫ
-// ========================================================================
-const PROMOCODES = {
-    'Start100': { type: 'money', amount: 100, desc: '+100 ₽ на баланс' },
-    'FFFFFFGA123': { type: 'boost', duration: 60, desc: '2x заработок на 1 минуту' },
-    'Bonus2': { type: 'money', amount: 200, desc: '+200 ₽ на баланс' },
-    'Newlimited': { type: 'money+boost', amount: 300, duration: 60, desc: '+300 ₽ + 2x заработок на 1 минуту', globalLimit: 10000 }
-};
-
-// ========================================================================
 // 4. МАЙНИНГ ПО УРОВНЯМ
 // ========================================================================
 function getMiningTier() {
@@ -723,36 +723,18 @@ let tradeState = {
 // 6. ГЛАВНАЯ ФУНКЦИЯ ДОХОДА (СБАЛАНСИРОВАННАЯ ЭКОНОМИКА)
 // ========================================================================
 function getRealEps() {
-    // Проверка: есть ли карты?
-    if (G.gpus.length === 0) {
-        return 0;
-    }
+    if (G.gpus.length === 0) return 0;
+    if (!G.mining_active) return 0;
     
-    // Проверка: запущен ли майнинг?
-    if (!G.mining_active) {
-        return 0;
-    }
-    
-    // Считаем хешрейт
     const hashrate = G.gpus.reduce((s, g) => s + g.hashrate, 0);
-    
-    // Находим монету
     const coin = G.coins_data.find(c => c.name === G.mining_coin);
-    if (!coin) {
-        return 0;
-    }
+    if (!coin) return 0;
     
     const price = coin.current_price;
-    
-    // Считаем множитель
     const totalMultiplier = G.gpus.reduce((s, g) => s + (g.multiplier || 1.0), 0);
     
-    // ===== СБАЛАНСИРОВАННАЯ ЭКОНОМИКА =====
     // GTX 660 (3 MH/s) → 0.0100 ₽/с при цене монеты 50 ₽
-    // Формула: Доход = Хешрейт × 0.000066 × Цена_монеты × Множитель
     let eps = hashrate * 0.000066 * price * totalMultiplier;
-    
-    // Буфф 2x
     if (boostActive) eps *= 2;
     
     return eps;
@@ -1875,6 +1857,7 @@ console.log('🐷 ХРЮКА RTX 5090 – 500 ШТУК В МИРЕ!');
 console.log('💰 СБАЛАНСИРОВАННАЯ ЭКОНОМИКА!');
 console.log('📊 GTX 660 → 0.0100 ₽/с');
 console.log('🎫 ПРОМОКОДЫ: Start100, FFFFFFGA123, Bonus2, Newlimited');
+console.log('🔄 ОБМЕН: работает!');
 </script>
 </body>
 </html>
