@@ -85,10 +85,10 @@
         .boost-indicator { background: #402000; border: 2px solid #ff0; border-radius: 8px; padding: 6px 12px; text-align: center; font-weight: bold; color: #ff0; margin: 4px 0; display: none; }
         .chart-container { width: 100%; height: 250px; position: relative; background: #001020; border: 1px solid #003040; border-radius: 8px; overflow: hidden; }
         .chart-container canvas { width: 100% !important; height: 100% !important; }
-        @media (max-width: 480px) { .gpu-grid { grid-template-columns: 1fr 1fr; } .spin-wheel { width: 160px; height: 160px; } }
-        @media (max-width: 360px) { .gpu-grid { grid-template-columns: 1fr; } .spin-wheel { width: 140px; height: 140px; } }
         .force-reload-btn { margin: 6px 0; padding: 10px; background: #402000; border: 2px solid #ff0; border-radius: 8px; color: #ff0; text-align: center; cursor: pointer; font-weight: bold; }
         .force-reload-btn:active { opacity: 0.6; transform: scale(0.97); }
+        @media (max-width: 480px) { .gpu-grid { grid-template-columns: 1fr 1fr; } .spin-wheel { width: 160px; height: 160px; } }
+        @media (max-width: 360px) { .gpu-grid { grid-template-columns: 1fr; } .spin-wheel { width: 140px; height: 140px; } }
     </style>
 </head>
 <body>
@@ -122,7 +122,7 @@
 <!-- ШАПКА -->
 <div class="header">
     <h1>🥟 ПЕЛЕМЕШКА ТРЕЙДЕР</h1>
-    <div class="sub">🏖️ 500 КАРТ · ЛЕТНЯЯ ВЕРСИЯ</div>
+    <div class="sub">🏖️ 500 КАРТ · НОВАЯ ЭКОНОМИКА</div>
 </div>
 
 <!-- БАЛАНС -->
@@ -447,21 +447,21 @@ const COINS = [
 ];
 
 // ========================================================================
-// 3. ЛЕТНИЕ КАРТЫ
+// 3. ЛЕТНИЕ КАРТЫ (цены ×20)
 // ========================================================================
 const SUMMER_GPUS = [
-    { name: "🍉 Арбузный GTX 1060", hashrate: 100, rarity: "Обычная", color: "#4CAF50", emoji: "🍉", multiplier: 1.5, price: 200 },
-    { name: "🏖️ Пляжный RX 580", hashrate: 150, rarity: "Обычная", color: "#4CAF50", emoji: "🏖️", multiplier: 1.6, price: 200 },
-    { name: "🌊 Волновой GTX 1070", hashrate: 200, rarity: "Обычная", color: "#4CAF50", emoji: "🌊", multiplier: 1.7, price: 200 },
-    { name: "☀️ Солнечный RTX 2060", hashrate: 300, rarity: "Обычная", color: "#4CAF50", emoji: "☀️", multiplier: 1.8, price: 200 },
-    { name: "🍦 Мороженое RTX 2070", hashrate: 500, rarity: "Обычная", color: "#4CAF50", emoji: "🍦", multiplier: 1.9, price: 200 },
-    { name: "🌴 Пальмовый RX 5700", hashrate: 600, rarity: "Редкая", color: "#2196F3", emoji: "🌴", multiplier: 2.2, price: 500 },
-    { name: "🍹 Коктейльный RTX 2080", hashrate: 800, rarity: "Редкая", color: "#2196F3", emoji: "🍹", multiplier: 2.4, price: 500 },
-    { name: "🏄 Серферский RTX 3070", hashrate: 1000, rarity: "Редкая", color: "#2196F3", emoji: "🏄", multiplier: 2.6, price: 500 },
-    { name: "🌺 Цветочный RX 6800", hashrate: 2000, rarity: "Эпическая", color: "#9C27B0", emoji: "🌺", multiplier: 3.0, price: 1500 },
-    { name: "🔥 Жаркий RTX 3080", hashrate: 3000, rarity: "Эпическая", color: "#9C27B0", emoji: "🔥", multiplier: 3.5, price: 1500 },
-    { name: "🐠 Рыбный RTX 4090", hashrate: 5000, rarity: "Легендарная", color: "#FF6F00", emoji: "🐠", multiplier: 4.5, price: 5000 },
-    { name: "🏝️ Островной RTX 5090", hashrate: 10000, rarity: "Легендарная", color: "#FF6F00", emoji: "🏝️", multiplier: 5.5, price: 5000 }
+    { name: "🍉 Арбузный GTX 1060", hashrate: 100, rarity: "Обычная", color: "#4CAF50", emoji: "🍉", multiplier: 1.5, price: 4000 },
+    { name: "🏖️ Пляжный RX 580", hashrate: 150, rarity: "Обычная", color: "#4CAF50", emoji: "🏖️", multiplier: 1.6, price: 4000 },
+    { name: "🌊 Волновой GTX 1070", hashrate: 200, rarity: "Обычная", color: "#4CAF50", emoji: "🌊", multiplier: 1.7, price: 4000 },
+    { name: "☀️ Солнечный RTX 2060", hashrate: 300, rarity: "Обычная", color: "#4CAF50", emoji: "☀️", multiplier: 1.8, price: 4000 },
+    { name: "🍦 Мороженое RTX 2070", hashrate: 500, rarity: "Обычная", color: "#4CAF50", emoji: "🍦", multiplier: 1.9, price: 4000 },
+    { name: "🌴 Пальмовый RX 5700", hashrate: 600, rarity: "Редкая", color: "#2196F3", emoji: "🌴", multiplier: 2.2, price: 10000 },
+    { name: "🍹 Коктейльный RTX 2080", hashrate: 800, rarity: "Редкая", color: "#2196F3", emoji: "🍹", multiplier: 2.4, price: 10000 },
+    { name: "🏄 Серферский RTX 3070", hashrate: 1000, rarity: "Редкая", color: "#2196F3", emoji: "🏄", multiplier: 2.6, price: 10000 },
+    { name: "🌺 Цветочный RX 6800", hashrate: 2000, rarity: "Эпическая", color: "#9C27B0", emoji: "🌺", multiplier: 3.0, price: 30000 },
+    { name: "🔥 Жаркий RTX 3080", hashrate: 3000, rarity: "Эпическая", color: "#9C27B0", emoji: "🔥", multiplier: 3.5, price: 30000 },
+    { name: "🐠 Рыбный RTX 4090", hashrate: 5000, rarity: "Легендарная", color: "#FF6F00", emoji: "🐠", multiplier: 4.5, price: 100000 },
+    { name: "🏝️ Островной RTX 5090", hashrate: 10000, rarity: "Легендарная", color: "#FF6F00", emoji: "🏝️", multiplier: 5.5, price: 100000 }
 ];
 
 // ========================================================================
@@ -491,7 +491,7 @@ const PROMOCODES = {
 };
 
 // ========================================================================
-// 6. ВСЕ КАРТЫ (500 штук + Хрюка) – ПОЛНАЯ ВЕРСИЯ
+// 6. ВСЕ КАРТЫ (500 штук + Хрюка) – ЦЕНЫ ×20, ХРЮКА НЕ ТРОГАЕТСЯ
 // ========================================================================
 const LIMITED_GPU_ID = 999;
 let limitedGpuStock = 500;
@@ -500,7 +500,7 @@ function generateAllGpus() {
     const gpus = [];
     let id = 1;
     
-    // ===== УРОВЕНЬ 1 (50 карт) =====
+    // ===== УРОВЕНЬ 1 (50 карт, цены ×20) =====
     const tier1Names = [
         "GT 1030 2GB", "GT 1030 4GB", "GTX 650 1GB", "GTX 650 2GB", "GTX 750 1GB",
         "GTX 750 2GB", "GTX 750 Ti 2GB", "GTX 750 Ti 4GB", "GT 710 1GB", "GT 710 2GB",
@@ -515,11 +515,11 @@ function generateAllGpus() {
     ];
     tier1Names.forEach((name, i) => {
         const h = 1 + (i % 5) * 0.3;
-        const p = 100 + i * 8;
+        const p = (100 + i * 8) * 20; // ×20
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 1, multiplier: 1.0 + i * 0.005, limited: false, color: "#4CAF50" });
     });
     
-    // ===== УРОВЕНЬ 2 (50 карт) =====
+    // ===== УРОВЕНЬ 2 (50 карт, цены ×20) =====
     const tier2Names = [
         "GTX 670 2GB", "GTX 670 4GB", "GTX 680 2GB", "GTX 680 4GB", "GTX 760 2GB",
         "GTX 760 4GB", "GTX 770 2GB", "GTX 770 4GB", "GTX 780 3GB", "GTX 780 6GB",
@@ -534,11 +534,11 @@ function generateAllGpus() {
     ];
     tier2Names.forEach((name, i) => {
         const h = 5 + i * 0.2;
-        const p = 500 + i * 30;
+        const p = (500 + i * 30) * 20;
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 2, multiplier: 1.35 + i * 0.005, limited: false, color: "#2196F3" });
     });
     
-    // ===== УРОВЕНЬ 3 (50 карт) =====
+    // ===== УРОВЕНЬ 3 (50 карт, цены ×20) =====
     const tier3Names = [
         "RX 460 2GB", "RX 460 4GB", "RX 470 4GB", "RX 470 8GB", "RX 480 4GB",
         "RX 480 8GB", "RX 550 2GB", "RX 550 4GB", "RX 560 2GB", "RX 560 4GB",
@@ -553,11 +553,11 @@ function generateAllGpus() {
     ];
     tier3Names.forEach((name, i) => {
         const h = 15 + i * 0.5;
-        const p = 2000 + i * 120;
+        const p = (2000 + i * 120) * 20;
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 3, multiplier: 1.70 + i * 0.005, limited: false, color: "#FF9800" });
     });
     
-    // ===== УРОВЕНЬ 4 (50 карт) =====
+    // ===== УРОВЕНЬ 4 (50 карт, цены ×20) =====
     const tier4Names = [
         "RX 6700 XT 12GB", "RX 6800 16GB", "RX 6800 XT 16GB", "RX 6900 XT 16GB", "RX 6900 XT 32GB",
         "RX 7600 8GB", "RX 7600 XT 12GB", "RX 7700 XT 12GB", "RX 7800 XT 16GB", "RX 7900 XT 20GB",
@@ -572,11 +572,11 @@ function generateAllGpus() {
     ];
     tier4Names.forEach((name, i) => {
         const h = 40 + i * 1.2;
-        const p = 8000 + i * 440;
+        const p = (8000 + i * 440) * 20;
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 4, multiplier: 2.05 + i * 0.005, limited: false, color: "#F44336" });
     });
     
-    // ===== УРОВЕНЬ 5 (50 карт) =====
+    // ===== УРОВЕНЬ 5 (50 карт, цены ×20) =====
     const tier5Names = [
         "RTX B200 384GB", "RTX B100 192GB", "RTX B100 384GB", "RTX X100 256GB", "RTX X100 512GB",
         "RTX X200 256GB", "RTX X200 512GB", "RTX Z100 512GB", "RTX Z100 1TB", "RTX Z200 512GB",
@@ -591,11 +591,11 @@ function generateAllGpus() {
     ];
     tier5Names.forEach((name, i) => {
         const h = 100 + i * 3;
-        const p = 30000 + i * 1400;
+        const p = (30000 + i * 1400) * 20;
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 5, multiplier: 2.40 + i * 0.005, limited: false, color: "#9C27B0" });
     });
     
-    // ===== УРОВЕНЬ 6 (50 карт) =====
+    // ===== УРОВЕНЬ 6 (50 карт, цены ×20) =====
     const tier6Names = [
         "Quantum Core V9", "Quantum Core V10", "Quantum Core X1", "Quantum Core X2", "Quantum Core X3",
         "Quantum Core X4", "Quantum Core X5", "Quantum Core X6", "Quantum Core X7", "Quantum Core X8",
@@ -610,11 +610,11 @@ function generateAllGpus() {
     ];
     tier6Names.forEach((name, i) => {
         const h = 250 + i * 5;
-        const p = 100000 + i * 8000;
+        const p = (100000 + i * 8000) * 20;
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 6, multiplier: 2.75 + i * 0.005, limited: false, color: "#E91E63" });
     });
     
-    // ===== УРОВЕНЬ 7 (50 карт) =====
+    // ===== УРОВЕНЬ 7 (50 карт, цены ×20) =====
     const tier7Names = [
         "Infinity Core 4", "Infinity Core 5", "Omega Core 1", "Omega Core 2", "Omega Core 3",
         "Omega Core 4", "Omega Core 5", "Titan Core 1", "Titan Core 2", "Titan Core 3",
@@ -629,11 +629,11 @@ function generateAllGpus() {
     ];
     tier7Names.forEach((name, i) => {
         const h = 500 + i * 90;
-        const p = 500000 + i * 90000;
+        const p = (500000 + i * 90000) * 20;
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 7, multiplier: 3.10 + i * 0.01, limited: false, color: "#00BCD4" });
     });
     
-    // ===== УРОВЕНЬ 8 (50 карт) =====
+    // ===== УРОВЕНЬ 8 (50 карт, цены ×20) =====
     const tier8Names = [
         "Ultimate Core 4", "Ultimate Core 5", "Mega Core 1", "Mega Core 2", "Mega Core 3",
         "Mega Core 4", "Mega Core 5", "Hyper GPU 1", "Hyper GPU 2", "Hyper GPU 3",
@@ -648,11 +648,11 @@ function generateAllGpus() {
     ];
     tier8Names.forEach((name, i) => {
         const h = 5000 + i * 400;
-        const p = 5000000 + i * 900000;
+        const p = (5000000 + i * 900000) * 20;
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 8, multiplier: 4.00 + i * 0.02, limited: false, color: "#FF5722" });
     });
     
-    // ===== УРОВЕНЬ 9 (50 карт) =====
+    // ===== УРОВЕНЬ 9 (50 карт, цены ×20) =====
     const tier9Names = [
         "Aurora GPU 4", "Aurora GPU 5", "Nebula Core 1", "Nebula Core 2", "Nebula Core 3",
         "Nebula Core 4", "Nebula Core 5", "Vortex GPU 1", "Vortex GPU 2", "Vortex GPU 3",
@@ -667,11 +667,11 @@ function generateAllGpus() {
     ];
     tier9Names.forEach((name, i) => {
         const h = 25000 + i * 1500;
-        const p = 50000000 + i * 9000000;
+        const p = (50000000 + i * 9000000) * 20;
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 9, multiplier: 5.00 + i * 0.03, limited: false, color: "#FF6F00" });
     });
     
-    // ===== УРОВЕНЬ 10 (50 карт) =====
+    // ===== УРОВЕНЬ 10 (50 карт, цены ×20) =====
     const tier10Names = [
         "Infinity X 4", "Infinity X 5", "Omnipotent Core 1", "Omnipotent Core 2", "Omnipotent Core 3",
         "Omnipotent Core 4", "Omnipotent Core 5", "Absolute GPU 1", "Absolute GPU 2", "Absolute GPU 3",
@@ -686,11 +686,11 @@ function generateAllGpus() {
     ];
     tier10Names.forEach((name, i) => {
         const h = 100000 + i * 8000;
-        const p = 500000000 + i * 90000000;
+        const p = (500000000 + i * 90000000) * 20;
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 10, multiplier: 6.00 + i * 0.04, limited: false, color: "#00E676" });
     });
     
-    // ===== УРОВЕНЬ 11 (50 карт) =====
+    // ===== УРОВЕНЬ 11 (50 карт, цены ×20) =====
     const tier11Names = [
         "Final Core 4", "Final Core 5", "Transcendent Core 1", "Transcendent Core 2", "Transcendent Core 3",
         "Transcendent Core 4", "Transcendent Core 5", "Ascended GPU 1", "Ascended GPU 2", "Ascended GPU 3",
@@ -705,16 +705,16 @@ function generateAllGpus() {
     ];
     tier11Names.forEach((name, i) => {
         const h = 500000 + i * 30000;
-        const p = 5000000000 + i * 900000000;
+        const p = (5000000000 + i * 900000000) * 20;
         gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 11, multiplier: 7.00 + i * 0.05, limited: false, color: "#00BCD4" });
     });
     
-    // ===== ХРЮКА =====
+    // ===== ХРЮКА (ЦЕНА НЕ МЕНЯЕТСЯ!) =====
     gpus.push({ 
         id: LIMITED_GPU_ID, 
         name: "🐷 Хрюка RTX 5090", 
         hashrate: 5000000, 
-        price: 396000000000000000000000, 
+        price: 396000000000000000000000, // ОСТАЁТСЯ ТА ЖЕ
         tier: 12, 
         multiplier: 10.00, 
         limited: true, 
@@ -1892,10 +1892,6 @@ function updateTradeUI() {
 // 17. ЗАПУСК
 // ========================================================================
 function initGame() {
-    // Убираем блокировку повторной инициализации
-    // if (gameInitialized) return;
-    // gameInitialized = true;
-    
     G.coins_data = COINS.map(c => ({ ...c, current_price: c.price }));
     COINS.forEach(c => { G.portfolio[c.name] = 0; G.wallet[c.name] = 0; });
     G.selected_coin = G.coins_data[0];
@@ -1959,10 +1955,12 @@ initGame();
 
 console.log('🔥 ПЕЛЕМЕШКА ТРЕЙДЕР – 500 КАРТ!');
 console.log('📊 Всего карт в ALL_GPUS:', ALL_GPUS.length);
+console.log('💰 ЦЕНЫ ВСЕХ КАРТ ×20 (КРОМЕ ХРЮКИ)!');
+console.log('🐷 ХРЮКА: 396 СЕКСТИЛЛИОНОВ (НЕ ДОСТИЖИМА)');
 console.log('🏖️ 12 ЛЕТНИХ КАРТ!');
 console.log('🎰 КРУТИЛКА КАЖДЫЕ 3 ЧАСА!');
 console.log('📦 ЛЕТНИЙ КЕЙС ЗА 100 МОНЕТ!');
-console.log('⛏️ МАЙНИНГ ПО УРОВНЯМ – ФИКС!');
+console.log('⛏️ МАЙНИНГ ПО УРОВНЯМ!');
 console.log('🔄 Если карты не видны, нажмите кнопку "ПРИНУДИТЕЛЬНО ОБНОВИТЬ"');
 </script>
 </body>
