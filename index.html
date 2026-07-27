@@ -52,6 +52,7 @@
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(10px);
+            position: relative;
         }
         .notification.show {
             transform: translateY(0);
@@ -121,7 +122,7 @@
             background: linear-gradient(90deg, #4fc3f7, #0088cc);
         }
 
-        /* === ОСТАЛЬНЫЕ СТИЛИ (сжато) === */
+        /* === ОСТАЛЬНЫЕ СТИЛИ === */
         .header {
             background: linear-gradient(145deg, #0d1a2b, #08111f);
             padding: 18px 14px;
@@ -1379,12 +1380,10 @@
             notificationQueue.push(notif);
             processNotifications();
 
-            // Звуки
             if (type === 'success') playCoinSound();
             else if (type === 'error') playErrorSound();
             else if (type === 'warning') playTone(500, 0.2, 'square', 0.1);
 
-            // Авто-закрытие
             setTimeout(() => {
                 closeNotification(notif);
             }, duration);
@@ -1396,7 +1395,6 @@
             const notif = notificationQueue.shift();
             notif.classList.add('show');
 
-            // Прогресс-бар
             const progress = notif.querySelector('.progress-line');
             let width = 100;
             const interval = setInterval(() => {
@@ -1497,29 +1495,29 @@
         // ========================================================================
         const SUMMER_GPUS = [
             { name: "🍉 Арбузный GTX 1060", hashrate: 100, rarity: "Обычная", color: "#4CAF50", emoji: "🍉", multiplier: 0.8,
-                price: 4000 },
+                price: 4000, durability: 100 },
             { name: "🏖️ Пляжный RX 580", hashrate: 150, rarity: "Обычная", color: "#4CAF50", emoji: "🏖️", multiplier: 0.85,
-                price: 4000 },
+                price: 4000, durability: 100 },
             { name: "🌊 Волновой GTX 1070", hashrate: 200, rarity: "Обычная", color: "#4CAF50", emoji: "🌊", multiplier: 0.9,
-                price: 4000 },
+                price: 4000, durability: 100 },
             { name: "☀️ Солнечный RTX 2060", hashrate: 300, rarity: "Обычная", color: "#4CAF50", emoji: "☀️", multiplier: 0.95,
-                price: 4000 },
+                price: 4000, durability: 100 },
             { name: "🍦 Мороженое RTX 2070", hashrate: 500, rarity: "Обычная", color: "#4CAF50", emoji: "🍦", multiplier: 1.0,
-                price: 4000 },
+                price: 4000, durability: 100 },
             { name: "🌴 Пальмовый RX 5700", hashrate: 600, rarity: "Редкая", color: "#2196F3", emoji: "🌴", multiplier: 1.1,
-                price: 10000 },
+                price: 10000, durability: 100 },
             { name: "🍹 Коктейльный RTX 2080", hashrate: 800, rarity: "Редкая", color: "#2196F3", emoji: "🍹", multiplier: 1.2,
-                price: 10000 },
+                price: 10000, durability: 100 },
             { name: "🏄 Серферский RTX 3070", hashrate: 1000, rarity: "Редкая", color: "#2196F3", emoji: "🏄", multiplier: 1.3,
-                price: 10000 },
+                price: 10000, durability: 100 },
             { name: "🌺 Цветочный RX 6800", hashrate: 2000, rarity: "Эпическая", color: "#9C27B0", emoji: "🌺", multiplier: 1.5,
-                price: 30000 },
+                price: 30000, durability: 100 },
             { name: "🔥 Жаркий RTX 3080", hashrate: 3000, rarity: "Эпическая", color: "#9C27B0", emoji: "🔥", multiplier: 1.8,
-                price: 30000 },
+                price: 30000, durability: 100 },
             { name: "🐠 Рыбный RTX 4090", hashrate: 5000, rarity: "Легендарная", color: "#FF6F00", emoji: "🐠", multiplier: 2.0,
-                price: 100000 },
+                price: 100000, durability: 100 },
             { name: "🏝️ Островной RTX 5090", hashrate: 10000, rarity: "Легендарная", color: "#FF6F00", emoji: "🏝️",
-                multiplier: 2.5, price: 100000 }
+                multiplier: 2.5, price: 100000, durability: 100 }
         ];
 
         // ========================================================================
@@ -1537,7 +1535,6 @@
         ];
 
         function getDailyCaseReward() {
-            // 70% обычные, 30% редкие
             const isRare = Math.random() < 0.3;
             const pool = DAILY_CASE_REWARDS.filter(r => isRare ? r.rarity === 'rare' : r.rarity === 'common');
             return pool[Math.floor(Math.random() * pool.length)];
@@ -1565,7 +1562,6 @@
             btn.disabled = true;
             btn.textContent = '🎰 ОТКРЫВАЕТСЯ...';
 
-            // Анимация прокрутки
             const slot = document.getElementById('caseSlot');
             const items = document.getElementById('caseItems');
             const itemHeight = 120;
@@ -1573,18 +1569,15 @@
             const randomIndex = Math.floor(Math.random() * totalItems);
             const winner = DAILY_CASE_REWARDS[randomIndex];
 
-            // Создаём расширенный список для прокрутки (3 копии)
             let extendedItems = [];
             for (let rep = 0; rep < 3; rep++) {
                 DAILY_CASE_REWARDS.forEach(r => {
                     extendedItems.push(r);
                 });
             }
-            // Добавляем победителя в конец, чтобы он выпал
             const startIndex = totalItems * 2 + randomIndex;
             const targetIndex = startIndex + Math.floor(Math.random() * 5) + 3;
 
-            // Заполняем слот
             items.innerHTML = extendedItems.map((r, i) => `
                     <div class="case-item ${i === targetIndex ? 'winner' : ''}" data-index="${i}">
                         <div class="item-icon">${r.icon}</div>
@@ -1593,14 +1586,12 @@
                     </div>
                 `).join('');
 
-            // Анимация прокрутки
             const duration = 3000 + Math.random() * 1500;
             const startTime = Date.now();
 
             function animateCase() {
                 const elapsed = Date.now() - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                // easeOutCubic
                 const ease = 1 - Math.pow(1 - progress, 3);
                 const totalOffset = targetIndex * itemHeight + 60;
                 const currentOffset = totalOffset * ease;
@@ -1609,20 +1600,16 @@
                 if (progress < 1) {
                     requestAnimationFrame(animateCase);
                 } else {
-                    // Финиш
                     items.style.transform = `translateY(-${targetIndex * itemHeight + 60}px)`;
                     setTimeout(() => {
-                        // Подсветка победителя
                         const winnerEl = items.querySelector(`.case-item[data-index="${targetIndex}"]`);
                         if (winnerEl) {
                             winnerEl.classList.add('winner');
-                            // Добавляем рамку
                             winnerEl.style.border = '2px solid #ffd700';
                             winnerEl.style.borderRadius = '8px';
                             winnerEl.style.boxShadow = '0 0 40px rgba(255,215,0,0.4)';
                         }
 
-                        // Применяем награду
                         applyDailyCaseReward(winner);
                         btn.disabled = false;
                         btn.textContent = '🎁 ОТКРЫТЬ КЕЙС';
@@ -1641,7 +1628,6 @@
                                 ${winner.rarity === 'rare' ? ' 🌟 РЕДКОСТЬ!' : ''}
                             `;
 
-                        // Добавляем в историю
                         G.caseHistory.push({
                             time: new Date().toLocaleString(),
                             name: winner.name,
@@ -1650,7 +1636,6 @@
                         });
                         updateCaseHistory();
 
-                        // Обновляем кейс
                         G.dailyCaseTime = Date.now();
                         updateCaseTimer();
                         saveToStorage();
@@ -1886,33 +1871,106 @@
             return COINS;
         }
 
+        // ========================================================================
+        // ИСПРАВЛЕННЫЕ ФУНКЦИИ — ЛЕТНИЕ КАРТЫ РАБОТАЮТ!
+        // ========================================================================
+
+        // ДОХОД ОТ МАЙНИНГА — считает ВСЕ карты (обычные + летние)
         function getRealEps() {
             const allGpus = [...G.gpus, ...G.summer_gpus].filter(g => g.durability > 0);
             if (allGpus.length === 0 || !G.mining_active) return 0;
+
             const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
             const coin = COINS.find(c => c.name === G.mining_coin);
             if (!coin) return 0;
+
             const scaledHashrate = Math.sqrt(hashrate) * 0.0001;
             let eps = scaledHashrate * coin.price * 0.0000001;
             if (boostActive) eps *= 2;
             return eps;
         }
 
+        // ЛЕТНИЕ МОНЕТЫ — бонус сверху
         function getSummerPerHour() {
             const allGpus = [...G.gpus, ...G.summer_gpus].filter(g => g.durability > 0);
             if (allGpus.length === 0 || !G.mining_active) return 0;
             const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
-            return (Math.sqrt(hashrate) * 0.00001) * 100;
+            return (Math.sqrt(hashrate) * 0.00002) * 100;
         }
 
+        // ЭЛЕКТРИЧЕСТВО — считается со ВСЕХ карт
         function getElectricityCost() {
             const allGpus = [...G.gpus, ...G.summer_gpus];
             if (allGpus.length === 0 || !G.mining_active) return 0;
             const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
-            // Стоимость электричества: 0.5 ₽ за 1 MH/s в час
             return hashrate * 0.5;
         }
 
+        // ИЗНОС — для ВСЕХ карт (обычные + летние)
+        function processDurability() {
+            if (!G.mining_active) return;
+
+            // Обычные карты
+            G.gpus.forEach((gpu, index) => {
+                if (gpu.durability <= 0) return;
+                const wear = 0.01 + (gpu.hashrate / 10000) * 0.02;
+                if (Math.random() < wear * 0.1) {
+                    gpu.durability -= 1;
+                    if (gpu.durability < 0) gpu.durability = 0;
+                    if (gpu.durability <= 0) {
+                        G.brokenGpus++;
+                        showNotification('💀', `${gpu.name} сломалась! Нужен ремонт.`, 'error');
+                        playErrorSound();
+                    } else if (gpu.durability < 30) {
+                        showNotification('⚠️', `${gpu.name} изнашивается! Осталось ${gpu.durability}%`, 'warning');
+                    }
+                    updateUI();
+                    saveToStorage();
+                }
+            });
+
+            // Летние карты — тоже изнашиваются!
+            G.summer_gpus.forEach((gpu) => {
+                if (gpu.durability <= 0) return;
+                const wear = 0.01 + (gpu.hashrate / 10000) * 0.02;
+                if (Math.random() < wear * 0.1) {
+                    gpu.durability -= 1;
+                    if (gpu.durability < 0) gpu.durability = 0;
+                    if (gpu.durability <= 0) {
+                        G.brokenGpus++;
+                        showNotification('💀', `${gpu.name} сломалась! Нужен ремонт.`, 'error');
+                        playErrorSound();
+                    } else if (gpu.durability < 30) {
+                        showNotification('⚠️', `${gpu.name} изнашивается! Осталось ${gpu.durability}%`, 'warning');
+                    }
+                    updateUI();
+                    saveToStorage();
+                }
+            });
+        }
+
+        // ========================================================================
+        // РЕМОНТ ЛЕТНИХ КАРТ
+        // ========================================================================
+        function repairSummerGpu(index) {
+            const gpu = G.summer_gpus[index];
+            if (!gpu) return;
+            const cost = Math.floor(gpu.price * 0.2);
+            if (G.budget < cost) {
+                showNotification('❌', `Не хватает ${cost} ₽ для ремонта!`, 'error');
+                return;
+            }
+            G.budget -= cost;
+            gpu.durability = 100;
+            playCoinSound();
+            showNotification('🔧', `${gpu.name} отремонтирована!`, 'success');
+            saveToStorage();
+            updateUI();
+        }
+
+        // ========================================================================
+        // ОСТАЛЬНЫЕ ФУНКЦИИ
+        // ========================================================================
         function doClick() {
             if (!G.nickname) {
                 showNotification('⚠️', 'Сначала авторизуйся!', 'error');
@@ -2229,6 +2287,7 @@
                 return;
             }
             let html = '';
+            // Обычные карты
             G.gpus.forEach((g, idx) => {
                 const status = g.durability > 0 ? `🟢 ${g.durability}%` : '💀 Сломана';
                 const repairBtn = g.durability <= 0 ?
@@ -2245,12 +2304,19 @@
                         </div>
                     </div>`;
             });
-            G.summer_gpus.forEach((g) => {
-                html += `<div class="coin-item" style="border-color:rgba(255,126,179,0.2); background:rgba(0,0,0,0.1);">
+            // Летние карты — с индикацией состояния и ремонтом
+            G.summer_gpus.forEach((g, idx) => {
+                const status = g.durability > 0 ? `🟢 ${g.durability}%` : '💀 Сломана';
+                const repairBtn = g.durability <= 0 ?
+                    `<button class="btn btn-orange btn-sm" onclick="repairSummerGpu(${idx})" style="border-radius:40px;">🔧 Починить</button>` :
+                    '';
+                html += `<div class="coin-item" style="border-color:${g.durability > 0 ? 'rgba(255,126,179,0.2)' : '#ff6b6b'}; background:rgba(0,0,0,0.1);">
                         <span class="name" style="color:${g.color};">${g.emoji} ${g.name}</span>
                         <span>⚡ ${g.hashrate} MH/s</span>
-                        <span style="color:#ff7eb3;">🏖️ Летняя</span>
+                        <span style="color:${g.durability > 0 ? '#66ff99' : '#ff6b6b'};">${status}</span>
                         <span style="color:#f7d44a;">×${g.multiplier?.toFixed(2) || '1.00'}</span>
+                        <span style="color:#ff7eb3; font-size:9px;">🏖️</span>
+                        ${repairBtn}
                     </div>`;
             });
             list.innerHTML = html;
@@ -2266,6 +2332,7 @@
                             <span class="name" style="color:${g.color};">${g.emoji} ${g.name}</span>
                             <span>⚡ ${g.hashrate} MH/s</span>
                             <span style="color:${g.color};">${g.rarity}</span>
+                            <span style="color:${g.durability > 0 ? '#66ff99' : '#ff6b6b'};">${g.durability > 0 ? `🟢 ${g.durability}%` : '💀 Сломана'}</span>
                         </div>
                     `).join('');
             }
@@ -2490,7 +2557,7 @@
                 }
                 if (!chosen) chosen = SUMMER_GPUS[0];
                 G.summer_gpus.push({ ...chosen, id: Date.now() + '_' + i + '_' + Math.random().toString(36).substr(2,
-                        5) });
+                        5), durability: 100 });
                 results.push(chosen);
             }
             const container = document.getElementById('caseResult');
@@ -2619,6 +2686,37 @@
         function updateBoostUI() { document.getElementById('boostTimer').textContent = boostRemaining; }
 
         // ========================================================================
+        // ЭЛЕКТРИЧЕСТВО
+        // ========================================================================
+        function processElectricity() {
+            if (!G.mining_active) return;
+            const cost = getElectricityCost();
+            if (cost <= 0) return;
+
+            const now = Date.now();
+            const interval = 5 * 60 * 1000;
+            const timeSincePay = now - G.lastElectricityPay;
+
+            if (timeSincePay >= interval) {
+                const hours = timeSincePay / (60 * 60 * 1000);
+                const totalCost = cost * hours;
+
+                if (G.budget >= totalCost) {
+                    G.budget -= totalCost;
+                    G.lastElectricityPay = now;
+                    showNotification('⚡', `Списано ${totalCost.toFixed(2)} ₽ за электричество`, 'info');
+                } else {
+                    G.mining_active = false;
+                    document.getElementById('miningBtn').textContent = '▶️ ЗАПУСТИТЬ';
+                    showNotification('⚡', '❌ Не хватает денег на электричество! Майнинг отключён', 'error');
+                    playErrorSound();
+                }
+                updateUI();
+                saveToStorage();
+            }
+        }
+
+        // ========================================================================
         // СОХРАНЕНИЕ
         // ========================================================================
         function saveToStorage() {
@@ -2632,7 +2730,7 @@
                     last_spin_time: G.last_spin_time, total_cases: G.total_cases, limitedGpuStock: G.limitedGpuStock,
                     usedPromoCodes: usedPromoCodes, achievementsUnlocked: achievementsUnlocked,
                     dailyCaseTime: G.dailyCaseTime, caseHistory: G.caseHistory, brokenGpus: G.brokenGpus,
-                    soundEnabled: G.soundEnabled
+                    soundEnabled: G.soundEnabled, lastElectricityPay: G.lastElectricityPay
                 };
                 localStorage.setItem(key, JSON.stringify(data));
                 addToLeaderboard();
@@ -2733,67 +2831,6 @@
         function getUsers() {
             try { const saved = localStorage.getItem('pelemeshka_users'); return saved ? JSON.parse(saved) : []; } catch (
             e) { return []; }
-        }
-
-        // ========================================================================
-        // ЭЛЕКТРИЧЕСТВО И ПОЛОМКИ
-        // ========================================================================
-        function processElectricity() {
-            if (!G.mining_active) return;
-            const cost = getElectricityCost();
-            if (cost <= 0) return;
-
-            // Платим каждые 5 минут
-            const now = Date.now();
-            const interval = 5 * 60 * 1000;
-            const timeSincePay = now - G.lastElectricityPay;
-
-            if (timeSincePay >= interval) {
-                const hours = timeSincePay / (60 * 60 * 1000);
-                const totalCost = cost * hours;
-
-                if (G.budget >= totalCost) {
-                    G.budget -= totalCost;
-                    G.lastElectricityPay = now;
-                    showNotification('⚡', `Списано ${totalCost.toFixed(2)} ₽ за электричество`, 'info');
-                } else {
-                    // Отключаем майнинг
-                    G.mining_active = false;
-                    document.getElementById('miningBtn').textContent = '▶️ ЗАПУСТИТЬ';
-                    showNotification('⚡', '❌ Не хватает денег на электричество! Майнинг отключён', 'error');
-                    playErrorSound();
-                }
-                updateUI();
-                saveToStorage();
-            }
-        }
-
-        function processDurability() {
-            if (!G.mining_active) return;
-            const now = Date.now();
-
-            G.gpus.forEach((gpu, index) => {
-                if (gpu.durability <= 0) return;
-
-                // Износ: каждый час падает на 1-3% в зависимости от мощности
-                const wear = 0.01 + (gpu.hashrate / 10000) * 0.02;
-                const chance = Math.random();
-
-                if (chance < wear * 0.1) {
-                    gpu.durability -= 1;
-                    if (gpu.durability < 0) gpu.durability = 0;
-
-                    if (gpu.durability <= 0) {
-                        G.brokenGpus++;
-                        showNotification('💀', `${gpu.name} сломалась! Нужен ремонт.`, 'error');
-                        playErrorSound();
-                    } else if (gpu.durability < 30) {
-                        showNotification('⚠️', `${gpu.name} изнашивается! Осталось ${gpu.durability}%`, 'warning');
-                    }
-                    updateUI();
-                    saveToStorage();
-                }
-            });
         }
 
         // ========================================================================
@@ -2941,7 +2978,7 @@
             if (gameInitialized) return;
             gameInitialized = true;
             G.selected_coin = COINS[0];
-            G.dailyCaseTime = Date.now() - 24 * 60 * 60 * 1000; // Доступен сразу
+            G.dailyCaseTime = Date.now() - 24 * 60 * 60 * 1000;
             loadLeaderboard();
             loadSettings();
 
@@ -2977,6 +3014,7 @@
         console.log('⚡ Электричество и поломки видеокарт');
         console.log('🔔 Уведомления сверху');
         console.log('🔊 Звуковые эффекты');
+        console.log('🏖️ Летние карты теперь работают и приносят доход!');
     </script>
 </body>
-</html>
+                </html>
