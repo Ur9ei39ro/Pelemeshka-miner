@@ -1872,102 +1872,105 @@
         }
 
         // ========================================================================
-        // ИСПРАВЛЕННЫЕ ФУНКЦИИ — ЛЕТНИЕ КАРТЫ РАБОТАЮТ!
-        // ========================================================================
+// ДОХОД ОТ МАЙНИНГА — считает ВСЕ карты (обычные + летние)
+// ========================================================================
+function getRealEps() {
+    const allGpus = [...G.gpus, ...G.summer_gpus].filter(g => g.durability > 0);
+    if (allGpus.length === 0 || !G.mining_active) return 0;
 
-        // ДОХОД ОТ МАЙНИНГА — считает ВСЕ карты (обычные + летние)
-        function getRealEps() {
-            const allGpus = [...G.gpus, ...G.summer_gpus].filter(g => g.durability > 0);
-            if (allGpus.length === 0 || !G.mining_active) return 0;
+    const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
+    const coin = COINS.find(c => c.name === G.mining_coin);
+    if (!coin) return 0;
 
-            const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
-            const coin = COINS.find(c => c.name === G.mining_coin);
-            if (!coin) return 0;
+    const scaledHashrate = Math.sqrt(hashrate) * 0.0001;
+    let eps = scaledHashrate * coin.price * 0.0000001;
+    if (boostActive) eps *= 2;
+    return eps;
+}
 
-            const scaledHashrate = Math.sqrt(hashrate) * 0.0001;
-            let eps = scaledHashrate * coin.price * 0.0000001;
-            if (boostActive) eps *= 2;
-            return eps;
-        }
+// ========================================================================
+// ЛЕТНИЕ МОНЕТЫ — бонус сверху
+// ========================================================================
+function getSummerPerHour() {
+    const allGpus = [...G.gpus, ...G.summer_gpus].filter(g => g.durability > 0);
+    if (allGpus.length === 0 || !G.mining_active) return 0;
+    const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
+    return (Math.sqrt(hashrate) * 0.00002) * 100;
+}
 
-        // ЛЕТНИЕ МОНЕТЫ — бонус сверху
-        function getSummerPerHour() {
-            const allGpus = [...G.gpus, ...G.summer_gpus].filter(g => g.durability > 0);
-            if (allGpus.length === 0 || !G.mining_active) return 0;
-            const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
-            return (Math.sqrt(hashrate) * 0.00002) * 100;
-        }
+// ========================================================================
+// ЭЛЕКТРИЧЕСТВО — считается со ВСЕХ карт
+// ========================================================================
+function getElectricityCost() {
+    const allGpus = [...G.gpus, ...G.summer_gpus];
+    if (allGpus.length === 0 || !G.mining_active) return 0;
+    const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
+    return hashrate * 0.5;
+}
 
-        // ЭЛЕКТРИЧЕСТВО — считается со ВСЕХ карт
-        function getElectricityCost() {
-            const allGpus = [...G.gpus, ...G.summer_gpus];
-            if (allGpus.length === 0 || !G.mining_active) return 0;
-            const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
-            return hashrate * 0.5;
-        }
+// ========================================================================
+// ИЗНОС — для ВСЕХ карт (обычные + летние)
+// ========================================================================
+function processDurability() {
+    if (!G.mining_active) return;
 
-        // ИЗНОС — для ВСЕХ карт (обычные + летние)
-        function processDurability() {
-            if (!G.mining_active) return;
-
-            // Обычные карты
-            G.gpus.forEach((gpu, index) => {
-                if (gpu.durability <= 0) return;
-                const wear = 0.01 + (gpu.hashrate / 10000) * 0.02;
-                if (Math.random() < wear * 0.1) {
-                    gpu.durability -= 1;
-                    if (gpu.durability < 0) gpu.durability = 0;
-                    if (gpu.durability <= 0) {
-                        G.brokenGpus++;
-                        showNotification('💀', `${gpu.name} сломалась! Нужен ремонт.`, 'error');
-                        playErrorSound();
-                    } else if (gpu.durability < 30) {
-                        showNotification('⚠️', `${gpu.name} изнашивается! Осталось ${gpu.durability}%`, 'warning');
-                    }
-                    updateUI();
-                    saveToStorage();
-                }
-            });
-
-            // Летние карты — тоже изнашиваются!
-            G.summer_gpus.forEach((gpu) => {
-                if (gpu.durability <= 0) return;
-                const wear = 0.01 + (gpu.hashrate / 10000) * 0.02;
-                if (Math.random() < wear * 0.1) {
-                    gpu.durability -= 1;
-                    if (gpu.durability < 0) gpu.durability = 0;
-                    if (gpu.durability <= 0) {
-                        G.brokenGpus++;
-                        showNotification('💀', `${gpu.name} сломалась! Нужен ремонт.`, 'error');
-                        playErrorSound();
-                    } else if (gpu.durability < 30) {
-                        showNotification('⚠️', `${gpu.name} изнашивается! Осталось ${gpu.durability}%`, 'warning');
-                    }
-                    updateUI();
-                    saveToStorage();
-                }
-            });
-        }
-
-        // ========================================================================
-        // РЕМОНТ ЛЕТНИХ КАРТ
-        // ========================================================================
-        function repairSummerGpu(index) {
-            const gpu = G.summer_gpus[index];
-            if (!gpu) return;
-            const cost = Math.floor(gpu.price * 0.2);
-            if (G.budget < cost) {
-                showNotification('❌', `Не хватает ${cost} ₽ для ремонта!`, 'error');
-                return;
+    // Обычные карты
+    G.gpus.forEach((gpu, index) => {
+        if (gpu.durability <= 0) return;
+        const wear = 0.01 + (gpu.hashrate / 10000) * 0.02;
+        if (Math.random() < wear * 0.1) {
+            gpu.durability -= 1;
+            if (gpu.durability < 0) gpu.durability = 0;
+            if (gpu.durability <= 0) {
+                G.brokenGpus++;
+                showNotification('💀', `${gpu.name} сломалась! Нужен ремонт.`, 'error');
+                playErrorSound();
+            } else if (gpu.durability < 30) {
+                showNotification('⚠️', `${gpu.name} изнашивается! Осталось ${gpu.durability}%`, 'warning');
             }
-            G.budget -= cost;
-            gpu.durability = 100;
-            playCoinSound();
-            showNotification('🔧', `${gpu.name} отремонтирована!`, 'success');
-            saveToStorage();
             updateUI();
+            saveToStorage();
         }
+    });
 
+    // Летние карты — тоже изнашиваются!
+    G.summer_gpus.forEach((gpu) => {
+        if (gpu.durability <= 0) return;
+        const wear = 0.01 + (gpu.hashrate / 10000) * 0.02;
+        if (Math.random() < wear * 0.1) {
+            gpu.durability -= 1;
+            if (gpu.durability < 0) gpu.durability = 0;
+            if (gpu.durability <= 0) {
+                G.brokenGpus++;
+                showNotification('💀', `${gpu.name} сломалась! Нужен ремонт.`, 'error');
+                playErrorSound();
+            } else if (gpu.durability < 30) {
+                showNotification('⚠️', `${gpu.name} изнашивается! Осталось ${gpu.durability}%`, 'warning');
+            }
+            updateUI();
+            saveToStorage();
+        }
+    });
+}
+
+// ========================================================================
+// РЕМОНТ ЛЕТНИХ КАРТ
+// ========================================================================
+function repairSummerGpu(index) {
+    const gpu = G.summer_gpus[index];
+    if (!gpu) return;
+    const cost = Math.floor(gpu.price * 0.2);
+    if (G.budget < cost) {
+        showNotification('❌', `Не хватает ${cost} ₽ для ремонта!`, 'error');
+        return;
+    }
+    G.budget -= cost;
+    gpu.durability = 100;
+    playCoinSound();
+    showNotification('🔧', `${gpu.name} отремонтирована!`, 'success');
+    saveToStorage();
+    updateUI();
+}
         // ========================================================================
         // ОСТАЛЬНЫЕ ФУНКЦИИ
         // ========================================================================
