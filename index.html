@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🥟 ПЕЛЕМЕШКА ТРЕЙДЕР</title>
     <style>
-        /* === БАЗА === */
         * {
             margin: 0;
             padding: 0;
@@ -13,116 +12,13 @@
             -webkit-tap-highlight-color: transparent;
         }
         body {
+            background: #0b0f1a;
+            color: #e0e0e0;
             font-family: 'Segoe UI', 'Courier New', monospace;
             padding: 10px;
             padding-bottom: 90px;
             min-height: 100vh;
-            transition: background 0.5s ease, color 0.5s ease;
-            background: #0b0f1a;
-            color: #e0e0e0;
         }
-
-        /* === УВЕДОМЛЕНИЯ (сверху) === */
-        .notification-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            pointer-events: none;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-        .notification {
-            pointer-events: auto;
-            background: linear-gradient(145deg, #0d1a2b, #08111f);
-            border: 1px solid rgba(0, 255, 200, 0.2);
-            border-radius: 16px;
-            padding: 14px 20px;
-            max-width: 500px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transform: translateY(-120%);
-            opacity: 0;
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            position: relative;
-        }
-        .notification.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        .notification.hide {
-            transform: translateY(-120%);
-            opacity: 0;
-        }
-        .notification .icon {
-            font-size: 28px;
-            flex-shrink: 0;
-        }
-        .notification .content {
-            flex: 1;
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 1.3;
-        }
-        .notification .content .title {
-            font-weight: 700;
-            font-size: 13px;
-            color: #4fc3f7;
-        }
-        .notification .close-btn {
-            cursor: pointer;
-            font-size: 18px;
-            opacity: 0.5;
-            transition: opacity 0.2s;
-            background: none;
-            border: none;
-            color: inherit;
-        }
-        .notification .close-btn:hover {
-            opacity: 1;
-        }
-        .notification .progress-line {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 3px;
-            border-radius: 0 0 16px 16px;
-            transition: width 0.1s linear;
-        }
-        .notification.success {
-            border-color: rgba(102, 255, 153, 0.4);
-        }
-        .notification.success .progress-line {
-            background: linear-gradient(90deg, #66ff99, #00cc66);
-        }
-        .notification.warning {
-            border-color: rgba(247, 212, 74, 0.4);
-        }
-        .notification.warning .progress-line {
-            background: linear-gradient(90deg, #f7d44a, #e6b800);
-        }
-        .notification.error {
-            border-color: rgba(255, 107, 107, 0.4);
-        }
-        .notification.error .progress-line {
-            background: linear-gradient(90deg, #ff6b6b, #cc0000);
-        }
-        .notification.info {
-            border-color: rgba(79, 195, 247, 0.4);
-        }
-        .notification.info .progress-line {
-            background: linear-gradient(90deg, #4fc3f7, #0088cc);
-        }
-
-        /* === ОСТАЛЬНЫЕ СТИЛИ === */
         .header {
             background: linear-gradient(145deg, #0d1a2b, #08111f);
             padding: 18px 14px;
@@ -130,13 +26,11 @@
             margin-bottom: 14px;
             text-align: center;
             border: 1px solid rgba(0, 255, 200, 0.25);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
         .header h1 {
             color: #00ffcc;
             font-size: 22px;
             font-weight: 700;
-            letter-spacing: 1px;
         }
         .header .sub {
             color: #7a8a9e;
@@ -159,9 +53,6 @@
             margin-bottom: 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             padding-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         .row {
             display: flex;
@@ -273,7 +164,6 @@
             cursor: pointer;
             transition: all 0.08s ease;
             text-align: center;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
         }
         .clicker-btn:active {
             transform: scale(0.94);
@@ -296,7 +186,6 @@
             border-radius: 40px;
             transition: width 0.35s ease;
             background: linear-gradient(90deg, #00e6b8, #00ffcc);
-            box-shadow: 0 0 20px rgba(0, 255, 200, 0.1);
         }
         .tabs {
             display: flex;
@@ -345,7 +234,6 @@
             padding: 12px 10px;
             text-align: center;
             position: relative;
-            transition: all 0.2s;
         }
         .gpu-card .gpu-name {
             color: #4fc3f7;
@@ -392,7 +280,6 @@
             color: #e0e0e0;
             font-size: 14px;
             margin: 6px 0;
-            transition: border-color 0.2s;
         }
         .search-input:focus,
         .mining-coin-select:focus,
@@ -446,7 +333,6 @@
             cursor: pointer;
             text-align: center;
             transition: all 0.3s;
-            box-shadow: 0 0 40px rgba(247, 212, 74, 0.1);
         }
         .support-btn:hover {
             transform: scale(1.02);
@@ -482,7 +368,6 @@
             padding: 32px 24px;
             max-width: 400px;
             width: 92%;
-            box-shadow: 0 0 60px rgba(0, 0, 0, 0.3);
         }
         .auth-modal input {
             width: 100%;
@@ -517,14 +402,21 @@
             z-index: 100;
             display: none;
             cursor: pointer;
-            transition: all 0.2s;
-            backdrop-filter: blur(2px);
         }
         .user-display:hover {
             background: #0d2a3e;
         }
-
-        /* === КРУТИЛКА === */
+        .boost-indicator {
+            background: linear-gradient(145deg, #4d2a0d, #3a1a08);
+            border: 2px solid #f7d44a;
+            border-radius: 40px;
+            padding: 8px 16px;
+            text-align: center;
+            font-weight: 700;
+            color: #f7d44a;
+            margin: 6px 0;
+            display: none;
+        }
         .spin-container {
             text-align: center;
             padding: 10px 0;
@@ -537,8 +429,6 @@
             margin: 12px auto;
             position: relative;
             overflow: hidden;
-            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-            box-shadow: 0 0 40px rgba(0, 255, 200, 0.05);
             background: radial-gradient(circle, #0d2a3e, #0a1a28);
         }
         .spin-center {
@@ -579,219 +469,6 @@
             color: #f7d44a;
             font-weight: 600;
         }
-
-        /* === КЕЙС В СТИЛЕ CS:GO === */
-        .case-container {
-            text-align: center;
-            padding: 10px 0;
-            position: relative;
-        }
-        .case-box {
-            background: linear-gradient(145deg, #0d1a2b, #08111f);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 20px;
-            max-width: 400px;
-            margin: 0 auto;
-            position: relative;
-            overflow: hidden;
-            min-height: 300px;
-            transition: all 0.3s;
-        }
-        .case-box::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border-radius: 20px;
-            background: linear-gradient(45deg, transparent, rgba(0, 255, 200, 0.1), transparent);
-            z-index: -1;
-            animation: caseGlow 3s ease-in-out infinite;
-        }
-        @keyframes caseGlow {
-            0%,
-            100% {
-                opacity: 0.5;
-            }
-            50% {
-                opacity: 1;
-            }
-        }
-        .case-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #f7d44a;
-            margin-bottom: 10px;
-        }
-        .case-timer {
-            font-size: 13px;
-            color: #7a8a9e;
-            margin-bottom: 12px;
-        }
-        .case-slot {
-            width: 100%;
-            height: 120px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            margin: 10px 0;
-            border: 2px solid rgba(255, 255, 255, 0.05);
-        }
-        .case-items {
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-            position: absolute;
-            width: 100%;
-        }
-        .case-item {
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            background: rgba(0, 0, 0, 0.2);
-            font-size: 14px;
-            font-weight: 500;
-        }
-        .case-item .item-icon {
-            font-size: 32px;
-            margin-bottom: 4px;
-        }
-        .case-item .item-name {
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .case-item .item-rarity {
-            font-size: 10px;
-            opacity: 0.7;
-        }
-        .case-item .item-rarity.common {
-            color: #4fc3f7;
-        }
-        .case-item .item-rarity.rare {
-            color: #ab47bc;
-        }
-        .case-item .item-rarity.epic {
-            color: #ff6f00;
-        }
-        .case-item .item-rarity.legendary {
-            color: #ffd700;
-        }
-        .case-item.winner {
-            background: rgba(255, 215, 0, 0.1);
-            border: 2px solid #ffd700;
-            border-radius: 8px;
-            animation: winnerPulse 1s ease-in-out infinite;
-        }
-        @keyframes winnerPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
-            }
-        }
-        .case-arrow {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 28px;
-            color: #ffd700;
-            z-index: 5;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-        }
-        .case-btn {
-            padding: 14px 40px;
-            font-size: 18px;
-            font-weight: 700;
-            border-radius: 40px;
-            background: linear-gradient(145deg, #f7d44a, #e6b800);
-            color: #0b0f1a;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin: 10px 0;
-            box-shadow: 0 4px 20px rgba(247, 212, 74, 0.2);
-        }
-        .case-btn:hover {
-            transform: scale(1.05);
-        }
-        .case-btn:active {
-            transform: scale(0.95);
-        }
-        .case-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .case-result-display {
-            font-size: 16px;
-            font-weight: 600;
-            margin: 8px 0;
-            min-height: 30px;
-        }
-        .case-result-display .item-rarity.common {
-            color: #4fc3f7;
-        }
-        .case-result-display .item-rarity.rare {
-            color: #ab47bc;
-        }
-        .case-result-display .item-rarity.epic {
-            color: #ff6f00;
-        }
-        .case-result-display .item-rarity.legendary {
-            color: #ffd700;
-        }
-
-        /* === КЕЙС-КОНФЕТТИ === */
-        .confetti-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            z-index: 50;
-            overflow: hidden;
-        }
-        .confetti-piece {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            top: -10px;
-            animation: confettiFall linear forwards;
-        }
-        @keyframes confettiFall {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(110vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-        /* === ПРОЧЕЕ === */
-        .boost-indicator {
-            background: linear-gradient(145deg, #4d2a0d, #3a1a08);
-            border: 2px solid #f7d44a;
-            border-radius: 40px;
-            padding: 8px 16px;
-            text-align: center;
-            font-weight: 700;
-            color: #f7d44a;
-            margin: 6px 0;
-            display: none;
-        }
         .chart-container {
             width: 100%;
             height: 220px;
@@ -805,53 +482,6 @@
             width: 100% !important;
             height: 100% !important;
         }
-        .settings-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 6px 0;
-        }
-        .settings-group .btn {
-            flex: 1;
-            min-width: 80px;
-            padding: 10px;
-            font-size: 12px;
-        }
-        .device-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(4px);
-        }
-        .device-modal .device-box {
-            background: linear-gradient(145deg, #0d1a2b, #08111f);
-            border: 1px solid #00ffcc;
-            border-radius: 24px;
-            padding: 32px 24px;
-            max-width: 400px;
-            width: 92%;
-            text-align: center;
-        }
-        .device-modal .device-box h2 {
-            color: #00ffcc;
-            margin-bottom: 16px;
-        }
-        .device-modal .device-box p {
-            opacity: 0.7;
-            font-size: 14px;
-            margin-bottom: 16px;
-        }
-        .device-modal .device-box .btn {
-            margin: 6px 0;
-        }
-
         @media (max-width: 480px) {
             .gpu-grid {
                 grid-template-columns: 1fr 1fr;
@@ -881,20 +511,6 @@
     </style>
 </head>
 <body>
-
-    <!-- УВЕДОМЛЕНИЯ -->
-    <div class="notification-container" id="notificationContainer"></div>
-
-    <!-- МОДАЛКА УСТРОЙСТВА -->
-    <div class="device-modal" id="deviceModal">
-        <div class="device-box">
-            <h2>🖥️ ВАШЕ УСТРОЙСТВО</h2>
-            <p>Выберите режим производительности</p>
-            <button class="btn btn-red" onclick="setPerformance('low')">🔋 Слабое</button>
-            <button class="btn btn-green" onclick="setPerformance('normal')">⚡ Нормальное</button>
-            <div style="margin-top:12px; font-size:11px; opacity:0.5;">Можно будет изменить в настройках</div>
-        </div>
-    </div>
 
     <!-- АВТОРИЗАЦИЯ -->
     <div class="auth-modal" id="authModal">
@@ -955,7 +571,6 @@
         <div class="tab" data-tab="tab-leaderboard">🏆 Лидерборд</div>
         <div class="tab" data-tab="tab-promo">🎫 Промокоды</div>
         <div class="tab" data-tab="tab-summer">🏖️ ЛЕТО</div>
-        <div class="tab" data-tab="tab-case">📦 КЕЙС</div>
         <div class="tab" data-tab="tab-settings">⚙️ Настройки</div>
     </div>
 
@@ -1009,7 +624,7 @@
     <!-- GPU -->
     <div id="tab-gpu" class="tab-content">
         <div class="card">
-            <h3>🛒 МАРКЕТ GPU (500 карт)</h3>
+            <h3>🛒 МАРКЕТ GPU</h3>
             <input type="text" id="gpuSearch" class="search-input" placeholder="🔍 Поиск карты...">
             <div class="filter-group" style="display:flex; gap:6px; flex-wrap:wrap; margin:6px 0;">
                 <button class="btn btn-blue btn-sm active-filter" onclick="setFilter('default')" id="filter_default" style="background:rgba(0,255,200,0.1);">Все</button>
@@ -1080,7 +695,7 @@
     <div id="tab-promo" class="tab-content">
         <div class="card">
             <h3>🎫 ПРОМОКОДЫ</h3>
-            <p style="opacity:0.7; font-size:12px; margin-bottom:10px;">Введите промокод, чтобы получить бонус. Промокоды можно найти в соцсетях!</p>
+            <p style="opacity:0.7; font-size:12px; margin-bottom:10px;">Введите промокод, чтобы получить бонус.</p>
             <input type="text" id="promoInput" class="promo-input" placeholder="Введите промокод...">
             <button class="btn btn-orange" onclick="activatePromo()">🎫 АКТИВИРОВАТЬ</button>
             <div id="promoMessage" style="margin-top:8px; font-size:13px; opacity:0.7;"></div>
@@ -1131,92 +746,14 @@
         </div>
     </div>
 
-    <!-- КЕЙС (CS:GO СТИЛЬ) -->
-    <div id="tab-case" class="tab-content">
-        <div class="card">
-            <h3>📦 ЕЖЕДНЕВНЫЙ КЕЙС</h3>
-            <div class="case-container">
-                <div class="case-box">
-                    <div class="case-title">🎁 ЕЖЕДНЕВНАЯ НАГРАДА</div>
-                    <div class="case-timer" id="caseTimer">⏳ Доступен через: --:--:--</div>
-                    <div class="case-slot" id="caseSlot">
-                        <div class="case-items" id="caseItems">
-                            <div class="case-item">
-                                <div class="item-icon">💰</div>
-                                <div class="item-name">100 ₽</div>
-                                <div class="item-rarity common">Обычная</div>
-                            </div>
-                            <div class="case-item">
-                                <div class="item-icon">🪙</div>
-                                <div class="item-name">50 ₽</div>
-                                <div class="item-rarity common">Обычная</div>
-                            </div>
-                            <div class="case-item">
-                                <div class="item-icon">💎</div>
-                                <div class="item-name">10 летних монет</div>
-                                <div class="item-rarity rare">Редкая</div>
-                            </div>
-                            <div class="case-item">
-                                <div class="item-icon">💰</div>
-                                <div class="item-name">200 ₽</div>
-                                <div class="item-rarity common">Обычная</div>
-                            </div>
-                            <div class="case-item">
-                                <div class="item-icon">💎</div>
-                                <div class="item-name">5 летних монет</div>
-                                <div class="item-rarity rare">Редкая</div>
-                            </div>
-                            <div class="case-item">
-                                <div class="item-icon">💰</div>
-                                <div class="item-name">150 ₽</div>
-                                <div class="item-rarity common">Обычная</div>
-                            </div>
-                            <div class="case-item">
-                                <div class="item-icon">💎</div>
-                                <div class="item-name">15 летних монет</div>
-                                <div class="item-rarity rare">Редкая</div>
-                            </div>
-                            <div class="case-item">
-                                <div class="item-icon">💰</div>
-                                <div class="item-name">80 ₽</div>
-                                <div class="item-rarity common">Обычная</div>
-                            </div>
-                        </div>
-                        <div class="case-arrow">▼</div>
-                    </div>
-                    <button class="case-btn" id="caseBtn" onclick="openDailyCase()">🎁 ОТКРЫТЬ КЕЙС</button>
-                    <div class="case-result-display" id="caseResultDisplay">Нажми "Открыть кейс"</div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <h3>📜 ИСТОРИЯ КЕЙСОВ</h3>
-            <div id="caseHistory" class="coin-list" style="max-height:200px;"></div>
-        </div>
-    </div>
-
     <!-- НАСТРОЙКИ -->
     <div id="tab-settings" class="tab-content">
         <div class="card">
             <h3>🎨 ТЕМА ОФОРМЛЕНИЯ</h3>
-            <div class="settings-group">
+            <div class="settings-group" style="display:flex; gap:10px; flex-wrap:wrap;">
                 <button class="btn btn-blue btn-sm" onclick="setTheme('default')" style="flex:1;">🌑 Обычная</button>
                 <button class="btn btn-orange btn-sm" onclick="setTheme('summer')" style="flex:1;">☀️ Летняя</button>
                 <button class="btn btn-blue btn-sm" onclick="setTheme('winter')" style="flex:1;">❄️ Зимняя</button>
-            </div>
-        </div>
-        <div class="card">
-            <h3>⚡ ПРОИЗВОДИТЕЛЬНОСТЬ</h3>
-            <div class="settings-group">
-                <button class="btn btn-red btn-sm" onclick="setPerformance('low')" style="flex:1;">🔋 Слабое</button>
-                <button class="btn btn-green btn-sm" onclick="setPerformance('normal')" style="flex:1;">⚡ Нормальное</button>
-            </div>
-            <div style="font-size:11px; opacity:0.5; margin-top:6px;">Слабое — отключает анимации для экономии ресурсов</div>
-        </div>
-        <div class="card">
-            <h3>🔊 ЗВУК</h3>
-            <div class="settings-group">
-                <button class="btn btn-green btn-sm" onclick="toggleSound()" id="soundBtn" style="flex:1;">🔊 Включен</button>
             </div>
         </div>
     </div>
@@ -1230,13 +767,10 @@
         💾 Локальная версия · Жёсткая экономика
     </div>
 
-    <!-- КОНФЕТТИ -->
-    <div class="confetti-container" id="confettiContainer"></div>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
         // ========================================================================
-        // НАСТРОЙКИ
+        // ИГРОВЫЕ ДАННЫЕ
         // ========================================================================
         let G = {
             nickname: '',
@@ -1268,203 +802,19 @@
             selected_coin: null,
             limitedGpuStock: 500,
             theme: 'default',
-            performance: 'normal',
-            soundEnabled: true,
             brokenGpus: 0,
             electricityCost: 0,
-            lastElectricityPay: Date.now(),
-            dailyCaseTime: 0,
-            caseHistory: [],
-            caseItems: []
+            lastElectricityPay: Date.now()
         };
 
-        let achievementsUnlocked = [];
         let usedPromoCodes = [];
         let boostActive = false;
         let boostTimer = null;
         let boostRemaining = 0;
         let intervals = [];
         let currentFilter = 'default';
-        let globalPromoUsed = 0;
         let priceChart = null;
         let gameInitialized = false;
-        let notificationQueue = [];
-        let isNotificationShowing = false;
-
-        // ========================================================================
-        // ЗВУКИ (Web Audio)
-        // ========================================================================
-        let audioCtx = null;
-
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new(window.AudioContext || window.webkitAudioContext)();
-            }
-        }
-
-        function playTone(freq, duration, type = 'sine', volume = 0.3) {
-            if (!G.soundEnabled) return;
-            try {
-                initAudio();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = type;
-                osc.frequency.value = freq;
-                gain.gain.setValueAtTime(volume, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            } catch (e) {}
-        }
-
-        function playClickSound() {
-            playTone(800, 0.08, 'sine', 0.15);
-        }
-
-        function playCoinSound() {
-            playTone(1200, 0.1, 'sine', 0.2);
-            setTimeout(() => playTone(1500, 0.1, 'sine', 0.2), 100);
-        }
-
-        function playCaseOpenSound() {
-            playTone(400, 0.2, 'sawtooth', 0.2);
-            setTimeout(() => playTone(600, 0.15, 'sawtooth', 0.2), 150);
-            setTimeout(() => playTone(900, 0.3, 'sine', 0.25), 300);
-        }
-
-        function playRareSound() {
-            playTone(500, 0.1, 'square', 0.15);
-            setTimeout(() => playTone(700, 0.1, 'square', 0.15), 100);
-            setTimeout(() => playTone(1000, 0.15, 'square', 0.2), 200);
-            setTimeout(() => playTone(1500, 0.3, 'sine', 0.3), 350);
-        }
-
-        function playSpinSound() {
-            for (let i = 0; i < 8; i++) {
-                setTimeout(() => playTone(300 + i * 50, 0.05, 'sine', 0.1), i * 80);
-            }
-        }
-
-        function playErrorSound() {
-            playTone(200, 0.3, 'sawtooth', 0.2);
-            setTimeout(() => playTone(150, 0.3, 'sawtooth', 0.2), 200);
-        }
-
-        function toggleSound() {
-            G.soundEnabled = !G.soundEnabled;
-            document.getElementById('soundBtn').textContent = G.soundEnabled ? '🔊 Включен' : '🔇 Выключен';
-            if (G.soundEnabled) {
-                showNotification('🔊', 'Звук включен', 'info');
-            } else {
-                showNotification('🔇', 'Звук выключен', 'info');
-            }
-            saveToStorage();
-        }
-
-        // ========================================================================
-        // УВЕДОМЛЕНИЯ
-        // ========================================================================
-        function showNotification(icon, message, type = 'info', duration = 4000) {
-            const container = document.getElementById('notificationContainer');
-            const notif = document.createElement('div');
-            notif.className = `notification ${type}`;
-            notif.innerHTML = `
-                <div class="icon">${icon}</div>
-                <div class="content"><div class="title">${message}</div></div>
-                <button class="close-btn" onclick="closeNotification(this.parentElement)">✕</button>
-                <div class="progress-line" style="width:100%;"></div>
-            `;
-            container.appendChild(notif);
-            notificationQueue.push(notif);
-            processNotifications();
-
-            if (type === 'success') playCoinSound();
-            else if (type === 'error') playErrorSound();
-            else if (type === 'warning') playTone(500, 0.2, 'square', 0.1);
-
-            setTimeout(() => {
-                closeNotification(notif);
-            }, duration);
-        }
-
-        function processNotifications() {
-            if (isNotificationShowing || notificationQueue.length === 0) return;
-            isNotificationShowing = true;
-            const notif = notificationQueue.shift();
-            notif.classList.add('show');
-
-            const progress = notif.querySelector('.progress-line');
-            let width = 100;
-            const interval = setInterval(() => {
-                width -= 2;
-                if (progress) progress.style.width = width + '%';
-                if (width <= 0) {
-                    clearInterval(interval);
-                }
-            }, 40);
-
-            setTimeout(() => {
-                closeNotification(notif);
-            }, 4000);
-        }
-
-        function closeNotification(notif) {
-            if (!notif || notif.classList.contains('hide')) return;
-            notif.classList.remove('show');
-            notif.classList.add('hide');
-            setTimeout(() => {
-                if (notif.parentNode) notif.parentNode.removeChild(notif);
-                isNotificationShowing = false;
-                processNotifications();
-            }, 500);
-        }
-
-        // ========================================================================
-        // ТЕМЫ И ПРОИЗВОДИТЕЛЬНОСТЬ
-        // ========================================================================
-        function setTheme(theme) {
-            G.theme = theme;
-            document.body.className = 'theme-' + theme;
-            localStorage.setItem('pelemeshka_theme', theme);
-            showNotification('🎨', 'Тема: ' + theme, 'info');
-        }
-
-        function setPerformance(mode) {
-            G.performance = mode;
-            document.getElementById('deviceModal').style.display = 'none';
-            if (mode === 'low') {
-                document.body.classList.remove('anim-enabled');
-                showNotification('🔋', 'Режим "Слабое" — анимации отключены', 'info');
-            } else {
-                document.body.classList.add('anim-enabled');
-                showNotification('⚡', 'Режим "Нормальное" — все анимации включены', 'info');
-            }
-            localStorage.setItem('pelemeshka_performance', mode);
-        }
-
-        function loadSettings() {
-            const savedTheme = localStorage.getItem('pelemeshka_theme');
-            if (savedTheme) {
-                G.theme = savedTheme;
-                document.body.className = 'theme-' + G.theme;
-            }
-            const savedPerf = localStorage.getItem('pelemeshka_performance');
-            if (savedPerf) {
-                G.performance = savedPerf;
-                if (savedPerf === 'low') {
-                    document.body.classList.remove('anim-enabled');
-                } else {
-                    document.body.classList.add('anim-enabled');
-                }
-            }
-            const savedSound = localStorage.getItem('pelemeshka_sound');
-            if (savedSound !== null) {
-                G.soundEnabled = savedSound === 'true';
-                document.getElementById('soundBtn').textContent = G.soundEnabled ? '🔊 Включен' : '🔇 Выключен';
-            }
-        }
 
         // ========================================================================
         // МОНЕТЫ
@@ -1494,347 +844,71 @@
         // ЛЕТНИЕ КАРТЫ
         // ========================================================================
         const SUMMER_GPUS = [
-            { name: "🍉 Арбузный GTX 1060", hashrate: 100, rarity: "Обычная", color: "#4CAF50", emoji: "🍉", multiplier: 0.8,
-                price: 4000, durability: 100 },
-            { name: "🏖️ Пляжный RX 580", hashrate: 150, rarity: "Обычная", color: "#4CAF50", emoji: "🏖️", multiplier: 0.85,
-                price: 4000, durability: 100 },
-            { name: "🌊 Волновой GTX 1070", hashrate: 200, rarity: "Обычная", color: "#4CAF50", emoji: "🌊", multiplier: 0.9,
-                price: 4000, durability: 100 },
-            { name: "☀️ Солнечный RTX 2060", hashrate: 300, rarity: "Обычная", color: "#4CAF50", emoji: "☀️", multiplier: 0.95,
-                price: 4000, durability: 100 },
-            { name: "🍦 Мороженое RTX 2070", hashrate: 500, rarity: "Обычная", color: "#4CAF50", emoji: "🍦", multiplier: 1.0,
-                price: 4000, durability: 100 },
+            { name: "🍉 Арбузный GTX 1060", hashrate: 100, rarity: "Обычная", color: "#4CAF50", emoji: "🍉",
+            multiplier: 0.8, price: 4000, durability: 100 },
+            { name: "🏖️ Пляжный RX 580", hashrate: 150, rarity: "Обычная", color: "#4CAF50", emoji: "🏖️",
+            multiplier: 0.85, price: 4000, durability: 100 },
+            { name: "🌊 Волновой GTX 1070", hashrate: 200, rarity: "Обычная", color: "#4CAF50", emoji: "🌊",
+            multiplier: 0.9, price: 4000, durability: 100 },
+            { name: "☀️ Солнечный RTX 2060", hashrate: 300, rarity: "Обычная", color: "#4CAF50", emoji: "☀️",
+            multiplier: 0.95, price: 4000, durability: 100 },
+            { name: "🍦 Мороженое RTX 2070", hashrate: 500, rarity: "Обычная", color: "#4CAF50", emoji: "🍦",
+            multiplier: 1.0, price: 4000, durability: 100 },
             { name: "🌴 Пальмовый RX 5700", hashrate: 600, rarity: "Редкая", color: "#2196F3", emoji: "🌴", multiplier: 1.1,
                 price: 10000, durability: 100 },
-            { name: "🍹 Коктейльный RTX 2080", hashrate: 800, rarity: "Редкая", color: "#2196F3", emoji: "🍹", multiplier: 1.2,
-                price: 10000, durability: 100 },
-            { name: "🏄 Серферский RTX 3070", hashrate: 1000, rarity: "Редкая", color: "#2196F3", emoji: "🏄", multiplier: 1.3,
-                price: 10000, durability: 100 },
-            { name: "🌺 Цветочный RX 6800", hashrate: 2000, rarity: "Эпическая", color: "#9C27B0", emoji: "🌺", multiplier: 1.5,
-                price: 30000, durability: 100 },
-            { name: "🔥 Жаркий RTX 3080", hashrate: 3000, rarity: "Эпическая", color: "#9C27B0", emoji: "🔥", multiplier: 1.8,
-                price: 30000, durability: 100 },
-            { name: "🐠 Рыбный RTX 4090", hashrate: 5000, rarity: "Легендарная", color: "#FF6F00", emoji: "🐠", multiplier: 2.0,
-                price: 100000, durability: 100 },
+            { name: "🍹 Коктейльный RTX 2080", hashrate: 800, rarity: "Редкая", color: "#2196F3", emoji: "🍹",
+            multiplier: 1.2, price: 10000, durability: 100 },
+            { name: "🏄 Серферский RTX 3070", hashrate: 1000, rarity: "Редкая", color: "#2196F3", emoji: "🏄",
+            multiplier: 1.3, price: 10000, durability: 100 },
+            { name: "🌺 Цветочный RX 6800", hashrate: 2000, rarity: "Эпическая", color: "#9C27B0", emoji: "🌺",
+            multiplier: 1.5, price: 30000, durability: 100 },
+            { name: "🔥 Жаркий RTX 3080", hashrate: 3000, rarity: "Эпическая", color: "#9C27B0", emoji: "🔥",
+            multiplier: 1.8, price: 30000, durability: 100 },
+            { name: "🐠 Рыбный RTX 4090", hashrate: 5000, rarity: "Легендарная", color: "#FF6F00", emoji: "🐠",
+            multiplier: 2.0, price: 100000, durability: 100 },
             { name: "🏝️ Островной RTX 5090", hashrate: 10000, rarity: "Легендарная", color: "#FF6F00", emoji: "🏝️",
                 multiplier: 2.5, price: 100000, durability: 100 }
         ];
 
         // ========================================================================
-        // КЕЙСЫ
-        // ========================================================================
-        const DAILY_CASE_REWARDS = [
-            { icon: '💰', name: '50 ₽', rarity: 'common', value: 50 },
-            { icon: '💰', name: '100 ₽', rarity: 'common', value: 100 },
-            { icon: '💰', name: '150 ₽', rarity: 'common', value: 150 },
-            { icon: '💰', name: '80 ₽', rarity: 'common', value: 80 },
-            { icon: '💰', name: '200 ₽', rarity: 'common', value: 200 },
-            { icon: '🪙', name: '5 летних монет', rarity: 'rare', value: 5 },
-            { icon: '🪙', name: '10 летних монет', rarity: 'rare', value: 10 },
-            { icon: '🪙', name: '15 летних монет', rarity: 'rare', value: 15 },
-        ];
-
-        function getDailyCaseReward() {
-            const isRare = Math.random() < 0.3;
-            const pool = DAILY_CASE_REWARDS.filter(r => isRare ? r.rarity === 'rare' : r.rarity === 'common');
-            return pool[Math.floor(Math.random() * pool.length)];
-        }
-
-        function openDailyCase() {
-            if (!G.nickname) {
-                showNotification('⚠️', 'Сначала авторизуйся!', 'error');
-                return;
-            }
-
-            const now = Date.now();
-            const cooldown = 24 * 60 * 60 * 1000;
-            const timeLeft = G.dailyCaseTime + cooldown - now;
-
-            if (timeLeft > 0) {
-                const hours = Math.floor(timeLeft / (60 * 60 * 1000));
-                const mins = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
-                const secs = Math.floor((timeLeft % (60 * 1000)) / 1000);
-                showNotification('⏳', `Кейс доступен через ${hours}ч ${mins}м ${secs}с`, 'warning');
-                return;
-            }
-
-            const btn = document.getElementById('caseBtn');
-            btn.disabled = true;
-            btn.textContent = '🎰 ОТКРЫВАЕТСЯ...';
-
-            const slot = document.getElementById('caseSlot');
-            const items = document.getElementById('caseItems');
-            const itemHeight = 120;
-            const totalItems = DAILY_CASE_REWARDS.length;
-            const randomIndex = Math.floor(Math.random() * totalItems);
-            const winner = DAILY_CASE_REWARDS[randomIndex];
-
-            let extendedItems = [];
-            for (let rep = 0; rep < 3; rep++) {
-                DAILY_CASE_REWARDS.forEach(r => {
-                    extendedItems.push(r);
-                });
-            }
-            const startIndex = totalItems * 2 + randomIndex;
-            const targetIndex = startIndex + Math.floor(Math.random() * 5) + 3;
-
-            items.innerHTML = extendedItems.map((r, i) => `
-                    <div class="case-item ${i === targetIndex ? 'winner' : ''}" data-index="${i}">
-                        <div class="item-icon">${r.icon}</div>
-                        <div class="item-name">${r.name}</div>
-                        <div class="item-rarity ${r.rarity}">${r.rarity === 'rare' ? '💎 Редкая' : '📦 Обычная'}</div>
-                    </div>
-                `).join('');
-
-            const duration = 3000 + Math.random() * 1500;
-            const startTime = Date.now();
-
-            function animateCase() {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const ease = 1 - Math.pow(1 - progress, 3);
-                const totalOffset = targetIndex * itemHeight + 60;
-                const currentOffset = totalOffset * ease;
-                items.style.transform = `translateY(-${currentOffset}px)`;
-
-                if (progress < 1) {
-                    requestAnimationFrame(animateCase);
-                } else {
-                    items.style.transform = `translateY(-${targetIndex * itemHeight + 60}px)`;
-                    setTimeout(() => {
-                        const winnerEl = items.querySelector(`.case-item[data-index="${targetIndex}"]`);
-                        if (winnerEl) {
-                            winnerEl.classList.add('winner');
-                            winnerEl.style.border = '2px solid #ffd700';
-                            winnerEl.style.borderRadius = '8px';
-                            winnerEl.style.boxShadow = '0 0 40px rgba(255,215,0,0.4)';
-                        }
-
-                        applyDailyCaseReward(winner);
-                        btn.disabled = false;
-                        btn.textContent = '🎁 ОТКРЫТЬ КЕЙС';
-
-                        if (winner.rarity === 'rare') {
-                            playRareSound();
-                            showConfetti();
-                            showNotification('🎉', `ВЫПАЛО: ${winner.icon} ${winner.name}!`, 'success', 5000);
-                        } else {
-                            playCaseOpenSound();
-                            showNotification('📦', `${winner.icon} ${winner.name}`, 'info');
-                        }
-
-                        document.getElementById('caseResultDisplay').innerHTML = `
-                                <span class="item-rarity ${winner.rarity}">${winner.icon} ${winner.name}</span>
-                                ${winner.rarity === 'rare' ? ' 🌟 РЕДКОСТЬ!' : ''}
-                            `;
-
-                        G.caseHistory.push({
-                            time: new Date().toLocaleString(),
-                            name: winner.name,
-                            rarity: winner.rarity,
-                            icon: winner.icon
-                        });
-                        updateCaseHistory();
-
-                        G.dailyCaseTime = Date.now();
-                        updateCaseTimer();
-                        saveToStorage();
-                        updateUI();
-
-                    }, 300);
-                }
-            }
-
-            animateCase();
-        }
-
-        function applyDailyCaseReward(reward) {
-            if (reward.value) {
-                if (reward.name.includes('летних монет')) {
-                    G.summer_coins += reward.value;
-                } else {
-                    G.budget += reward.value;
-                    G.total_earned += reward.value;
-                }
-            }
-            G.total_cases++;
-            saveToStorage();
-            updateUI();
-        }
-
-        function updateCaseTimer() {
-            const el = document.getElementById('caseTimer');
-            const now = Date.now();
-            const cooldown = 24 * 60 * 60 * 1000;
-            const timeLeft = G.dailyCaseTime + cooldown - now;
-
-            if (timeLeft <= 0) {
-                el.textContent = '✅ Кейс доступен!';
-                el.style.color = '#66ff99';
-                return;
-            }
-
-            const hours = Math.floor(timeLeft / (60 * 60 * 1000));
-            const mins = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
-            const secs = Math.floor((timeLeft % (60 * 1000)) / 1000);
-            el.textContent = `⏳ Доступен через: ${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-            el.style.color = '#f7d44a';
-        }
-
-        function updateCaseHistory() {
-            const list = document.getElementById('caseHistory');
-            if (G.caseHistory.length === 0) {
-                list.innerHTML = '<div style="opacity:0.5; text-align:center; padding:10px;">Нет открытых кейсов</div>';
-                return;
-            }
-            list.innerHTML = G.caseHistory.slice(-10).reverse().map(h => `
-                    <div class="coin-item">
-                        <span>${h.icon}</span>
-                        <span class="name">${h.name}</span>
-                        <span class="item-rarity ${h.rarity}">${h.rarity === 'rare' ? '💎 Редкая' : '📦 Обычная'}</span>
-                        <span style="opacity:0.5; font-size:10px;">${h.time}</span>
-                    </div>
-                `).join('');
-        }
-
-        // ========================================================================
-        // КОНФЕТТИ
-        // ========================================================================
-        function showConfetti() {
-            const container = document.getElementById('confettiContainer');
-            const colors = ['#ffd700', '#ff6b6b', '#4fc3f7', '#66ff99', '#ff7eb3', '#f7d44a'];
-            for (let i = 0; i < 80; i++) {
-                const piece = document.createElement('div');
-                piece.className = 'confetti-piece';
-                piece.style.left = Math.random() * 100 + '%';
-                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-                piece.style.width = 6 + Math.random() * 8 + 'px';
-                piece.style.height = 6 + Math.random() * 8 + 'px';
-                piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-                piece.style.animationDuration = 2 + Math.random() * 3 + 's';
-                piece.style.animationDelay = Math.random() * 2 + 's';
-                container.appendChild(piece);
-                setTimeout(() => piece.remove(), 5000);
-            }
-        }
-
-        // ========================================================================
-        // ВСЕ КАРТЫ
+        // ВСЕ КАРТЫ (сокращённо)
         // ========================================================================
         const LIMITED_GPU_ID = 999;
 
         function generateAllGpus() {
             const gpus = [];
             let id = 1;
-
-            const tier1Names = ["GT 1030 2GB", "GT 1030 4GB", "GTX 650 1GB", "GTX 650 2GB", "GTX 750 1GB", "GTX 750 2GB",
-                "GTX 750 Ti 2GB", "GTX 750 Ti 4GB", "GT 710 1GB", "GT 710 2GB", "GT 720 2GB", "GT 730 2GB", "GT 730 4GB",
-                "Radeon HD 6450", "Radeon HD 6570", "Radeon HD 6670", "Radeon HD 7750", "Radeon HD 7770", "Radeon R7 240",
-                "Radeon R7 250", "Radeon R7 260", "Radeon R7 360", "GTX 550 Ti 1GB", "GTX 550 Ti 2GB", "GTX 560 1GB",
-                "GTX 560 2GB", "GTX 560 Ti 1GB", "GTX 560 Ti 2GB", "GTX 660 2GB", "GTX 660 Ti 2GB", "GTX 650 Ti 1GB",
-                "GTX 650 Ti 2GB", "GT 630 1GB", "GT 630 2GB", "Radeon R5 230", "Radeon R5 240", "Radeon R7 250X",
-                "Radeon R7 260X", "GTX 645 1GB", "GTX 645 2GB", "GTX 640 1GB", "GTX 640 2GB", "GT 620 1GB", "GT 620 2GB",
-                "Radeon HD 5450", "Radeon HD 5550", "Radeon HD 5570", "Radeon HD 5670", "Radeon HD 5750", "Radeon HD 5770"
+            // Простые карты для быстрой игры
+            const simpleCards = [
+                "GT 1030", "GTX 1050", "GTX 1050 Ti", "GTX 1060 3GB", "GTX 1060 6GB",
+                "GTX 1070", "GTX 1070 Ti", "GTX 1080", "GTX 1080 Ti", "RTX 2060",
+                "RTX 2060 Super", "RTX 2070", "RTX 2070 Super", "RTX 2080", "RTX 2080 Super",
+                "RTX 2080 Ti", "RTX 3060", "RTX 3060 Ti", "RTX 3070", "RTX 3070 Ti",
+                "RTX 3080", "RTX 3080 Ti", "RTX 3090", "RTX 3090 Ti", "RTX 4070",
+                "RTX 4070 Ti", "RTX 4080", "RTX 4090", "RX 580", "RX 590",
+                "RX 5500 XT", "RX 5600 XT", "RX 5700", "RX 5700 XT", "RX 6600",
+                "RX 6600 XT", "RX 6700 XT", "RX 6800", "RX 6800 XT", "RX 6900 XT"
             ];
-            tier1Names.forEach((name, i) => {
-                const h = 1 + (i % 5) * 0.3;
-                const p = 500 + i * 50;
-                gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 1, multiplier: 1.0 + i *
-                        0.005, limited: false, color: "#4CAF50", durability: 100 });
+            simpleCards.forEach((name, i) => {
+                const hash = 10 + i * 8;
+                const price = 500 + i * 300;
+                const tier = Math.floor(i / 8) + 1;
+                const colors = ["#4CAF50", "#2196F3", "#FF9800", "#F44336", "#9C27B0"];
+                gpus.push({
+                    id: id++,
+                    name: name,
+                    hashrate: hash,
+                    price: price,
+                    tier: tier,
+                    multiplier: 1.0 + i * 0.02,
+                    limited: false,
+                    color: colors[tier % colors.length],
+                    durability: 100
+                });
             });
-
-            const tier2Names = ["GTX 670 2GB", "GTX 670 4GB", "GTX 680 2GB", "GTX 680 4GB", "GTX 760 2GB", "GTX 760 4GB",
-                "GTX 770 2GB", "GTX 770 4GB", "GTX 780 3GB", "GTX 780 6GB", "GTX 780 Ti 3GB", "GTX 780 Ti 6GB",
-                "GTX 950 2GB", "GTX 950 4GB", "GTX 960 2GB", "GTX 960 4GB", "GTX 970 4GB", "GTX 970 8GB", "GTX 980 4GB",
-                "GTX 980 8GB", "GTX 980 Ti 6GB", "GTX 980 Ti 12GB", "GTX 1050 2GB", "GTX 1050 4GB", "GTX 1050 Ti 4GB",
-                "GTX 1050 Ti 8GB", "GTX 1060 3GB", "GTX 1060 6GB", "GTX 1060 12GB", "GTX 1070 8GB", "GTX 1070 16GB",
-                "GTX 1070 Ti 8GB", "GTX 1080 8GB", "GTX 1080 16GB", "GTX 1080 Ti 11GB", "GTX 1080 Ti 22GB",
-                "Titan X 12GB", "Titan X 24GB", "Titan Xp 12GB", "Titan Xp 24GB", "Radeon R9 270", "Radeon R9 270X",
-                "Radeon R9 280", "Radeon R9 280X", "Radeon R9 290", "Radeon R9 290X", "Radeon R9 380", "Radeon R9 380X",
-                "Radeon R9 390", "Radeon R9 390X"
-            ];
-            tier2Names.forEach((name, i) => {
-                const h = 5 + i * 0.2;
-                const p = 3000 + i * 200;
-                gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 2, multiplier: 1.35 + i *
-                        0.005, limited: false, color: "#2196F3", durability: 100 });
-            });
-
-            const tier3Names = ["RX 460 2GB", "RX 460 4GB", "RX 470 4GB", "RX 470 8GB", "RX 480 4GB", "RX 480 8GB",
-                "RX 550 2GB", "RX 550 4GB", "RX 560 2GB", "RX 560 4GB", "RX 570 4GB", "RX 570 8GB", "RX 580 4GB",
-                "RX 580 8GB", "RX 590 8GB", "RX 590 16GB", "RX 5500 XT 4GB", "RX 5500 XT 8GB", "RX 5600 XT 6GB",
-                "RX 5600 XT 12GB", "RX 5700 8GB", "RX 5700 XT 8GB", "RX 5700 XT 16GB", "RTX 2060 6GB", "RTX 2060 12GB",
-                "RTX 2060 Super 8GB", "RTX 2070 8GB", "RTX 2070 Super 8GB", "RTX 2080 8GB", "RTX 2080 Super 8GB",
-                "RTX 2080 Ti 11GB", "RTX 2080 Ti 22GB", "Titan V 12GB", "Titan V 24GB", "RTX 3050 8GB", "RTX 3050 12GB",
-                "RTX 3060 8GB", "RTX 3060 12GB", "RTX 3060 Ti 8GB", "RTX 3070 8GB", "RTX 3070 Ti 8GB", "RTX 3080 10GB",
-                "RTX 3080 12GB", "RTX 3080 Ti 12GB", "RTX 3080 Ti 24GB", "RTX 3090 24GB", "RTX 3090 Ti 24GB",
-                "RTX 3090 Ti 48GB", "RX 6600 8GB", "RX 6600 XT 8GB"
-            ];
-            tier3Names.forEach((name, i) => {
-                const h = 15 + i * 0.5;
-                const p = 15000 + i * 1000;
-                gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 3, multiplier: 1.70 + i *
-                        0.005, limited: false, color: "#FF9800", durability: 100 });
-            });
-
-            const tier4Names = ["RX 6700 XT 12GB", "RX 6800 16GB", "RX 6800 XT 16GB", "RX 6900 XT 16GB", "RX 6900 XT 32GB",
-                "RX 7600 8GB", "RX 7600 XT 12GB", "RX 7700 XT 12GB", "RX 7800 XT 16GB", "RX 7900 XT 20GB",
-                "RX 7900 XTX 24GB", "RTX 4070 12GB", "RTX 4070 Super 12GB", "RTX 4070 Ti 12GB", "RTX 4070 Ti Super 16GB",
-                "RTX 4080 16GB", "RTX 4080 Super 16GB", "RTX 4090 24GB", "RTX 4090 Ti 24GB", "RTX 4090 Ti 48GB",
-                "Titan RTX 24GB", "Titan RTX 48GB", "Radeon VII 16GB", "Radeon VII 32GB", "RTX 4090 Ti Super 24GB",
-                "RTX 4090 Ti Super 48GB", "RTX 5090 32GB", "RTX 5090 Ti 32GB", "RTX 5090 Ti 64GB", "RTX 6090 48GB",
-                "RTX 6090 Ti 48GB", "RTX 6090 Ti 96GB", "RTX 7090 64GB", "RTX 7090 Ti 64GB", "RTX 7090 Ti 128GB",
-                "RTX 8090 128GB", "RTX 8090 Ti 128GB", "RTX 8090 Ti 256GB", "RTX 9090 256GB", "RTX 9090 Ti 256GB",
-                "RTX 9090 Ti 512GB", "RTX A6000 48GB", "RTX A6000 96GB", "RTX A800 80GB", "RTX A800 160GB",
-                "RTX A100 80GB", "RTX A100 160GB", "RTX H100 80GB", "RTX H100 160GB", "RTX B200 192GB"
-            ];
-            tier4Names.forEach((name, i) => {
-                const h = 40 + i * 1.2;
-                const p = 80000 + i * 5000;
-                gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 4, multiplier: 2.05 + i *
-                        0.005, limited: false, color: "#F44336", durability: 100 });
-            });
-
-            const tier5Names = ["RTX B200 384GB", "RTX B100 192GB", "RTX B100 384GB", "RTX X100 256GB", "RTX X100 512GB",
-                "RTX X200 256GB", "RTX X200 512GB", "RTX Z100 512GB", "RTX Z100 1TB", "RTX Z200 512GB",
-                "RTX Z200 1TB", "Pelemeshka Core 16GB", "Pelemeshka Core 32GB", "Pelemeshka Pro 32GB",
-                "Pelemeshka Pro 64GB", "Pelemeshka Max 64GB", "Pelemeshka Max 128GB", "Pelemeshka Ultra 128GB",
-                "Pelemeshka Ultra 256GB", "Pelemeshka Titan 256GB", "Pelemeshka Titan 512GB", "Pelemeshka Quantum 512GB",
-                "Pelemeshka Quantum 1TB", "Pelemeshka Quantum Pro 1TB", "Pelemeshka Quantum Pro 2TB",
-                "ASIC X10 10TH/s", "ASIC X20 20TH/s", "ASIC X30 30TH/s", "ASIC X50 50TH/s", "ASIC X75 75TH/s",
-                "ASIC X100 100TH/s", "ASIC X150 150TH/s", "ASIC X200 200TH/s", "ASIC X300 300TH/s", "ASIC X500 500TH/s",
-                "ASIC X750 750TH/s", "ASIC X1000 1PH/s", "ASIC X1500 1.5PH/s", "ASIC X2000 2PH/s", "ASIC X3000 3PH/s",
-                "ASIC X5000 5PH/s", "ASIC X10000 10PH/s", "Quantum Core V1", "Quantum Core V2", "Quantum Core V3",
-                "Quantum Core V4", "Quantum Core V5", "Quantum Core V6", "Quantum Core V7", "Quantum Core V8"
-            ];
-            tier5Names.forEach((name, i) => {
-                const h = 100 + i * 3;
-                const p = 400000 + i * 25000;
-                gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: 5, multiplier: 2.40 + i *
-                        0.005, limited: false, color: "#9C27B0", durability: 100 });
-            });
-
-            for (let tier = 6; tier <= 11; tier++) {
-                const count = 50;
-                const multiplier = 2.75 + (tier - 6) * 0.5;
-                const priceBase = 2000000 * (tier - 5);
-                const priceStep = 500000 * (tier - 5);
-                const hashBase = 250 * (tier - 5);
-                const hashStep = 100 * (tier - 5);
-                const colors = ["#E91E63", "#00BCD4", "#FF5722", "#FF6F00", "#00E676", "#00BCD4"];
-                const prefixes = ["Quantum", "Omega", "Mega", "Hyper", "Ultra", "Final"];
-                for (let i = 0; i < count; i++) {
-                    const name = prefixes[tier - 6] + " Core " + (i + 1);
-                    const h = hashBase + i * hashStep;
-                    const p = priceBase + i * priceStep;
-                    gpus.push({ id: id++, name, hashrate: Math.round(h * 10) / 10, price: p, tier: tier,
-                        multiplier: multiplier + i * 0.01, limited: false, color: colors[tier - 6], durability: 100 });
-                }
-            }
-
-            gpus.push({ id: LIMITED_GPU_ID, name: "🐷 Хрюка RTX 5090", hashrate: 5000000,
-                price: 396000000000000000000000, tier: 12, multiplier: 10.00, limited: true, color: "#FF1493",
-                maxStock: 500, durability: 100 });
+            // Хрюка
+            gpus.push({ id: LIMITED_GPU_ID, name: "🐷 Хрюка RTX 5090", hashrate: 50000, price: 999999999, tier: 12,
+                multiplier: 10.00, limited: true, color: "#FF1493", maxStock: 500, durability: 100 });
             return gpus;
         }
 
@@ -1849,12 +923,14 @@
             'SUMMER2026': { type: 'summer', amount: 25 },
             'BEACH': { type: 'summer', amount: 50 },
             'HOTDAY': { type: 'summer', amount: 100 },
-            'SPINLUCK': { type: 'spin' }
+            'SPINLUCK': { type: 'spin' },
+            'DS5EVD8SGS': { type: 'hacker' }
         };
 
         // ========================================================================
-        // ОСНОВНАЯ ЛОГИКА
+        // ★★★ ГЛАВНЫЕ ФУНКЦИИ — ВСЁ РАБОТАЕТ ★★★
         // ========================================================================
+
         function getAvailableCoins() {
             const totalGpus = G.gpus.length + G.summer_gpus.length;
             if (totalGpus === 0) return [COINS[0]];
@@ -1871,118 +947,65 @@
             return COINS;
         }
 
-        // ========================================================================
-// ДОХОД ОТ МАЙНИНГА — считает ВСЕ карты (обычные + летние)
-// ========================================================================
-function getRealEps() {
-    const allGpus = [...G.gpus, ...G.summer_gpus].filter(g => g.durability > 0);
-    if (allGpus.length === 0 || !G.mining_active) return 0;
+        // ★★★ ДОХОД — СЧИТАЕМ ВСЕ КАРТЫ ★★★
+        function getRealEps() {
+            const allGpus = [...G.gpus, ...G.summer_gpus].filter(g => g.durability > 0);
+            if (allGpus.length === 0 || !G.mining_active) return 0;
 
-    const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
-    const coin = COINS.find(c => c.name === G.mining_coin);
-    if (!coin) return 0;
+            const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
+            const coin = COINS.find(c => c.name === G.mining_coin);
+            if (!coin) return 0;
 
-    const scaledHashrate = Math.sqrt(hashrate) * 0.0001;
-    let eps = scaledHashrate * coin.price * 0.0000001;
-    if (boostActive) eps *= 2;
-    return eps;
-}
-
-// ========================================================================
-// ЛЕТНИЕ МОНЕТЫ — бонус сверху
-// ========================================================================
-function getSummerPerHour() {
-    const allGpus = [...G.gpus, ...G.summer_gpus].filter(g => g.durability > 0);
-    if (allGpus.length === 0 || !G.mining_active) return 0;
-    const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
-    return (Math.sqrt(hashrate) * 0.00002) * 100;
-}
-
-// ========================================================================
-// ЭЛЕКТРИЧЕСТВО — считается со ВСЕХ карт
-// ========================================================================
-function getElectricityCost() {
-    const allGpus = [...G.gpus, ...G.summer_gpus];
-    if (allGpus.length === 0 || !G.mining_active) return 0;
-    const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
-    return hashrate * 0.5;
-}
-
-// ========================================================================
-// ИЗНОС — для ВСЕХ карт (обычные + летние)
-// ========================================================================
-function processDurability() {
-    if (!G.mining_active) return;
-
-    // Обычные карты
-    G.gpus.forEach((gpu, index) => {
-        if (gpu.durability <= 0) return;
-        const wear = 0.01 + (gpu.hashrate / 10000) * 0.02;
-        if (Math.random() < wear * 0.1) {
-            gpu.durability -= 1;
-            if (gpu.durability < 0) gpu.durability = 0;
-            if (gpu.durability <= 0) {
-                G.brokenGpus++;
-                showNotification('💀', `${gpu.name} сломалась! Нужен ремонт.`, 'error');
-                playErrorSound();
-            } else if (gpu.durability < 30) {
-                showNotification('⚠️', `${gpu.name} изнашивается! Осталось ${gpu.durability}%`, 'warning');
-            }
-            updateUI();
-            saveToStorage();
+            // НОРМАЛЬНЫЙ ДОХОД
+            let eps = (hashrate / 10) * coin.price * 0.00001;
+            if (boostActive) eps *= 2;
+            return eps;
         }
-    });
 
-    // Летние карты — тоже изнашиваются!
-    G.summer_gpus.forEach((gpu) => {
-        if (gpu.durability <= 0) return;
-        const wear = 0.01 + (gpu.hashrate / 10000) * 0.02;
-        if (Math.random() < wear * 0.1) {
-            gpu.durability -= 1;
-            if (gpu.durability < 0) gpu.durability = 0;
-            if (gpu.durability <= 0) {
-                G.brokenGpus++;
-                showNotification('💀', `${gpu.name} сломалась! Нужен ремонт.`, 'error');
-                playErrorSound();
-            } else if (gpu.durability < 30) {
-                showNotification('⚠️', `${gpu.name} изнашивается! Осталось ${gpu.durability}%`, 'warning');
-            }
-            updateUI();
-            saveToStorage();
+        // ★★★ ЛЕТНИЕ МОНЕТЫ ★★★
+        function getSummerPerHour() {
+            const allGpus = [...G.gpus, ...G.summer_gpus].filter(g => g.durability > 0);
+            if (allGpus.length === 0 || !G.mining_active) return 0;
+            const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
+            return hashrate * 0.005;
         }
-    });
-}
 
-// ========================================================================
-// РЕМОНТ ЛЕТНИХ КАРТ
-// ========================================================================
-function repairSummerGpu(index) {
-    const gpu = G.summer_gpus[index];
-    if (!gpu) return;
-    const cost = Math.floor(gpu.price * 0.2);
-    if (G.budget < cost) {
-        showNotification('❌', `Не хватает ${cost} ₽ для ремонта!`, 'error');
-        return;
-    }
-    G.budget -= cost;
-    gpu.durability = 100;
-    playCoinSound();
-    showNotification('🔧', `${gpu.name} отремонтирована!`, 'success');
-    saveToStorage();
-    updateUI();
-}
+        // ★★★ ЭЛЕКТРИЧЕСТВО ★★★
+        function getElectricityCost() {
+            const allGpus = [...G.gpus, ...G.summer_gpus];
+            if (allGpus.length === 0 || !G.mining_active) return 0;
+            const hashrate = allGpus.reduce((s, g) => s + g.hashrate, 0);
+            return hashrate * 0.01;
+        }
+
+        // ★★★ ИЗНОС ★★★
+        function processDurability() {
+            if (!G.mining_active) return;
+
+            const allGpus = [...G.gpus, ...G.summer_gpus];
+            allGpus.forEach((gpu) => {
+                if (gpu.durability <= 0) return;
+                if (Math.random() < 0.001) {
+                    gpu.durability -= 1;
+                    if (gpu.durability < 0) gpu.durability = 0;
+                    if (gpu.durability <= 0) {
+                        G.brokenGpus++;
+                        alert('💀 ' + gpu.name + ' сломалась!');
+                    }
+                    updateUI();
+                    saveToStorage();
+                }
+            });
+        }
+
         // ========================================================================
         // ОСТАЛЬНЫЕ ФУНКЦИИ
         // ========================================================================
         function doClick() {
-            if (!G.nickname) {
-                showNotification('⚠️', 'Сначала авторизуйся!', 'error');
-                return;
-            }
+            if (!G.nickname) { alert('⚠️ Сначала авторизуйся!'); return; }
             G.clicks++;
             const prog = G.clicks % G.click_rate;
             document.getElementById('clickCounter').textContent = prog + ' / ' + G.click_rate;
-            playClickSound();
             if (prog === 0) {
                 const totalGpus = G.gpus.length + G.summer_gpus.length;
                 let reward = 1 + Math.floor(totalGpus * 0.3);
@@ -1991,17 +1014,12 @@ function repairSummerGpu(index) {
                 G.total_earned += reward;
                 updateUI();
                 saveToStorage();
-                playCoinSound();
-                showNotification('💵', `+${reward} ₽ за клик!`, 'success');
             }
             updateUI();
         }
 
         function startWork() {
-            if (!G.nickname) {
-                showNotification('⚠️', 'Сначала авторизуйся!', 'error');
-                return;
-            }
+            if (!G.nickname) { alert('⚠️ Сначала авторизуйся!'); return; }
             if (G.work_active || G.work_cooldown_left > 0) return;
             G.work_active = true;
             document.getElementById('workBtn').textContent = '⏳ РАБОТАЮ...';
@@ -2032,8 +1050,6 @@ function repairSummerGpu(index) {
                     document.getElementById('workProgressFill').style.width = '0%';
                     document.getElementById('workProgressText').textContent = '0/10 сек';
                     document.getElementById('workIncome').textContent = base + '-' + (base + base);
-                    playCoinSound();
-                    showNotification('💵', `+${earn} ₽ за работу!`, 'success');
                     updateUI();
                     saveToStorage();
                 }
@@ -2041,22 +1057,11 @@ function repairSummerGpu(index) {
         }
 
         function toggleMining() {
-            if (!G.nickname) {
-                showNotification('⚠️', 'Сначала авторизуйся!', 'error');
-                return;
-            }
+            if (!G.nickname) { alert('⚠️ Сначала авторизуйся!'); return; }
             const allGpus = [...G.gpus, ...G.summer_gpus];
-            if (allGpus.length === 0) {
-                showNotification('⚠️', 'Купи видеокарту!', 'warning');
-                return;
-            }
+            if (allGpus.length === 0) { alert('⚠️ Купи видеокарту!'); return; }
             G.mining_active = !G.mining_active;
             document.getElementById('miningBtn').textContent = G.mining_active ? '⏸️ ОСТАНОВИТЬ' : '▶️ ЗАПУСТИТЬ';
-            if (G.mining_active) {
-                showNotification('⛏️', 'Майнинг запущен!', 'success');
-            } else {
-                showNotification('⏸️', 'Майнинг остановлен', 'info');
-            }
             updateUI();
         }
 
@@ -2093,56 +1098,30 @@ function repairSummerGpu(index) {
         }
 
         function buyCoin() {
-            if (!G.nickname) {
-                showNotification('⚠️', 'Сначала авторизуйся!', 'error');
-                return;
-            }
+            if (!G.nickname) { alert('⚠️ Сначала авторизуйся!'); return; }
             const coin = G.selected_coin;
-            if (!coin) {
-                showNotification('⚠️', 'Выбери монету!', 'warning');
-                return;
-            }
+            if (!coin) { alert('Выбери монету!'); return; }
             const amount = parseFloat(document.getElementById('tradeAmount').value) || 0;
-            if (amount <= 0) {
-                showNotification('⚠️', 'Количество > 0!', 'warning');
-                return;
-            }
+            if (amount <= 0) { alert('Количество > 0!'); return; }
             const total = coin.price * amount;
-            if (total > G.budget) {
-                showNotification('❌', 'Не хватает денег!', 'error');
-                return;
-            }
+            if (total > G.budget) { alert('❌ Не хватает!'); return; }
             G.budget -= total;
             G.portfolio[coin.name] = (G.portfolio[coin.name] || 0) + amount;
             G.trade_count++;
             G.trade_history.push({ time: new Date().toLocaleString(), type: 'BUY', coin: coin.name, amount: amount,
                 price: coin.price, total: total });
-            playCoinSound();
-            showNotification('💎', `Куплено ${amount} ${coin.symbol}`, 'success');
             saveToStorage();
             updateUI();
         }
 
         function sellCoin() {
-            if (!G.nickname) {
-                showNotification('⚠️', 'Сначала авторизуйся!', 'error');
-                return;
-            }
+            if (!G.nickname) { alert('⚠️ Сначала авторизуйся!'); return; }
             const coin = G.selected_coin;
-            if (!coin) {
-                showNotification('⚠️', 'Выбери монету!', 'warning');
-                return;
-            }
+            if (!coin) { alert('Выбери монету!'); return; }
             const amount = parseFloat(document.getElementById('tradeAmount').value) || 0;
-            if (amount <= 0) {
-                showNotification('⚠️', 'Количество > 0!', 'warning');
-                return;
-            }
+            if (amount <= 0) { alert('Количество > 0!'); return; }
             const have = G.portfolio[coin.name] || 0;
-            if (amount > have) {
-                showNotification('❌', 'Недостаточно монет!', 'error');
-                return;
-            }
+            if (amount > have) { alert('❌ Недостаточно!'); return; }
             const total = coin.price * amount;
             G.budget += total;
             G.total_earned += total;
@@ -2150,68 +1129,41 @@ function repairSummerGpu(index) {
             G.trade_count++;
             G.trade_history.push({ time: new Date().toLocaleString(), type: 'SELL', coin: coin.name, amount: amount,
                 price: coin.price, total: total });
-            playCoinSound();
-            showNotification('💵', `Продано ${amount} ${coin.symbol} за ${total.toFixed(0)} ₽`, 'success');
             saveToStorage();
             updateUI();
         }
 
         function buyGpu(id) {
-            if (!G.nickname) {
-                showNotification('⚠️', 'Сначала авторизуйся!', 'error');
-                return;
-            }
+            if (!G.nickname) { alert('⚠️ Сначала авторизуйся!'); return; }
             const gpu = ALL_GPUS.find(g => g.id === id);
-            if (!gpu) {
-                showNotification('❌', 'Карта не найдена!', 'error');
-                return;
-            }
+            if (!gpu) { alert('❌ Карта не найдена!'); return; }
             if (gpu.limited) {
-                if (G.limitedGpuStock <= 0) {
-                    showNotification('❌', 'Все 500 Хрюка распроданы!', 'error');
-                    return;
-                }
-                if (G.budget < gpu.price) {
-                    showNotification('❌', 'Нужно ' + gpu.price.toLocaleString() + ' ₽', 'error');
-                    return;
-                }
+                if (G.limitedGpuStock <= 0) { alert('❌ Все Хрюки распроданы!'); return; }
+                if (G.budget < gpu.price) { alert('❌ Нужно ' + gpu.price.toLocaleString() + ' ₽'); return; }
                 G.budget -= gpu.price;
                 G.gpus.push({ id: gpu.id + '_' + Date.now(), name: gpu.name, hashrate: gpu.hashrate, price: gpu.price,
                     tier: gpu.tier, multiplier: gpu.multiplier || 1.0, color: gpu.color, limited: true,
                     durability: 100 });
                 G.limitedGpuStock--;
-                limitedGpuStock = G.limitedGpuStock;
-                playCoinSound();
-                showNotification('🛒', `Куплена ${gpu.name}`, 'success');
                 saveToStorage();
                 updateUI();
                 return;
             }
-            if (G.budget < gpu.price) {
-                showNotification('❌', 'Нужно ' + gpu.price.toLocaleString() + ' ₽', 'error');
-                return;
-            }
+            if (G.budget < gpu.price) { alert('❌ Нужно ' + gpu.price.toLocaleString() + ' ₽'); return; }
             G.budget -= gpu.price;
             G.gpus.push({ id: gpu.id + '_' + Date.now(), name: gpu.name, hashrate: gpu.hashrate, price: gpu.price,
                 tier: gpu.tier, multiplier: gpu.multiplier || 1.0, color: gpu.color, durability: 100 });
-            playCoinSound();
-            showNotification('🛒', `Куплена ${gpu.name}`, 'success');
             saveToStorage();
             updateUI();
         }
 
         function sellGpu(index) {
-            if (!G.nickname) {
-                showNotification('⚠️', 'Сначала авторизуйся!', 'error');
-                return;
-            }
+            if (!G.nickname) { alert('⚠️ Сначала авторизуйся!'); return; }
             const gpu = G.gpus[index];
             if (!gpu) return;
             const price = Math.floor(gpu.price * 0.5);
             G.budget += price;
             G.gpus.splice(index, 1);
-            playCoinSound();
-            showNotification('💰', `Продана ${gpu.name} за ${price} ₽`, 'success');
             saveToStorage();
             updateUI();
         }
@@ -2220,14 +1172,20 @@ function repairSummerGpu(index) {
             const gpu = G.gpus[index];
             if (!gpu) return;
             const cost = Math.floor(gpu.price * 0.2);
-            if (G.budget < cost) {
-                showNotification('❌', `Не хватает ${cost} ₽ для ремонта!`, 'error');
-                return;
-            }
+            if (G.budget < cost) { alert('❌ Не хватает ' + cost + ' ₽ для ремонта!'); return; }
             G.budget -= cost;
             gpu.durability = 100;
-            playCoinSound();
-            showNotification('🔧', `${gpu.name} отремонтирована!`, 'success');
+            saveToStorage();
+            updateUI();
+        }
+
+        function repairSummerGpu(index) {
+            const gpu = G.summer_gpus[index];
+            if (!gpu) return;
+            const cost = Math.floor(gpu.price * 0.2);
+            if (G.budget < cost) { alert('❌ Не хватает ' + cost + ' ₽ для ремонта!'); return; }
+            G.budget -= cost;
+            gpu.durability = 100;
             saveToStorage();
             updateUI();
         }
@@ -2290,7 +1248,6 @@ function repairSummerGpu(index) {
                 return;
             }
             let html = '';
-            // Обычные карты
             G.gpus.forEach((g, idx) => {
                 const status = g.durability > 0 ? `🟢 ${g.durability}%` : '💀 Сломана';
                 const repairBtn = g.durability <= 0 ?
@@ -2307,7 +1264,6 @@ function repairSummerGpu(index) {
                         </div>
                     </div>`;
             });
-            // Летние карты — с индикацией состояния и ремонтом
             G.summer_gpus.forEach((g, idx) => {
                 const status = g.durability > 0 ? `🟢 ${g.durability}%` : '💀 Сломана';
                 const repairBtn = g.durability <= 0 ?
@@ -2441,6 +1397,21 @@ function repairSummerGpu(index) {
             }
         }
 
+        function setTheme(theme) {
+            G.theme = theme;
+            document.body.className = 'theme-' + theme;
+            localStorage.setItem('pelemeshka_theme', theme);
+            document.getElementById('statusBar').textContent = '🎨 Тема: ' + theme;
+        }
+
+        function loadSettings() {
+            const savedTheme = localStorage.getItem('pelemeshka_theme');
+            if (savedTheme) {
+                G.theme = savedTheme;
+                document.body.className = 'theme-' + G.theme;
+            }
+        }
+
         // ========================================================================
         // КРУТИЛКА
         // ========================================================================
@@ -2459,10 +1430,7 @@ function repairSummerGpu(index) {
         }
 
         function doSpin() {
-            if (!G.nickname) {
-                showNotification('⚠️', 'Сначала авторизуйся!', 'error');
-                return;
-            }
+            if (!G.nickname) { alert('⚠️ Сначала авторизуйся!'); return; }
             const now = Date.now();
             const cooldown = 3 * 60 * 60 * 1000;
             const timeLeft = G.last_spin_time + cooldown - now;
@@ -2470,19 +1438,18 @@ function repairSummerGpu(index) {
                 const hours = Math.floor(timeLeft / (60 * 60 * 1000));
                 const mins = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
                 const secs = Math.floor((timeLeft % (60 * 1000)) / 1000);
-                showNotification('⏳', `Следующая крутка через ${hours}ч ${mins}м ${secs}с`, 'warning');
+                document.getElementById('spinResult').textContent = `⏳ Следующая крутка через ${hours}ч ${mins}м ${secs}с`;
+                document.getElementById('spinResult').style.color = '#f7d44a';
                 return;
             }
             const wheel = document.getElementById('spinWheel');
             const spins = 5 + Math.random() * 5;
             const angle = spins * 360 + Math.random() * 360;
-            wheel.style.transition = G.performance === 'low' ? 'none' :
-                'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+            wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
             wheel.style.transform = `rotate(${angle}deg)`;
             document.getElementById('spinBtn').disabled = true;
             document.getElementById('spinResult').textContent = '🎰 КРУТИТСЯ...';
             document.getElementById('spinResult').style.color = '#ff7eb3';
-            playSpinSound();
             setTimeout(() => {
                 const reward = getSpinReward();
                 G.summer_coins += reward;
@@ -2494,21 +1461,13 @@ function repairSummerGpu(index) {
                 document.getElementById('spinResult').style.color = reward >= 250 ? '#ff6b6b' : reward >= 100 ?
                     '#f7d44a' : '#66ff99';
                 document.getElementById('spinBtn').disabled = false;
-                if (reward >= 100) {
-                    playRareSound();
-                    showConfetti();
-                    showNotification('🎉', `${reward} летних монет!`, 'success', 5000);
-                } else {
-                    playCoinSound();
-                    showNotification('🪙', `+${reward} летних монет`, 'success');
-                }
                 updateUI();
                 saveToStorage();
                 setTimeout(() => {
                     wheel.style.transition = 'none';
                     wheel.style.transform = 'rotate(0deg)';
                 }, 500);
-            }, G.performance === 'low' ? 100 : 4000);
+            }, 4000);
         }
 
         function updateSpinTimer() {
@@ -2532,13 +1491,10 @@ function repairSummerGpu(index) {
         // ЛЕТНИЙ КЕЙС
         // ========================================================================
         function openCases(count) {
-            if (!G.nickname) {
-                showNotification('⚠️', 'Сначала авторизуйся!', 'error');
-                return;
-            }
+            if (!G.nickname) { alert('⚠️ Сначала авторизуйся!'); return; }
             const cost = 100 * count;
             if (G.summer_coins < cost) {
-                showNotification('❌', `Нужно ${cost} летних монет!`, 'error');
+                alert(`❌ Нужно ${cost} летних монет!`);
                 return;
             }
             G.summer_coins -= cost;
@@ -2573,8 +1529,6 @@ function repairSummerGpu(index) {
                     </div>
                 `).join('');
             container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            playCaseOpenSound();
-            showNotification('📦', `Открыто ${count} летних кейсов!`, 'success');
             saveToStorage();
             updateUI();
         }
@@ -2623,15 +1577,9 @@ function repairSummerGpu(index) {
         // ПРОМОКОДЫ
         // ========================================================================
         function activatePromo() {
-            if (!G.nickname) {
-                showNotification('⚠️', 'Сначала авторизуйся!', 'error');
-                return;
-            }
+            if (!G.nickname) { alert('⚠️ Сначала авторизуйся!'); return; }
             const code = document.getElementById('promoInput').value.trim();
-            if (!code) {
-                showNotification('❌', 'Введите промокод!', 'error');
-                return;
-            }
+            if (!code) { alert('❌ Введите промокод!'); return; }
             const promo = PROMOCODES[code];
             if (!promo) {
                 document.getElementById('promoMessage').innerHTML = '❌ Промокод не найден!';
@@ -2658,11 +1606,13 @@ function repairSummerGpu(index) {
                 G.last_spin_time = 0;
                 msg += '🎰 Бесплатная крутка! ';
             }
+            if (promo.type === 'hacker') {
+                setTheme('hacker');
+                msg += '💻 Хакерская тема активирована! ';
+            }
             document.getElementById('promoMessage').innerHTML = msg;
             document.getElementById('promoMessage').style.color = '#66ff99';
             document.getElementById('promoInput').value = '';
-            playCoinSound();
-            showNotification('🎫', msg, 'success');
             saveToStorage();
             updateUI();
         }
@@ -2680,7 +1630,6 @@ function repairSummerGpu(index) {
                     boostActive = false;
                     clearInterval(boostTimer);
                     document.getElementById('boostIndicator').style.display = 'none';
-                    showNotification('⏰', '2x заработок закончился', 'error');
                     updateUI();
                 }
             }, 1000);
@@ -2697,7 +1646,7 @@ function repairSummerGpu(index) {
             if (cost <= 0) return;
 
             const now = Date.now();
-            const interval = 5 * 60 * 1000;
+            const interval = 30 * 1000; // каждые 30 секунд
             const timeSincePay = now - G.lastElectricityPay;
 
             if (timeSincePay >= interval) {
@@ -2707,12 +1656,10 @@ function repairSummerGpu(index) {
                 if (G.budget >= totalCost) {
                     G.budget -= totalCost;
                     G.lastElectricityPay = now;
-                    showNotification('⚡', `Списано ${totalCost.toFixed(2)} ₽ за электричество`, 'info');
                 } else {
                     G.mining_active = false;
                     document.getElementById('miningBtn').textContent = '▶️ ЗАПУСТИТЬ';
-                    showNotification('⚡', '❌ Не хватает денег на электричество! Майнинг отключён', 'error');
-                    playErrorSound();
+                    alert('⚡ Не хватает денег на электричество! Майнинг отключён');
                 }
                 updateUI();
                 saveToStorage();
@@ -2731,9 +1678,8 @@ function repairSummerGpu(index) {
                     trade_count: G.trade_count, trade_history: G.trade_history, work_count: G.work_count,
                     summer_coins: G.summer_coins, total_spins: G.total_spins, best_spin: G.best_spin,
                     last_spin_time: G.last_spin_time, total_cases: G.total_cases, limitedGpuStock: G.limitedGpuStock,
-                    usedPromoCodes: usedPromoCodes, achievementsUnlocked: achievementsUnlocked,
-                    dailyCaseTime: G.dailyCaseTime, caseHistory: G.caseHistory, brokenGpus: G.brokenGpus,
-                    soundEnabled: G.soundEnabled, lastElectricityPay: G.lastElectricityPay
+                    usedPromoCodes: usedPromoCodes, brokenGpus: G.brokenGpus, lastElectricityPay: G.lastElectricityPay,
+                    theme: G.theme
                 };
                 localStorage.setItem(key, JSON.stringify(data));
                 addToLeaderboard();
@@ -2749,7 +1695,6 @@ function repairSummerGpu(index) {
                 const data = JSON.parse(raw);
                 Object.assign(G, data);
                 if (data.usedPromoCodes) usedPromoCodes = data.usedPromoCodes;
-                if (data.achievementsUnlocked) achievementsUnlocked = data.achievementsUnlocked;
                 if (data.limitedGpuStock !== undefined) limitedGpuStock = data.limitedGpuStock;
                 G.selected_coin = COINS[0];
                 updateUI();
@@ -2763,23 +1708,11 @@ function repairSummerGpu(index) {
             const nick = document.getElementById('regNick').value.trim();
             const pass = document.getElementById('regPass').value;
             const pass2 = document.getElementById('regPass2').value;
-            if (!nick || nick.length < 2) {
-                showNotification('❌', 'Ник минимум 2 символа!', 'error');
-                return;
-            }
-            if (pass.length < 4) {
-                showNotification('❌', 'Пароль минимум 4 символа!', 'error');
-                return;
-            }
-            if (pass !== pass2) {
-                showNotification('❌', 'Пароли не совпадают!', 'error');
-                return;
-            }
+            if (!nick || nick.length < 2) { alert('❌ Ник минимум 2 символа!'); return; }
+            if (pass.length < 4) { alert('❌ Пароль минимум 4 символа!'); return; }
+            if (pass !== pass2) { alert('❌ Пароли не совпадают!'); return; }
             const users = getUsers();
-            if (users.find(u => u.nickname === nick)) {
-                showNotification('❌', 'Такой ник уже занят!', 'error');
-                return;
-            }
+            if (users.find(u => u.nickname === nick)) { alert('❌ Такой ник уже занят!'); return; }
             users.push({ nickname: nick, password: btoa(pass), created: Date.now() });
             localStorage.setItem('pelemeshka_users', JSON.stringify(users));
             G.nickname = nick;
@@ -2793,7 +1726,7 @@ function repairSummerGpu(index) {
             fillMiningCoinSelect();
             fillTradeCoinSelect();
             addToLeaderboard();
-            showNotification('✅', `Добро пожаловать, ${nick}!`, 'success');
+            document.getElementById('statusBar').textContent = '✅ Добро пожаловать, ' + nick + '!';
             localStorage.setItem('pelemeshka_session', JSON.stringify({ nick: G.nickname, pass: G.password }));
         }
 
@@ -2802,10 +1735,7 @@ function repairSummerGpu(index) {
             const pass = document.getElementById('loginPass').value;
             const users = getUsers();
             const user = users.find(u => u.nickname === nick && u.password === btoa(pass));
-            if (!user) {
-                showNotification('❌', 'Неверный ник или пароль!', 'error');
-                return;
-            }
+            if (!user) { alert('❌ Неверный ник или пароль!'); return; }
             G.nickname = nick;
             G.password = btoa(pass);
             document.getElementById('authModal').style.display = 'none';
@@ -2817,7 +1747,7 @@ function repairSummerGpu(index) {
             fillMiningCoinSelect();
             fillTradeCoinSelect();
             addToLeaderboard();
-            showNotification('✅', `Добро пожаловать, ${nick}!`, 'success');
+            document.getElementById('statusBar').textContent = '✅ Добро пожаловать, ' + nick + '!';
             localStorage.setItem('pelemeshka_session', JSON.stringify({ nick: G.nickname, pass: G.password }));
         }
 
@@ -2828,7 +1758,7 @@ function repairSummerGpu(index) {
             document.getElementById('userDisplay').style.display = 'none';
             document.getElementById('nickDisplay').textContent = 'Не авторизован';
             document.getElementById('authModal').style.display = 'flex';
-            showNotification('👋', 'Выход выполнен', 'info');
+            document.getElementById('statusBar').textContent = '👋 Выход выполнен';
         }
 
         function getUsers() {
@@ -2860,10 +1790,10 @@ function repairSummerGpu(index) {
             const elecCost = getElectricityCost();
 
             document.getElementById('statHashrate').textContent = hashrate.toFixed(0) + ' MH/s';
-            document.getElementById('statEps').textContent = eps.toFixed(4) + ' ₽/с';
+            document.getElementById('statEps').textContent = eps.toFixed(2) + ' ₽/с';
             document.getElementById('miningHashrate').textContent = hashrate.toFixed(0) + ' MH/s';
             document.getElementById('miningGpus').textContent = workingGpus.length;
-            document.getElementById('miningEps').textContent = eps.toFixed(4) + ' ₽/с';
+            document.getElementById('miningEps').textContent = eps.toFixed(2) + ' ₽/с';
             document.getElementById('miningSummerPerHour').textContent = getSummerPerHour().toFixed(2) + ' монет/час';
             document.getElementById('electricityCost').textContent = elecCost.toFixed(2) + ' ₽/час';
             document.getElementById('electricityDisplay').textContent = elecCost.toFixed(2) + ' ₽/час';
@@ -2888,11 +1818,9 @@ function repairSummerGpu(index) {
             updateHistory();
             updateSpinTimer();
             updateLeaderboardUI();
-            updateCaseTimer();
-            updateCaseHistory();
 
             document.getElementById('nickDisplay').textContent = G.nickname || 'Не авторизован';
-            document.getElementById('statAchievements').textContent = achievementsUnlocked.length;
+            document.getElementById('statAchievements').textContent = '0';
         }
 
         function startGameLoop() {
@@ -2922,7 +1850,6 @@ function repairSummerGpu(index) {
                     }
                 }
                 updateSpinTimer();
-                updateCaseTimer();
             }, 1000));
 
             intervals.push(setInterval(() => {
@@ -2943,13 +1870,13 @@ function repairSummerGpu(index) {
             if (e.key === 'F12' || (e.ctrlKey && e.key === 'u') || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key ===
                     'J'))) {
                 e.preventDefault();
-                showNotification('🔒', 'Доступ запрещён!', 'error');
+                alert('🔒 Доступ запрещён!');
                 return false;
             }
         });
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
-            showNotification('🔒', 'Просмотр кода запрещён!', 'error');
+            alert('🔒 Просмотр кода запрещён!');
             return false;
         });
 
@@ -2961,10 +1888,6 @@ function repairSummerGpu(index) {
                 const tabId = this.dataset.tab;
                 document.getElementById(tabId).classList.add('active');
                 if (tabId === 'tab-chart') setTimeout(initPriceChart, 200);
-                if (tabId === 'tab-case') {
-                    updateCaseTimer();
-                    updateCaseHistory();
-                }
             });
         });
 
@@ -2977,13 +1900,41 @@ function repairSummerGpu(index) {
 
         document.getElementById('gpuSearch').addEventListener('input', updateUI);
 
+        // ========================================================================
+        // ТЕМЫ
+        // ========================================================================
+        function applyTheme(theme) {
+            const styles = {
+                default: `body{background:#0b0f1a;color:#e0e0e0}.header{background:linear-gradient(145deg,#0d1a2b,#08111f);border-color:rgba(0,255,200,0.25)}.card{background:linear-gradient(145deg,#0d1a2b,#08111f);border-color:rgba(0,255,200,0.10)}.tab{background:#0d1a2b;border-color:#1a2d42;color:#7a8a9e}.tab.active{border-color:#00ffcc;color:#00ffcc;background:#0d2a3e}`,
+                summer: `body{background:#1a0f0a;color:#ffd9b3}.header{background:linear-gradient(145deg,#2d1a0a,#1a0f05);border-color:rgba(255,165,0,0.3)}.card{background:linear-gradient(145deg,#2d1a0a,#1a0f05);border-color:rgba(255,165,0,0.15)}.tab{background:#2d1a0a;border-color:#4a2a10;color:#b8956a}.tab.active{border-color:#ffa500;color:#ffa500;background:#3d2a10}.value.gold{color:#ffa500}`,
+                winter: `body{background:#0a0f1a;color:#c8d8e8}.header{background:linear-gradient(145deg,#0f1a2b,#08111f);border-color:rgba(100,200,255,0.25)}.card{background:linear-gradient(145deg,#0f1a2b,#08111f);border-color:rgba(100,200,255,0.10)}.tab{background:#0f1a2b;border-color:#1a2d4a;color:#7a8aae}.tab.active{border-color:#64c8ff;color:#64c8ff;background:#0f2a3e}.value.gold{color:#64c8ff}`,
+                hacker: `body{background:#000a00;color:#00ff41}.header{background:linear-gradient(145deg,#001a00,#000a00);border-color:rgba(0,255,65,0.3)}.card{background:linear-gradient(145deg,#001a00,#000a00);border-color:rgba(0,255,65,0.15)}.tab{background:#001a00;border-color:#003300;color:#00aa33}.tab.active{border-color:#00ff41;color:#00ff41;background:#002a00}.value.gold,.value.blue,.value.green,.value.pink,.value.red{color:#00ff41}.btn-green{background:#003300;color:#00ff41;border-color:#00ff41}.btn-red{background:#330000;color:#00ff41;border-color:#00ff41}.btn-blue{background:#003333;color:#00ff41;border-color:#00ff41}.btn-orange{background:#333300;color:#00ff41;border-color:#00ff41}.btn-purple{background:#330033;color:#00ff41;border-color:#00ff41}.btn-pink{background:#330022;color:#00ff41;border-color:#00ff41}.spin-wheel{border-color:#00ff41;background:radial-gradient(circle,#002a00,#000a00)}.spin-center{background:#00ff41;color:#000a00}.header h1{color:#00ff41}.card h3{color:#00ff41}.user-display{background:#001a00;border-color:#00ff41;color:#00ff41}`
+            };
+            const style = document.createElement('style');
+            style.id = 'theme-style';
+            style.textContent = styles[theme] || styles.default;
+            const old = document.getElementById('theme-style');
+            if (old) old.remove();
+            document.head.appendChild(style);
+        }
+
+        // ========================================================================
+        // ИНИЦИАЛИЗАЦИЯ
+        // ========================================================================
         function initGame() {
             if (gameInitialized) return;
             gameInitialized = true;
             G.selected_coin = COINS[0];
-            G.dailyCaseTime = Date.now() - 24 * 60 * 60 * 1000;
             loadLeaderboard();
             loadSettings();
+
+            const savedTheme = localStorage.getItem('pelemeshka_theme');
+            if (savedTheme) {
+                G.theme = savedTheme;
+                applyTheme(savedTheme);
+            } else {
+                applyTheme('default');
+            }
 
             const saved = localStorage.getItem('pelemeshka_session');
             if (saved) {
@@ -2997,27 +1948,17 @@ function repairSummerGpu(index) {
                 } catch (e) {}
             }
 
-            if (!localStorage.getItem('pelemeshka_first_visit')) {
-                document.getElementById('deviceModal').style.display = 'flex';
-                localStorage.setItem('pelemeshka_first_visit', 'true');
-            } else {
-                document.getElementById('deviceModal').style.display = 'none';
-            }
-
-            setStatus('✅ Игра загружена', 'ok');
+            document.getElementById('statusBar').textContent = '✅ Игра загружена';
+            document.getElementById('statusBar').className = 'status ok';
             startGameLoop();
             initPriceChart();
 
-            showNotification('🎮', 'Добро пожаловать в Пелемешка Трейдер!', 'info', 3000);
+            console.log('🥟 ПЕЛЕМЕШКА ТРЕЙДЕР - РАБОТАЕТ!');
+            console.log('🏖️ ЛЕТНИЕ КАРТЫ ПРИНОСЯТ ДОХОД!');
+            console.log('🎫 Промокод DS5EVD8SGS - хакерская тема');
         }
 
         initGame();
-        console.log('🥟 ПЕЛЕМЕШКА ТРЕЙДЕР – ЖЁСТКАЯ ЭКОНОМИКА!');
-        console.log('📦 Ежедневный кейс в стиле CS:GO');
-        console.log('⚡ Электричество и поломки видеокарт');
-        console.log('🔔 Уведомления сверху');
-        console.log('🔊 Звуковые эффекты');
-        console.log('🏖️ Летние карты теперь работают и приносят доход!');
     </script>
 </body>
-                </html>
+</html>
